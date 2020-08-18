@@ -298,22 +298,20 @@ img{ max-width:100%;}
         socket.onopen = function (e) {
           console.log("[open] Connection established");
           console.log("Sending to server");
-         if(idx==0){
-           var json1 = {
-              msg_id: "load_msg"
-           };
-            socket.send(String(json1));
-            idx = idx+1;
-         }
-         else{
+
+           var json1 = '{\
+              msg_id: "load_msg"\
+           }';
+            socket.send(json1);
+
           $("#send").click(function () {
             // alert("clicked");
 
-            var json1 = {
-              msg_id: "normal",
-              msg: $("#message").val()
-           };
-            socket.send(String(json1));
+            var json2 = '{\
+              msg_id: "normal",\
+              msg: $("#message").val()\
+           }';
+            socket.send(json2);
             $("#msg_history").append('\
                 <div class="outgoing_msg">\
                   <div class="sent_msg">\
@@ -323,15 +321,17 @@ img{ max-width:100%;}
             ');
             $("#message").val("");
           });
-         }
+         
         };
 
         socket.onmessage = function (event) {
           var js1 = JSON.parse(event.data);
-          
+          console.log(js1);
           if(js1.msg_id==="load_msg"){
-            console.log("IN LOADMESSS");
-            var jsonData = JSON.parse(js1.list_msg);
+            
+            
+            if(Array.isArray(js1.msg) && js1.msg.length){
+              var jsonData = JSON.parse(js1.msg);
             for (var i = 0; i < jsonData.counters.length; i++) {
               var counter = jsonData.counters[i];
               console.log(counter.counter_name);
@@ -348,7 +348,8 @@ img{ max-width:100%;}
                   </div>\
                 </div>\
           ');
-}
+          }
+            }
 
           }
           else if (js1.msg_id === "online"){

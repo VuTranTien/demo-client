@@ -147,7 +147,7 @@
         new_element.innerHTML = element.name;
         new_element.onclick = function() { // Note this is a function
           //goi ajax toi api check xem token co hop le khong
-          alert(element.id);
+          // alert(element.id);
           // $.post(
           //         urlPre+"/restApi/room_info.do",
           //         {
