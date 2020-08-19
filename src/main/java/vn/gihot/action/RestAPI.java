@@ -26,6 +26,7 @@ public class RestAPI extends MultiActionController {
         JSONObject j1 = new JSONObject(res);
         j1.put("email",email);
         j1.put("key",MD5.getMd5(email+j1.getString("token")));
+        ClientController.email = email;
         return j1.toString();
     }
     @RequestMapping(value = "/room_info",method = RequestMethod.POST)

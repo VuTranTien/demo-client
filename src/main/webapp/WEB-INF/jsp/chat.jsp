@@ -264,6 +264,7 @@ img{ max-width:100%;}
       var port="";
       var idx = 0;
       var email =$("#email").val();
+      alert(email);
      
       
 
@@ -284,7 +285,7 @@ img{ max-width:100%;}
           console.log("Sending to server");
 
            var json1 = '{\
-              msg_id: "load_msg"\
+              msg_id: "load_msg",\
               msg_from:'+ email +'}';
             socket.send(json1);
             $(document).ready(function () {
