@@ -26,6 +26,7 @@ import java.util.Map;
 public class ClientController extends MultiActionController {
     private static String token = "";
     private ChatClient client=null;
+    private String email ="";
 
     @RequestMapping(value = "login",method = RequestMethod.GET)
     public String login(){
@@ -45,6 +46,7 @@ public class ClientController extends MultiActionController {
         if(j1.getInt("ret")==0){//dang nhap thanh cong
 
             token = j1.getString("token");//luu lai token dang nhap
+            this.email = email;//gan email de truyen sang view chat
             return "redirect:list-room.do";//TODO redirect toi trang chinh
 
         }
@@ -96,6 +98,8 @@ public class ClientController extends MultiActionController {
         //start room
 
         model.addAttribute("room_id",id);
+        model.addAttribute("email",email);
+        email = "no-email";
         return "chat";
     }
 

@@ -206,28 +206,9 @@ img{ max-width:100%;}
                 </span> </div>
             </div>
           </div>
-          <div class="inbox_chat">
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
-    
-            <div class="chat_list">
-              <div class="chat_people">
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                <div class="chat_ib">
-                  <h5>Sunil Rajput <span class="chat_date">Dec 25</span></h5>
-                  <p>Test, which is a new approach to have all solutions
-                    astrology under one roof.</p>
-                </div>
-              </div>
-            </div>
+          <div class="inbox_chat" id="list_online">
+          
+
           </div>
         </div>
         <div class="mesgs">
@@ -291,10 +272,11 @@ img{ max-width:100%;}
       
 
 
-        // console.log(ip+"_________"+port);
+        // Khoi tao socket
 
         let socket = new WebSocket("ws://localhost:"+"9000");
 
+        //Gui tin nhan di
         socket.onopen = function (e) {
           console.log("[open] Connection established");
           console.log("Sending to server");
@@ -303,14 +285,17 @@ img{ max-width:100%;}
               msg_id: "load_msg"\
            }';
             socket.send(json1);
-
+            $(document).ready(function () {
+            $('#message').keypress(function (e) {
+              if (e.keyCode == 13)
+                $('#send').click();
+            });
+          });
           $("#send").click(function () {
-            // alert("clicked");
 
             var json2 = '{\
               msg_id: "normal",\
-              msg: $("#message").val()\
-           }';
+              msg:'+ $("#message").val()+'}';
             socket.send(json2);
             $("#msg_history").append('\
                 <div class="outgoing_msg">\
@@ -323,18 +308,17 @@ img{ max-width:100%;}
           });
          
         };
-
+        //Xu li tin nhan toi
         socket.onmessage = function (event) {
           var js1 = JSON.parse(event.data);
-          console.log(js1);
-          if(js1.msg_id==="load_msg"){
+          
+          if(js1.msg_id==="load"){
             
-            
-            if(Array.isArray(js1.msg) && js1.msg.length){
+            if(js1.msg.length>0){
               var jsonData = JSON.parse(js1.msg);
-            for (var i = 0; i < jsonData.counters.length; i++) {
-              var counter = jsonData.counters[i];
-              console.log(counter.counter_name);
+            for (var i = 0; i < jsonData.length; i++) {
+              var counter = jsonData[i];
+                console.log(counter);
 
               $("#msg_history").append('\
               <div class="incoming_msg">\
@@ -353,6 +337,22 @@ img{ max-width:100%;}
 
           }
           else if (js1.msg_id === "online"){
+            console.log(js1.list_user);
+            var list_user = js1.list_user;
+            for (var i = 0;i<list_user.length;i++){
+              $("#list_online").append('\
+              <div class="chat_list">\
+              <div class="chat_people">\
+                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>\
+                <div class="chat_ib">\
+                  <h5>'+list_user[i]+'<span class="chat_date">Dec 25</span></h5>\
+                </div>\
+              </div>\
+            </div>\
+              ');
+
+            }
+
 
           }   
           else if(js1.msg_id==="normal"){
