@@ -317,7 +317,7 @@ img{ max-width:100%;}
           var js1 = JSON.parse(event.data);
           
           if(js1.msg_id==="load"){
-            
+            console.log(js1.msg);
             if(js1.msg.length>0){
               var jsonData = JSON.parse(js1.msg);
             for (var i = 0; i < jsonData.length; i++) {
@@ -351,7 +351,7 @@ img{ max-width:100%;}
               <div class="chat_people">\
                 <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>\
                 <div class="chat_ib">\
-                  <h5>'+list_user[i]+'<span class="chat_date">Dec 25</span></h5>\
+                  <h5>'+list_user[i].email+'<span class="chat_date">Dec 25</span></h5>\
                 </div>\
               </div>\
             </div>\
