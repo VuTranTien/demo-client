@@ -299,7 +299,7 @@ img{ max-width:100%;}
             var json2 = '{\
               msg_id: "normal",\
               msg_from:'+ email +',\
-              '+'msg:'+ $("#message").val()+'}';
+              '+'msg:"'+ String($("#message").val())+'"}';
             socket.send(json2);
             $("#msg_history").append('\
                 <div class="outgoing_msg">\
@@ -369,7 +369,7 @@ img{ max-width:100%;}
                   </div>\
                   <div class="received_msg">\
                     <div class="received_withd_msg">\
-                      <p>'+js1.msg+'</p>\
+                      <p>'+String(js1.msg)+'</p>\
                       <span class="time_date">'+ js1.msg_from +'</span>\
                     </div>\
                   </div>\
