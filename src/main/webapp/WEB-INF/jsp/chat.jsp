@@ -274,7 +274,7 @@ img{ max-width:100%;}
 
         // Khoi tao socket
 
-        let socket = new WebSocket("ws://localhost:"+"9000");
+        let socket = new WebSocket("ws://192.168.100.139:"+"9000");
 
         //Gui tin nhan di
         socket.onopen = function (e) {
@@ -337,6 +337,7 @@ img{ max-width:100%;}
 
           }
           else if (js1.msg_id === "online"){
+            $("#list_online").empty();
             console.log(js1.list_user);
             var list_user = js1.list_user;
             for (var i = 0;i<list_user.length;i++){

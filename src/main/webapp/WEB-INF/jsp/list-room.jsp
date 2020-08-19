@@ -98,7 +98,7 @@
 <body onload="loadRoom()">
   <div class="container" style="margin-top: 20px;">
     <div class="row justify-content-center ">
-      <h1>Happy Chatting</h1>
+      <h2>List Room</h2>
     </div>
     <div class="row justify-content-center ">
       <div class="btn-group-vertical w-50 " id="list-rooms">
@@ -134,7 +134,7 @@
   var urlPre = "http://localhost:8880";
   function loadRoom() {//load room tra ve tu api 
   
-    $.post("http://localhost:8080"+"/center/user/room_list.do", function (data) {
+    $.post("http://192.168.100.139:8080"+"/center/user/room_list.do", function (data) {
       var listRooms = JSON.parse(data);
       var i = 0;
       listRooms.forEach((element) => {

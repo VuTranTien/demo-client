@@ -21,7 +21,7 @@ public class RestAPI extends MultiActionController {
         Map<String,String> map = new HashMap<String, String>();
         map.put("email",email);
         map.put("password", password);
-        CallAPI call1 = new CallAPI("http://localhost:8080/center/user/login.do",map);
+        CallAPI call1 = new CallAPI("http://192.168.100.139:8080/center/user/login.do",map);
         String res = call1.getAPIResult(false);
         JSONObject j1 = new JSONObject(res);
         j1.put("email",email);
