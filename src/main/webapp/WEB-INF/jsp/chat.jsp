@@ -197,6 +197,7 @@ img{ max-width:100%;}
             <div class="recent_heading">
               <h4 >Online</h4>
               <input type="text" hidden value="${room_id}" id="room_name">
+              <input type="text" hidden value="${email}" id="email">
             </div>
             <div class="srch_bar">
               <div class="stylish-input-group">
@@ -262,6 +263,7 @@ img{ max-width:100%;}
       var ip="";
       var port="";
       var idx = 0;
+      var email =$("#email").val();
      
       
 
@@ -283,7 +285,7 @@ img{ max-width:100%;}
 
            var json1 = '{\
               msg_id: "load_msg"\
-           }';
+              msg_from:'+ email +'}';
             socket.send(json1);
             $(document).ready(function () {
             $('#message').keypress(function (e) {
@@ -295,7 +297,8 @@ img{ max-width:100%;}
 
             var json2 = '{\
               msg_id: "normal",\
-              msg:'+ $("#message").val()+'}';
+              msg_from:'+ email +',\
+              '+'msg:'+ $("#message").val()+'}';
             socket.send(json2);
             $("#msg_history").append('\
                 <div class="outgoing_msg">\
@@ -340,6 +343,7 @@ img{ max-width:100%;}
             $("#list_online").empty();
             console.log(js1.list_user);
             var list_user = js1.list_user;
+            $("#list_online").empty();
             for (var i = 0;i<list_user.length;i++){
               $("#list_online").append('\
               <div class="chat_list">\

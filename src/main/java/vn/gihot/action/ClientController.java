@@ -99,7 +99,6 @@ public class ClientController extends MultiActionController {
 
         model.addAttribute("room_id",id);
         model.addAttribute("email",email);
-        email = "no-email";
         return "chat";
     }
 
