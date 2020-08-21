@@ -40,9 +40,14 @@
     <div class="container" style="margin-top: 20px;">
         <div class="row justify-content-center ">
             <h1> Game Board </h1>
-
+           
+           
+        </div><br><br>
+        <div class="row justify-content-center">
+            <h4 class="text-success">YOUR TURN</h4>
         </div>
-        <div class="row justify-content-center ">
+        <div class="row justify-content-center" id="frame0">
+            <!-- <button onclick="test()" id = "test_click">clickME</button> -->
             <table id="gameBoard">
                 <tbody></tbody>
             </table>
@@ -52,8 +57,9 @@
 
     <script>
         var checkerBoard = [];
-        var size = 20;
-        var matrix = [];
+        var size = 17;
+        var turn = 0;
+        var matrix =[[]];
         var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                 <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
                 <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\
@@ -65,14 +71,16 @@
                         <circle cx="10" cy="10" r="10"/>\
                         </svg>';
 
-        $(function () {
 
+
+
+        $(function () {
 
             for (var i = 0; i < size; i++) {
 
                 var trOdd = $('<tr>').addClass('odd');//le
                 var trEven = $('<tr>').addClass('even');//chan
-
+                matrix[i]=[];
                 if (i % 2 !== 0) { checkerBoard.push(trEven); }
                 else { checkerBoard.push(trOdd); }
 
@@ -82,11 +90,28 @@
                     tdEle.addClass('cell');
                     var btn = $('<button>');
                     btn.addClass('btn btn-light');
+                    matrix[i][j] = -1;
                     // btn.append("x");
-                    btn.click(function () {
+                    btn.click(function (vi=i,vj=j) {
                         // var p_tag = $('<p>');
-                        //     p_tag.html(maskOf_O);
-                        $(this).html(maskOf_O);
+                        console.log(String(matrix));
+                        if(turn++%2==0){
+                            $(this).html(maskOf_O);
+                            alert("i:"+vi+" j:"+vj)
+                            matrix[vi][vj] = 0;
+                        }
+                        else{
+                            $(this).html(maskOf_X);
+                            matrix[vi][vj] = 1;
+                        }
+                        $(this).css("pointer-events","none");        
+                        console.log(matrix.toString());                
+                        // $('#frame0').css("pointer-events","none");//khoa su kien click
+                        // $('#test_click').css("pointer-events","auto");
+
+
+                        //goi su kien xuong Restcontroller
+                        
                     });
                     tdEle.append(btn);
                     checkerBoard[i].append(tdEle);
@@ -120,6 +145,11 @@
             // });
 
         });
+        function test (){
+            $('#test_click').css("pointer-events","none");
+            alert("disable");
+
+        }
 
     </script>
 
