@@ -41,6 +41,7 @@
     body {
       background-color: #74EBD5;
       background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%);
+      /* background-image: linear-gradient(to right, #2193b0 ,  #6dd5ed ); */
       min-height: 100vh;
     }
     .container{max-width:1170px; margin:auto;}

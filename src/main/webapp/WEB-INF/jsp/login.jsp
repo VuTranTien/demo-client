@@ -10,6 +10,12 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+      body{
+        /* background-image: linear-gradient(to right, #c4e0e5, #4ca1af ); */
+        background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%);
+      }
+    </style>
   <script>
     function parseJwt(token) {
       var base64Url = token.split('.')[1];

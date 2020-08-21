@@ -103,6 +103,13 @@ public class ClientController extends MultiActionController {
         return "chat";
     }
 
+    @RequestMapping(value = "/game-caro",method=RequestMethod.GET)
+    public String Loadgame(){
+        //start room
+
+        return "game-caro";
+    }
+
     
 
 }

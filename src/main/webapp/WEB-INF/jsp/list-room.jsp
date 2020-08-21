@@ -24,6 +24,7 @@
     body {
       background-color: #74EBD5;
       background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%);
+      /* background-image: linear-gradient(to right, #c4e0e5, #4ca1af ); */
       min-height: 100vh;
     }
 
@@ -175,17 +176,6 @@
     });
 
   }
-
-  // $(".list-group a").click(function () {
-  //   $(".active").removeClass('active');
-  //   $(this).addClass('active');
-  //   alert($(this).html());
-
-  // });
-  // var btn = document.getElementById("#room_1");
-  // btn.addEventListener("click",function(){
-  //     alert("room_1");
-  // });
 
 </script>
 
