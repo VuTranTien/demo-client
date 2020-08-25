@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/vendors/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/vendors/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/vendors/themify-icons/css/themify-icons.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="vendors/flag-icon-css/css/flag-icon.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/vendors/selectFX/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
@@ -321,10 +321,6 @@
                     </div>
                   </div>
                 </li>
-
-
-
-
                 <h3 class="menu-title">Danh sách bàn cờ</h3><!-- /.menu-title -->
 
                 <li class="menu-item dropdown">
@@ -355,7 +351,7 @@
       </div>
     </div>
   </header>
-
+  
   <div class="content mt-3">
     <div class="messaging">
       <div class="inbox_msg">
@@ -407,17 +403,21 @@
     <script>
 
       var listRooms;
-
+     
       var ip="";
       var port="";
       var idx = 0;
       var email =$("#email").val();
+      alert(email);
+     
+      
 
-
-
-
-      function load() {//load room tra ve tu api
+      function load() {//load room tra ve tu api 
         console.log($("#room_name").val());
+        
+        
+      
+
 
         // Khoi tao socket
 
@@ -438,16 +438,6 @@
                 $('#send').click();
             });
           });
-        
-          $("#createBoard").click(function(){
-            var json3 = '{\
-            msg_id: "createBoard",\
-            msg_name:'+ $("#nameBoard").val() +',\
-            msg_time:'+$("#coundownTime").val()+'\
-            }';
-            socket.send(json3);
-          });
-
           $("#send").click(function () {
 
             var json2 = '{\
@@ -464,12 +454,12 @@
             ');
             $("#message").val("");
           });
-
+         
         };
         //Xu li tin nhan toi
         socket.onmessage = function (event) {
           var js1 = JSON.parse(event.data);
-
+          
           if(js1.msg_id==="load"){
             console.log(js1.msg);
             if(js1.msg.length>0){
@@ -514,7 +504,7 @@
             }
 
 
-          }
+          }   
           else if(js1.msg_id==="normal"){
             console.log("IN NORMALLLLLLLLLLLL");
             $("#msg_history").append('\
@@ -532,7 +522,7 @@
           }
           else{
             console.log("Error in message recieved");
-          }
+          }     
           console.log('[message] Data received from ' + js1.msg_from + ' : ' + js1.msg);
         };
 

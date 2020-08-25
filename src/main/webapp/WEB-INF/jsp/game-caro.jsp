@@ -46,7 +46,7 @@
 
             <div class="col-12">
                 <div class="row justify-content-center">
-                    <button id = "btnStart" type="button" class="btn btn-warning">Start Game</button>
+                    <button type="button" class="btn btn-warning">Start Game</button>
                 </div>
                 <br>
             </div>
@@ -123,7 +123,6 @@
     <script>
         var checkerBoard = [];
         var x,y;
-        var t1;
         var size = 25;
         var turn = size ** 2;
         var matrix = [[]];
@@ -197,9 +196,9 @@
                     }
                 }
                 else if(json.msg_id ===""){
-                    
+
                 }
-                
+
             };
 
 
@@ -245,7 +244,7 @@
                     matrix[i][j] = -1;
                     // btn.append("x");
                     btn.click({ vi: i, vj: j }, function (event) {
-                        
+
                         // var p_tag = $('<p>');
                         console.log(matrix);
                         if (turn-- % 2 == 0) {
@@ -308,7 +307,7 @@
             alert("disable");
 
         }
-            
+
 
     </script>
     
