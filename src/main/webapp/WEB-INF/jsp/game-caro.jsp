@@ -46,7 +46,7 @@
 
             <div class="col-12">
                 <div class="row justify-content-center">
-                    <button type="button" class="btn btn-warning">Start Game</button>
+                    <button id = "btnStart" type="button" class="btn btn-warning">Start Game</button>
                 </div>
                 <br>
             </div>
@@ -123,6 +123,7 @@
     <script>
         var checkerBoard = [];
         var x,y;
+        var t1;
         var size = 25;
         var turn = size ** 2;
         var matrix = [[]];
@@ -144,6 +145,15 @@
             socket.onopen = function (e) {
                 console.log("-------------Room Connection------------");
             
+            // thieu email------------------------------------
+            $("#btnStart").click(function(){
+            var startgame = '{\
+            msg_id: "start_game",\
+            msg_from: chungminhde@gmail.com\
+            }';
+            // socket.send(startgame);
+            alert(startgame);
+            });
             // TODO load score user
             var getScoreUser1 = '{\
                     msg_id:"load_score",\
@@ -163,7 +173,14 @@
             // lose: "0"}';
             // socket.send(writeHistoryScore);
             }
-            
+            var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
+            (function countdown1() {
+            $seconds1.textContent = '00:' + seconds1
+            if (seconds1-- > 0)  t1 = setTimeout(countdown1, 1000)
+            if (seconds1 == 0) {
+             alert("You Lose")
+            }
+            })();
             
             socket.onmessage = function(event){
                 var json = JSON.parse(event.data);
@@ -171,6 +188,18 @@
                     $("#scoreUser1").text('Score: '+json.score)
                     $("#historyUser1").text('W:'+json.win + ' L:'+json.lose);
                 }
+                else if(json.msg_id === "game_state_win"){
+                    if(json.winner === "me"){
+                        alert("YOU WIN");
+                    }
+                    else{
+                        alert("YOU LOSE");
+                    }
+                }
+                else if(json.msg_id ===""){
+                    
+                }
+                
             };
 
 
@@ -187,11 +216,13 @@
         socket.onerror = function (error) {
           alert(`[error] ${error.message}`);
         };
+
+        create_checkBoard(socket);
         }
 
         //-------------------------------------------------------------------------------
 
-        $(function () {
+        function create_checkBoard (s) {
 
             for (var i = 0; i < size; i++) {
 
@@ -214,19 +245,31 @@
                     matrix[i][j] = -1;
                     // btn.append("x");
                     btn.click({ vi: i, vj: j }, function (event) {
+                        
                         // var p_tag = $('<p>');
                         console.log(matrix);
                         if (turn-- % 2 == 0) {
                             $(this).html(maskOf_O);
                             matrix[event.data.vi][event.data.vj] = 0;
-                            // x = event.data.vi;
-                            // y = event.data.vj;
+                            var state = '{\
+                            msg_id: "game_state",\
+                            label: 0,\
+                            x: '+ event.data.vi +',\
+                            y: '+ event.data.vj +',\
+                        }';
+                        s.send(state);
                         }
                         else {
                             $(this).html(maskOf_X);
                             matrix[event.data.vi][event.data.vj] = 1;
-                            // x = event.data.vi;
-                            // y = event.data.vj;
+                            clearTimeout(t1);
+                            var state = '{\
+                            msg_id: "game_state",\
+                            label: 1,\
+                            x: '+ event.data.vi +',\
+                            y: '+ event.data.vj +',\
+                        }';
+                        s.send(state);
                         }
                         $(this).css("pointer-events", "none");
 
@@ -259,20 +302,13 @@
             });
 
 
-        });
+        };
         function test() {
             $('#test_click').css("pointer-events", "none");
             alert("disable");
 
         }
-            // var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
-            // (function countdown1() {
-            // $seconds1.textContent = '00:' + seconds1
-            // if (seconds1-- > 0)  t1 = setTimeout(countdown1, 1000)
-            // if (seconds1 == 0) {
-            //  alert("You Lose")
-            // }
-            // })();
+            
 
     </script>
     
