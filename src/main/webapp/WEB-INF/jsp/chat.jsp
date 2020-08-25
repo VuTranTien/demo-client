@@ -378,10 +378,6 @@
       function load() {//load room tra ve tu api 
         console.log($("#room_name").val());
         
-        
-      
-
-
         // Khoi tao socket
 
         let socket = new WebSocket("ws://192.168.100.138:"+"9000");
