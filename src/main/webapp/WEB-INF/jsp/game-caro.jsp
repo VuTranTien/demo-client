@@ -139,6 +139,7 @@
 
         //-------------------------------------------------------------------------------
         function load() {
+            load_check_board();
             //Connection Server
             let socket = new WebSocket("ws://192.168.100.138:" + "9000");
             socket.onopen = function (e) {
@@ -191,7 +192,7 @@
 
         //-------------------------------------------------------------------------------
 
-        $(function () {
+        function load_check_board () {
 
             for (var i = 0; i < size; i++) {
 
@@ -230,8 +231,6 @@
                         }
                         $(this).css("pointer-events", "none");
 
-
-
                     });
                     tdEle.append(btn);
                     checkerBoard[i].append(tdEle);
@@ -259,12 +258,8 @@
             });
 
 
-        });
-        function test() {
-            $('#test_click').css("pointer-events", "none");
-            alert("disable");
-
-        }
+        };
+        
             // var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
             // (function countdown1() {
             // $seconds1.textContent = '00:' + seconds1

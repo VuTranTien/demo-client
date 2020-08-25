@@ -285,8 +285,45 @@
                     <a><i class="menu-icon fa fa-dashboard"></i>Phòng ${room_id}</a>
                 </li>
                 <li>
-                  <button type="button" onclick="create_form()" class="btn btn-secondary btn-sm ml-5"><i class="fa fa-lightbulb-o"></i>&nbsp; Tạo bàn</button>
+                  <button type="button" data-target="#form_create_check" data-toggle="modal"  class="btn btn-secondary btn-sm ml-5"><i class="fa fa-lightbulb-o"></i>&nbsp; Tạo bàn</button>
+                  
+                  <div class="modal fade" id="form_create_check" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalCenterTitle">Tạo bàn cờ</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div>
+                            <div class="form-group">
+                              <label for="recipient-name" class="col-form-label">Tên bàn</label>
+                              <input type="text" class="form-control" id="recipient-name">
+                            </div>
+                            <div class="form-group">
+                              <label for="#step_time" class="col-form-label">Thời gian mỗi bước đi</label>
+                              <select id=step_time class="custom-select" name="step_time">
+                                <option selected value="1">10</option>
+                                <option value="2">20</option>
+                                <option value="3">30</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                          <button type="button" class="btn btn-primary">Xong</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </li>
+                
+
+
+
                 <h3 class="menu-title">Danh sách bàn cờ</h3><!-- /.menu-title -->
                 
                 <li><a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-th"></i>Bàn 1</a></li>          
