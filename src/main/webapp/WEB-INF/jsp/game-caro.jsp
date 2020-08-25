@@ -17,7 +17,7 @@
             background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%);
 
         }
-        
+
 
         td {
             border: 1px solid #000;
@@ -34,7 +34,7 @@
     </style>
 </head>
 
-<body>
+<body onload="load()">
 
     <div class="container-fluid" style="margin-top: 20px;">
         <div class="row justify-content-center ">
@@ -43,24 +43,44 @@
 
         </div><br>
         <div class="row">
-            
+
             <div class="col-12">
                 <div class="row justify-content-center">
-                    <button type="button" class="btn btn-warning">Start game</button>
+                    <button type="button" class="btn btn-warning">Start Game</button>
                 </div>
                 <br>
-            </div> 
-            
+            </div>
+
             <!----------------------------------------------------------------------letf----------------------------------------------------------------->
             <div class="col-3 background-left">
                 <br>
                 <div class="row justify-content-center">
                     <h3>USER1</h3>
                 </div>
-                
+                <div class="row justify-content-center">
+                        <span style="font-size: 18px;" id = "scoreUser1"></span>
+                </div>
+                <div class="row justify-content-center">
+                    <span style="font-size: 18px;" id = "historyUser1"></span>
+                </div>
+                <div class="row justify-content-center">
+                    <span id="timerUser1" , style="color: red; font-size: 25px;">00:20</span>
+                </div>
+                <br>
+                <br>
+                <div class="row justify-content-center">
+                    <svg width="6em" height="6em" viewBox="0 0 16 16" class="bi bi-x align-center" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">\
+                        <path fill-rule="evenodd"
+                            d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z" />\
+                        <path fill-rule="evenodd"
+                            d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z" />\
+                    </svg>
+                </div>
+
             </div>
             <!----------------------------------------------------------------------center----------------------------------------------------------------->
-            <div class="col-6" >
+            <div class="col-6">
                 <div class="row justify-content-left" id="frame0">
                     <table id="gameBoard">
                         <tbody></tbody>
@@ -73,19 +93,37 @@
                 <div class="row justify-content-center">
                     <h3>USER2</h3>
                 </div>
+                <div class="row justify-content-center">
+                    <span style="font-size: 18px;" id="scoreUser1"></span>
+                </div>
+                <div class="row justify-content-center">
+                    <span style="font-size: 18px;" id="historyUser1"></span>
+                </div>
+                <div class="row justify-content-center">
+                    <span id="timerUser1" , style="color: red; font-size: 25px;">00:20</span>
+                </div>
+                <br>
+                <br>
+                <div class="row justify-content-center">
+                    <svg width="5em" height="5em" viewBox="0 0 16 16" class="bi bi-circle-fill" fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="8" cy="8" r="8" />
+                    </svg>
+                </div>
 
             </div>
         </div>
-        <div class="row" >
+        <div class="row">
             <!-- <button onclick="test()" id = "test_click">clickME</button> -->
-            
+
         </div>
     </div>
 
 
     <script>
         var checkerBoard = [];
-        var size = 23;
+        var x,y;
+        var size = 25;
         var turn = size ** 2;
         var matrix = [[]];
         var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
@@ -99,8 +137,59 @@
                         <circle cx="10" cy="10" r="10"/>\
                         </svg>';
 
+        //-------------------------------------------------------------------------------
+        function load() {
+            //Connection Server
+            let socket = new WebSocket("ws://192.168.100.138:" + "9000");
+            socket.onopen = function (e) {
+                console.log("-------------Room Connection------------");
+            
+            // TODO load score user
+            var getScoreUser1 = '{\
+                    msg_id:"load_score",\
+                    msg_from:"chungminhde@gmail.com"}';
+            
+            // var getScoreUser2 = '{\
+            //         msg_id:"load_score",\
+            //         msg_from:"user1@gmail.com"}';
+            socket.send(getScoreUser1);
+            // ssocket.send(getScoreUser2);
+            
+            //TODO write to datebase history
+            // var writeHistoryScore = '{\
+            // msg_id: "write_score",\
+            // msg_from: "chungminhde@gmail.com",\
+            // win: "1",\
+            // lose: "0"}';
+            // socket.send(writeHistoryScore);
+            }
+            
+            
+            socket.onmessage = function(event){
+                var json = JSON.parse(event.data);
+                if(json.msg_id == "load_score"){
+                    $("#scoreUser1").text('Score: '+json.score)
+                    $("#historyUser1").text('W:'+json.win + ' L:'+json.lose);
+                }
+            };
 
 
+            socket.onclose = function (event) {
+            if (event.wasClean) {
+            alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            } else {
+            // e.g. server process killed or network down
+            // event.code is usually 1006 in this case
+            alert('[close] Connection died');
+                }
+            };
+
+        socket.onerror = function (error) {
+          alert(`[error] ${error.message}`);
+        };
+        }
+
+        //-------------------------------------------------------------------------------
 
         $(function () {
 
@@ -109,8 +198,12 @@
                 var trOdd = $('<tr>').addClass('odd');//le
                 var trEven = $('<tr>').addClass('even');//chan
                 matrix[i] = [];
-                if (i % 2 !== 0) { checkerBoard.push(trEven); }
-                else { checkerBoard.push(trOdd); }
+                if (i % 2 !== 0) {
+                    checkerBoard.push(trEven);
+                }
+                else {
+                    checkerBoard.push(trOdd);
+                }
 
                 for (var j = 0; j < size; j++) {
 
@@ -122,18 +215,20 @@
                     // btn.append("x");
                     btn.click({ vi: i, vj: j }, function (event) {
                         // var p_tag = $('<p>');
-                        console.log(String(matrix));
+                        console.log(matrix);
                         if (turn-- % 2 == 0) {
                             $(this).html(maskOf_O);
                             matrix[event.data.vi][event.data.vj] = 0;
+                            // x = event.data.vi;
+                            // y = event.data.vj;
                         }
                         else {
                             $(this).html(maskOf_X);
                             matrix[event.data.vi][event.data.vj] = 1;
+                            // x = event.data.vi;
+                            // y = event.data.vj;
                         }
-
                         $(this).css("pointer-events", "none");
-                        console.log(matrix.toString());
 
 
 
@@ -142,6 +237,7 @@
                     checkerBoard[i].append(tdEle);
                 }
             }
+            
 
             $('tbody').append(checkerBoard);
             $(".odd td:odd").css("background-color", "white");
@@ -169,7 +265,16 @@
             alert("disable");
 
         }
+            // var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
+            // (function countdown1() {
+            // $seconds1.textContent = '00:' + seconds1
+            // if (seconds1-- > 0)  t1 = setTimeout(countdown1, 1000)
+            // if (seconds1 == 0) {
+            //  alert("You Lose")
+            // }
+            // })();
 
     </script>
+    
 
 </body>
