@@ -300,7 +300,7 @@
                         }';
                         s.send(state);
                         }
-                        $(this).css("pointer-events", "none");
+                        $(this).css("pointer-events", "none !important");
                         $("#frame0").css("pointer-events", "none");
 
 
