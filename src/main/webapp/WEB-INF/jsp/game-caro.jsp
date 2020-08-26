@@ -214,6 +214,7 @@
                    var jy = json.y;
                    matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X).css("pointer-events", "none","important");
                    dataMatrix[ix][jy] = json.label;
+                   turn = json.turn;
                    for(var k = 0;k<size;k++){
                             for(var l = 0; l<size; l++){
                                 if(dataMatrix[k][l]==-1){
@@ -279,7 +280,7 @@
 
                         // var p_tag = $('<p>');
                         // console.log(matrix);
-                        if (turn-- % 2 == 0) {
+                        if (turn % 2 == 0) {
                             $(this).html(maskOf_O);
                             dataMatrix[event.data.vi][event.data.vj] = 0;
 
