@@ -143,7 +143,7 @@
                         </svg>';
 
         //-------------------------------------------------------------------------------
-        function load() {
+        function load(){
             //Connection Server
             let socket = new WebSocket(url+ "9000");
             socket.onopen = function (e) {
@@ -182,6 +182,7 @@
             }
             };
             
+            
             socket.onmessage = function(event){
                 var json = JSON.parse(event.data);
                 console.log(json);
@@ -213,12 +214,11 @@
                    var jy = json.y;
                    matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X).css("pointer-events", "none","important");
                    dataMatrix[ix][jy] = json.label;
-                   var k=0,l=0;
-                        while(k<size){
-                            while(l<size){
+                   for(var k = 0;k<size;k++){
+                            for(var l = 0; l<size; l++){
                                 if(dataMatrix[k][l]==-1){
-                                    matrix[k++][l++].css("pointer-events", "auto");
-                                }
+                                    matrix[k][l].css("pointer-events", "auto"); 
+                                }                          
                             }
                         }
                 }
@@ -244,8 +244,10 @@
         };
 
         create_checkBoard(socket);
+        
+        
+            }
         }
-
         //-------------------------------------------------------------------------------
 
         function create_checkBoard (s) {
@@ -307,13 +309,12 @@
                         $(this).css("pointer-events", "none", "!important");
                         // // $(this).removeClass('no_click');
                         // $(this).addClass('have_click')
-                        $("#gameBoard").css("pointer-events", "none");
-                        var k=0,l=0;
-                        while(k<size){
-                            while(l<size){
+                        // $("#gameBoard").css("pointer-events", "none");
+                        for(var k = 0;k<size;k++){
+                            for(var l = 0; l<size; l++){
                                 if(dataMatrix[k][l]==-1){
-                                    matrix[k++][l++].css("pointer-events", "none");
-                                }
+                                    matrix[k][l].css("pointer-events", "none"); 
+                                }                          
                             }
                         }
                         // $("#frame0").attr("style","pointer-events : none");
