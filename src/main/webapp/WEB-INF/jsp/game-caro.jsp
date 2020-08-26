@@ -151,7 +151,7 @@
             // thieu email------------------------------------
             var js1 = '{\
             msg_id: "overide_channel",\
-            user:'+$("#email").val()+'    \
+            email:"'+$("#email").val()+'",\
             name: "c1"\
             }';
             socket.send(js1);
@@ -217,7 +217,9 @@
                     }
                 }
                 else if(json.msg_id === "game_state"){
-                    console.log(json);
+                   var ix = json.x;
+                   var jy = json.y;
+                   matrix[i][j].html = json.label;
                 }
                 else if(json.msg_id ===""){
 
@@ -266,7 +268,7 @@
                     var btn = $('<button>');
                     btn.addClass('cell btn btn-light isClick');
                     btn.css("pointer-events", "none");
-                    matrix[i][j] = -1;
+                    matrix[i][j] = btn;
                     // btn.append("x");
                     btn.click({ vi: i, vj: j }, function (event) {
 
