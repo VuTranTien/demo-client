@@ -440,20 +440,22 @@
           $("#createBoard").click(function(){
              var js3 = '{\
              msg_id: "create_board",\
+             email: "'+ $("#email").val()+'",\
              name:"'+ $("#nameBoard").val() +'",  \
              time:'+ $("#countdownTime").val() +'  \
                }';
               
               socket.send(js3);
-              location.replace("http://localhost:8880/demo-client/game-caro.do?name=c1");
+              location.replace("http://localhost:8880/demo-client/game-caro.do?name=c1&email="+email);
           });
           $("#enter_board").click(function(){
             var js4 = '{\
             msg_id: "enter_board",\
+            email: "'+ $("#email").val()+'",\
             name:'+'"c1"'+'\
             }';
             socket.send(js4);
-            location.replace("http://localhost:8880/demo-client/game-caro.do?name=c1");
+            location.replace("http://localhost:8880/demo-client/game-caro.do?name=c1&email="+email);
           });     
 
           $("#send").click(function () {

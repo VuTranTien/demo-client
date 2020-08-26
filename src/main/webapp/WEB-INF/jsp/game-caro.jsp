@@ -40,6 +40,8 @@
         <div class="row justify-content-center ">
             <h1> GAME BOARD </h1>
             <input id="name_of_check_board" type="text" hidden value="${name}">
+            <input type="text" value="${email}" hidden id="email">
+
 
 
         </div><br>
@@ -147,6 +149,12 @@
                 console.log("-------------Room Connection------------");
             
             // thieu email------------------------------------
+            var js1 = '{\
+            msg_id: "overide_channel",\
+            user:'+$("#email").val()+'    \
+            name: "c1"\
+            }';
+            socket.send(js1);
             $("#btnStart").click(function(){
             var startgame = '{\
             msg_id: "game_start",\
@@ -263,7 +271,7 @@
                     btn.click({ vi: i, vj: j }, function (event) {
 
                         // var p_tag = $('<p>');
-                        console.log(matrix);
+                        // console.log(matrix);
                         if (turn-- % 2 == 0) {
                             $(this).html(maskOf_O);
                             matrix[event.data.vi][event.data.vj] = 0;
@@ -282,6 +290,7 @@
                             clearTimeout(t1);
                             var state = '{\
                             msg_id: "game_state",\
+                            name: "c1",\
                             label: 1,\
                             x: '+ event.data.vi +',\
                             y: '+ event.data.vj +'\

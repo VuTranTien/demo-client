@@ -102,8 +102,9 @@ public class ClientController extends MultiActionController {
     }
 
     @RequestMapping(value = "/game-caro",method=RequestMethod.GET)
-    public String Loadgame(@RequestParam(value = "name") String name,Model model){
+    public String Loadgame(@RequestParam(value = "name") String name,@RequestParam(value = "email") String email,Model model){
         model.addAttribute("name",name);
+        model.addAttribute("email",email);
         return "game-caro";
     }
 
