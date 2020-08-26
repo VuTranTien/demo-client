@@ -47,7 +47,7 @@
 
             <div class="col-12">
                 <div class="row justify-content-center">
-                    <button type="button" class="btn btn-warning">Start Game</button>
+                    <button id="btnStart" type="button" class="btn btn-warning">Start Game</button>
                 </div>
                 <br>
             </div>
@@ -150,7 +150,7 @@
             $("#btnStart").click(function(){
             var startgame = '{\
             msg_id: "game_start",\
-            name:"'+$("#name_of_check_board") + '"\
+            name:"'+$("#name_of_check_board").val() + '"\
             }';
             socket.send(startgame);
             });
@@ -174,16 +174,17 @@
             // socket.send(writeHistoryScore);
             }
             var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
-            (function countdown1() {
+            function countdown1() {
             $seconds1.textContent = '00:' + seconds1
             if (seconds1-- > 0)  t1 = setTimeout(countdown1, 1000)
             if (seconds1 == 0) {
              alert("You Lose")
             }
-            });
+            };
             
             socket.onmessage = function(event){
                 var json = JSON.parse(event.data);
+                console.log(json);
                 if(json.msg_id == "load_score"){
                     $("#scoreUser1").text('Score: '+json.score)
                     $("#historyUser1").text('W:'+json.win + ' L:'+json.lose);

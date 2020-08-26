@@ -408,7 +408,6 @@
       var idx = 0;
       var email =$("#email").val();
       var url = "ws://192.168.100.139:";
-      alert(email);
      
       
 
@@ -441,8 +440,8 @@
           $("#createBoard").click(function(){
              var js3 = '{\
              msg_id: "create_board",\
-             name:'+ $("#nameBoard") +',  \
-             time:'+ $("#countdownTime") +'  \
+             name:"'+ $("#nameBoard").val() +'",  \
+             time:'+ $("#countdownTime").val() +'  \
                }';
               
               socket.send(js3);
