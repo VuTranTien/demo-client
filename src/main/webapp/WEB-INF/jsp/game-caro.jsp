@@ -219,7 +219,8 @@
                 else if(json.msg_id === "game_state"){
                    var ix = json.x;
                    var jy = json.y;
-                   matrix[i][j].html = json.label;
+                   matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X);
+                   $("#frame0").css("pointer-events", "auto");
                 }
                 else if(json.msg_id ===""){
 
@@ -300,6 +301,8 @@
                         s.send(state);
                         }
                         $(this).css("pointer-events", "none");
+                        $("#frame0").css("pointer-events", "none");
+
 
 
 
