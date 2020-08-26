@@ -133,9 +133,10 @@
         }
     });
   var urlPre = "http://localhost:8880";
+  var url = "http://192.168.100.139:8080";
   function loadRoom() {//load room tra ve tu api 
   
-    $.post("http://192.168.100.138:8080"+"/center/user/room_list.do", function (data) {
+    $.post(url+"/center/user/room_list.do", function (data) {
       var listRooms = JSON.parse(data);
       var i = 0;
       listRooms.forEach((element) => {

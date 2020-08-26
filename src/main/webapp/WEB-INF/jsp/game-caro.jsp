@@ -39,6 +39,7 @@
     <div class="container-fluid" style="margin-top: 20px;">
         <div class="row justify-content-center ">
             <h1> GAME BOARD </h1>
+            <input id="name_of_check_board" type="text" hidden value="${name}">
 
 
         </div><br>
@@ -126,6 +127,7 @@
         var size = 25;
         var turn = size ** 2;
         var matrix = [[]];
+        var url = "ws://192.168.100.139:" ;
         var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                 <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
                 <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\
@@ -140,18 +142,17 @@
         //-------------------------------------------------------------------------------
         function load() {
             //Connection Server
-            let socket = new WebSocket("ws://192.168.100.138:" + "9000");
+            let socket = new WebSocket(url+ "9000");
             socket.onopen = function (e) {
                 console.log("-------------Room Connection------------");
             
             // thieu email------------------------------------
             $("#btnStart").click(function(){
             var startgame = '{\
-            msg_id: "start_game",\
-            msg_from: chungminhde@gmail.com\
+            msg_id: "game_start",\
+            name:"'+$("#name_of_check_board") + '"\
             }';
-            // socket.send(startgame);
-            alert(startgame);
+            socket.send(startgame);
             });
             // TODO load score user
             var getScoreUser1 = '{\
@@ -179,7 +180,7 @@
             if (seconds1 == 0) {
              alert("You Lose")
             }
-            })();
+            });
             
             socket.onmessage = function(event){
                 var json = JSON.parse(event.data);
@@ -194,6 +195,20 @@
                     else{
                         alert("YOU LOSE");
                     }
+                }
+                else if(json.msg_id === "is_start"){
+                    if(json.ret == 0){
+                        $(".isClick").css("pointer-events", "auto");
+                        //set countdown time
+                        countdown1();
+
+                    }
+                    else{
+                        alert("Vui lòng chờ...");
+                    }
+                }
+                else if(json.msg_id==="game_state"){
+                    console.log(json);
                 }
                 else if(json.msg_id ===""){
 
@@ -240,7 +255,8 @@
                     var tdEle = $('<td>');
                     tdEle.addClass('cell');
                     var btn = $('<button>');
-                    btn.addClass('cell btn btn-light');
+                    btn.addClass('cell btn btn-light isClick');
+                    btn.css("pointer-events", "none");
                     matrix[i][j] = -1;
                     // btn.append("x");
                     btn.click({ vi: i, vj: j }, function (event) {
@@ -254,7 +270,7 @@
                             msg_id: "game_state",\
                             label: 0,\
                             x: '+ event.data.vi +',\
-                            y: '+ event.data.vj +',\
+                            y: '+ event.data.vj +'\
                         }';
                         s.send(state);
                         }

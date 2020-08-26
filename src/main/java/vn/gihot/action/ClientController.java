@@ -46,8 +46,6 @@ public class ClientController extends MultiActionController {
         if(j1.getInt("ret")==0){//dang nhap thanh cong
 
             token = j1.getString("token");//luu lai token dang nhap
-//            this.email = email;//gan email de truyen sang view chat
-//            System.out.println(this.email);
             return "redirect:list-room.do";//TODO redirect toi trang chinh
 
         }
@@ -104,9 +102,8 @@ public class ClientController extends MultiActionController {
     }
 
     @RequestMapping(value = "/game-caro",method=RequestMethod.GET)
-    public String Loadgame(){
-        //start room
-
+    public String Loadgame(@RequestParam(value = "name") String name,Model model){
+        model.addAttribute("name",name);
         return "game-caro";
     }
 

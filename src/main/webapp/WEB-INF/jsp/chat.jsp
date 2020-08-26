@@ -303,8 +303,8 @@
                               <input type="text" class="form-control" id="nameBoard">
                             </div>
                             <div class="form-group">
-                              <label for="#step_time" class="col-form-label">Thời gian mỗi bước đi</label>
-                              <select id="coundownTime" class="custom-select" name="coundownTime">
+                              <label for="#coundownTime" class="col-form-label">Thời gian mỗi bước đi</label>
+                              <select id="countdownTime" class="custom-select" name="coundownTime">
                                 <option selected value="15">15</option>
                                 <option value="20">20</option>
                                 <option value="25">25</option>
@@ -315,7 +315,7 @@
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                          <button id = "createBoard" type="button" class="btn btn-primary">Xong</button>
+                          <button  id = "createBoard" type="button" class="btn btn-primary">Xong</button>
                         </div>
                       </div>
                     </div>
@@ -324,7 +324,7 @@
                 <h3 class="menu-title">Danh sách bàn cờ</h3><!-- /.menu-title -->
 
                 <li class="menu-item dropdown">
-                  <a href="http://localhost:8880/demo-client/game-caro.do">
+                  <a id="enter_board">
                    <i class="menu-icon fa fa-th"></i>Bàn 1</a>
                 </li>
             </ul>
@@ -372,7 +372,6 @@
           </div>
           <div class="inbox_chat" id="list_online">
 
-
           </div>
         </div>
         <div class="mesgs">
@@ -408,6 +407,7 @@
       var port="";
       var idx = 0;
       var email =$("#email").val();
+      var url = "ws://192.168.100.139:";
       alert(email);
      
       
@@ -421,7 +421,7 @@
 
         // Khoi tao socket
 
-        let socket = new WebSocket("ws://192.168.100.138:"+"9000");
+        let socket = new WebSocket(url+"9000");
 
         //Gui tin nhan di
         socket.onopen = function (e) {
@@ -438,6 +438,25 @@
                 $('#send').click();
             });
           });
+          $("#createBoard").click(function(){
+             var js3 = '{\
+             msg_id: "create_board",\
+             name:'+ $("#nameBoard") +',  \
+             time:'+ $("#countdownTime") +'  \
+               }';
+              
+              socket.send(js3);
+              location.replace("http://localhost:8880/demo-client/game-caro.do?name=c1");
+          });
+          $("#enter_board").click(function(){
+            var js4 = '{\
+            msg_id: "enter_board",\
+            name:'+'"c1"'+'\
+            }';
+            socket.send(js4);
+            location.replace("http://localhost:8880/demo-client/game-caro.do?name=c1");
+          });     
+
           $("#send").click(function () {
 
             var json2 = '{\
@@ -492,18 +511,16 @@
             for (var i = 0;i<list_user.length;i++){
               $("#list_online").append('\
               <div class="chat_list">\
-              <div class="chat_people">\
-                <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>\
-                <div class="chat_ib">\
-                  <h5>'+list_user[i].email+'<span class="chat_date">Dec 25</span></h5>\
+                <div class="chat_people">\
+                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>\
+                  <div class="chat_ib">\
+                    <h5>'+list_user[i].email+'<span class="chat_date">Dec 25</span></h5>\
+                  </div>\
                 </div>\
               </div>\
-            </div>\
               ');
 
             }
-
-
           }   
           else if(js1.msg_id==="normal"){
             console.log("IN NORMALLLLLLLLLLLL");
