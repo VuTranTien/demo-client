@@ -208,7 +208,7 @@
                         alert("Vui lòng chờ...");
                     }
                 }
-                else if(json.msg_id==="game_state"){
+                else if(json.msg_id === "game_state"){
                     console.log(json);
                 }
                 else if(json.msg_id ===""){
@@ -269,6 +269,7 @@
                             matrix[event.data.vi][event.data.vj] = 0;
                             var state = '{\
                             msg_id: "game_state",\
+                            name: "c1",\
                             label: 0,\
                             x: '+ event.data.vi +',\
                             y: '+ event.data.vj +'\
@@ -283,7 +284,7 @@
                             msg_id: "game_state",\
                             label: 1,\
                             x: '+ event.data.vi +',\
-                            y: '+ event.data.vj +',\
+                            y: '+ event.data.vj +'\
                         }';
                         s.send(state);
                         }
