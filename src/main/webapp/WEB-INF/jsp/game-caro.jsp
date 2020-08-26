@@ -129,6 +129,7 @@
         var size = 25;
         var turn = size ** 2;
         var matrix = [[]];
+        var dataMatrix=[[]];
         var url = "ws://192.168.100.139:" ;
         var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                 <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
@@ -171,16 +172,7 @@
             //         msg_id:"load_score",\
             //         msg_from:"user1@gmail.com"}';
             socket.send(getScoreUser1);
-            // ssocket.send(getScoreUser2);
-            
-            //TODO write to datebase history
-            // var writeHistoryScore = '{\
-            // msg_id: "write_score",\
-            // msg_from: "chungminhde@gmail.com",\
-            // win: "1",\
-            // lose: "0"}';
-            // socket.send(writeHistoryScore);
-            }
+
             var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
             function countdown1() {
             $seconds1.textContent = '00:' + seconds1
@@ -207,7 +199,7 @@
                 }
                 else if(json.msg_id === "is_start"){
                     if(json.ret == 0){
-                        $(".isClick").css("pointer-events", "auto");
+                        $('.isClick').css("pointer-events", "auto");
                         //set countdown time
                         countdown1();
 
@@ -219,8 +211,16 @@
                 else if(json.msg_id === "game_state"){
                    var ix = json.x;
                    var jy = json.y;
-                   matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X);
-                   $("#frame0").css("pointer-events", "auto");
+                   matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X).css("pointer-events", "none","important");
+                   dataMatrix[ix][jy] = json.label;
+                   var k=0,l=0;
+                        while(k<size){
+                            while(l<size){
+                                if(dataMatrix[k][l]==-1){
+                                    matrix[k++][l++].css("pointer-events", "auto");
+                                }
+                            }
+                        }
                 }
                 else if(json.msg_id ===""){
 
@@ -255,6 +255,7 @@
                 var trOdd = $('<tr>').addClass('odd');//le
                 var trEven = $('<tr>').addClass('even');//chan
                 matrix[i] = [];
+                dataMatrix[i] =[];
                 if (i % 2 !== 0) {
                     checkerBoard.push(trEven);
                 }
@@ -270,6 +271,7 @@
                     btn.addClass('cell btn btn-light isClick');
                     btn.css("pointer-events", "none");
                     matrix[i][j] = btn;
+                    dataMatrix[i][j] = -1;
                     // btn.append("x");
                     btn.click({ vi: i, vj: j }, function (event) {
 
@@ -277,7 +279,8 @@
                         // console.log(matrix);
                         if (turn-- % 2 == 0) {
                             $(this).html(maskOf_O);
-                            matrix[event.data.vi][event.data.vj] = 0;
+                            dataMatrix[event.data.vi][event.data.vj] = 0;
+
                             var state = '{\
                             msg_id: "game_state",\
                             name: "c1",\
@@ -289,7 +292,7 @@
                         }
                         else {
                             $(this).html(maskOf_X);
-                            matrix[event.data.vi][event.data.vj] = 1;
+                            dataMatrix[event.data.vi][event.data.vj] = 1;
                             clearTimeout(t1);
                             var state = '{\
                             msg_id: "game_state",\
@@ -300,8 +303,20 @@
                         }';
                         s.send(state);
                         }
-                        $(this).css("pointer-events", "none !important");
-                        $("#frame0").css("pointer-events", "none");
+                        // $(this).attr("style","pointer-events : none !important");
+                        $(this).css("pointer-events", "none", "!important");
+                        // // $(this).removeClass('no_click');
+                        // $(this).addClass('have_click')
+                        $("#gameBoard").css("pointer-events", "none");
+                        var k=0,l=0;
+                        while(k<size){
+                            while(l<size){
+                                if(dataMatrix[k][l]==-1){
+                                    matrix[k++][l++].css("pointer-events", "none");
+                                }
+                            }
+                        }
+                        // $("#frame0").attr("style","pointer-events : none");
 
 
 
@@ -334,13 +349,7 @@
 
 
         };
-        function test() {
-            $('#test_click').css("pointer-events", "none");
-            alert("disable");
-
-        }
-
-
+        
     </script>
     
 
