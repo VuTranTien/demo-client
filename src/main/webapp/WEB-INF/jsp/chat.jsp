@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/vendors/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/vendors/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/vendors/themify-icons/css/themify-icons.css">
-    <link rel="stylesheet" href="vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/vendors/flag-icon-css/css/flag-icon.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/vendors/selectFX/css/cs-skin-elastic.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
@@ -286,6 +286,7 @@
                 </li>
                 <li>
                   <button type="button" data-target="#form_create_check" data-toggle="modal"  class="btn btn-secondary btn-sm ml-5"><i class="fa fa-lightbulb-o"></i>&nbsp; Tạo bàn</button>
+                  <button style="margin: 10px;" type="button" data-target="#form_ranked" data-toggle="modal"  class="btn btn-secondary btn-sm ml-5"><i class="fa fa-user"></i>&nbsp;  Xếp hạng</button>
 
                   <div class="modal fade" id="form_create_check" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -316,6 +317,35 @@
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                           <button  id = "createBoard" type="button" class="btn btn-primary">Xong</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal fade" id="form_ranked" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalCenterTitle">Bảng Xếp Hạng</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div>
+                            <div class="form-group" >
+                              <table id = "listRanked" class = "table">
+                                <tr>
+                                <th>Hạng</th>
+                                <th>Tên</th>
+                                <th>Điểm</th>
+                              </tr>
+                                
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         </div>
                       </div>
                     </div>
@@ -415,6 +445,7 @@
         console.log($("#room_name").val());
         
         
+        
       
 
 
@@ -426,7 +457,10 @@
         socket.onopen = function (e) {
           console.log("[open] Connection established");
           console.log("Sending to server");
-
+          var load_ranked = '{\
+            msg_id: load_ranked\
+          }';
+          socket.send(load_ranked);
            var json1 = '{\
               msg_id: "load_msg",\
               msg_from:'+ email +'}';
@@ -479,7 +513,8 @@
         //Xu li tin nhan toi
         socket.onmessage = function (event) {
           var js1 = JSON.parse(event.data);
-          
+          console.log(js1);
+
           if(js1.msg_id==="load"){
             console.log(js1.msg);
             if(js1.msg.length>0){
@@ -503,6 +538,21 @@
           }
             }
 
+          }
+          else if (js1.msg_id ==="load_ranked"){
+            if(js1.list.length > 0){
+              var list_ranked = JSON.parse(js1.list);
+            }
+            for(var i = 0; i< list_ranked.length; i++){
+              var ranked = list_ranked[i];
+              console.log(ranked);
+              $("#listRanked").append('\
+              <tr>\
+              <td>'+(i + 1)+'</td>\
+              <td>'+ranked.email+'</td>\
+              <td>'+ranked.score+'</td>\
+              </tr>');
+            }
           }
           else if (js1.msg_id === "online"){
             $("#list_online").empty();
