@@ -187,15 +187,7 @@
             }
             };
             $("#btnRestart").click(function(){
-                for(var k = 0;k<size;k++){
-                        for(var l = 0; l<size; l++){
-                            dataMatrix[k][l]=-1;
-                            matrix[k][l].html("").css("pointer-events","auto");    
-
-                        }
-                }
-                //TODO: reset turn ve 0
-                turn = 0;
+                
                 var js2 = '{\
                     msg_id: "restart_game",\
                     name: "'+$("#name").val()+'"\
@@ -246,6 +238,18 @@
                                 }                          
                             }
                         }
+                }
+                else if(json.msg_id==="restart_game"){
+                    for(var k = 0;k<size;k++){
+                        for(var l = 0; l<size; l++){
+                            dataMatrix[k][l]=-1;
+                            matrix[k][l].html("").css("pointer-events","auto");    
+
+                        }
+                }
+                //TODO: reset turn ve 0
+                turn = 0;
+
                 }
                 else if(json.msg_id ===""){
 
