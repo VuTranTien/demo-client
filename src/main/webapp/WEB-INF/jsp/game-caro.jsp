@@ -212,13 +212,21 @@
                 console.log(json);
                 if(json.msg_id === "load_score"){
                     if (json.msg_type ==="c1"){
-                    $("#scoreUser1").text('Score: '+json.score)
+                    $("#scoreUser1").text('Score: '+json.score);
                     $("#historyUser1").text('W:'+json.win + ' L:'+json.lose);
                     }
                     else if (json.msg_type ==="c2"){
-                    $("#scoreUser2").text('Score: '+json.score)
+                    $("#scoreUser2").text('Score: '+json.score);
                     $("#historyUser2").text('W:'+json.win + ' L:'+json.lose);
                     }
+                }
+                else if(json.msg_id ==="update_score"){
+                    var list_score = JSON.parse(json.list);
+                    $("#scoreUser1").text('Score: '+list_score[0].score);
+                    $("#historyUser1").text('W:'+list_score[0].win + ' L:'+list_score[0].lose);
+
+                    $("#scoreUser2").text('Score: '+list_score[1].score);
+                    $("#historyUser2").text('W:'+list_score[1].score + ' L:'+list_score[1].lose);
                 }
                 else if(json.msg_id === "game_state_win"){
                     alert(json.winner);
