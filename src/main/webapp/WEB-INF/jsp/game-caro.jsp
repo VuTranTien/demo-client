@@ -134,7 +134,7 @@
     <script>
         var checkerBoard = [];
         var x,y;
-        var size = 25;
+        var size = 22;
         var turn = size ** 2;
         var matrix = [[]];
         var dataMatrix=[[]];
@@ -187,6 +187,15 @@
             }
             };
             $("#btnRestart").click(function(){
+                for(var k = 0;k<size;k++){
+                        for(var l = 0; l<size; l++){
+                            dataMatrix[k][l]=-1;
+                            matrix[k][l].html("").css("pointer-events","auto");    
+
+                        }
+                }
+                //TODO: reset turn ve 0
+                turn = 0;
                 
                 var js2 = '{\
                     msg_id: "restart_game",\
@@ -308,41 +317,40 @@
 
                         // var p_tag = $('<p>');
                         // console.log(matrix);
-                        if (turn % 2 == 0) {
-                            $(this).html(maskOf_O);
-                            dataMatrix[event.data.vi][event.data.vj] = 0;
+                        var state = '{\
+                            msg_id: "game_state",\
+                            name: "c1",\
+                            x: '+ event.data.vi +',\
+                            y: '+ event.data.vj +'\
+                        }';
+                        s.send(state);
+                        // if (turn % 2 == 0) {
+                        //     $(this).html(maskOf_O);
+                            
 
-                            var state = '{\
-                            msg_id: "game_state",\
-                            name: "c1",\
-                            label: 0,\
-                            x: '+ event.data.vi +',\
-                            y: '+ event.data.vj +'\
-                        }';
-                        s.send(state);
-                        }
-                        else {
-                            $(this).html(maskOf_X);
-                            dataMatrix[event.data.vi][event.data.vj] = 1;
-                            clearTimeout(t1);
-                            var state = '{\
-                            msg_id: "game_state",\
-                            name: "c1",\
-                            label: 1,\
-                            x: '+ event.data.vi +',\
-                            y: '+ event.data.vj +'\
-                        }';
-                        s.send(state);
-                        }
-                        // $(this).attr("style","pointer-events : none !important");
-                        $(this).css("pointer-events", "none", "!important");
-                        for(var k = 0;k<size;k++){
-                            for(var l = 0; l<size; l++){
-                                if(dataMatrix[k][l]==-1){
-                                    matrix[k][l].css("pointer-events", "none"); 
-                                }                          
-                            }
-                        }
+                            
+                        // }
+                        // else {
+                        //     $(this).html(maskOf_X);
+                        //     dataMatrix[event.data.vi][event.data.vj] = 1;
+                        //     clearTimeout(t1);
+                        //     var state = '{\
+                        //     msg_id: "game_state",\
+                        //     name: "c1",\
+                        //     x: '+ event.data.vi +',\
+                        //     y: '+ event.data.vj +'\
+                        // }';
+                        // s.send(state);
+                        // }
+                        // // $(this).attr("style","pointer-events : none !important");
+                        // $(this).css("pointer-events", "none", "!important");
+                        // for(var k = 0;k<size;k++){
+                        //     for(var l = 0; l<size; l++){
+                        //         if(dataMatrix[k][l]==-1){
+                        //             matrix[k][l].css("pointer-events", "none"); 
+                        //         }                          
+                        //     }
+                        // }
 
                     });
                     tdEle.append(btn);
