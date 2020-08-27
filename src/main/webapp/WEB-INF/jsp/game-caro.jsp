@@ -66,7 +66,7 @@
             <div class="col-3 background-left">
                 <br>
                 <div class="row justify-content-center">
-                    <h3>USER1</h3>
+                    <h3 id = "nameUser1">USER1</h3>
                 </div>
                 <div class="row justify-content-center">
                         <span style="font-size: 18px;" id = "scoreUser1"></span>
@@ -102,7 +102,7 @@
             <div class="col-3 background-right">
                 <br>
                 <div class="row justify-content-center">
-                    <h3>USER2</h3>
+                    <h3 id = "nameUser2">USER2</h3>
                 </div>
                 <div class="row justify-content-center">
                     <span style="font-size: 18px;" id="scoreUser2"></span>
@@ -179,14 +179,14 @@
             
             socket.send(getScoreOwner);
 
-            var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
-            function countdown1() {
-            $seconds1.textContent = '00:' + seconds1
-            if (seconds1-- > 0)  t1 = setTimeout(countdown1, 1000)
-            if (seconds1 == 0) {
-             alert("You Lose")
-            }
-            };
+            // var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
+            // function countdown1() {
+            // $seconds1.textContent = '00:' + seconds1
+            // if (seconds1-- > 0)  t1 = setTimeout(countdown1, 1000)
+            // if (seconds1 == 0) {
+            //  alert("You Lose")
+            // }
+            // };
             $("#btnRestart").click(function(){
                 for(var k = 0;k<size;k++){
                         for(var l = 0; l<size; l++){
@@ -212,10 +212,12 @@
                 console.log(json);
                 if(json.msg_id === "load_score"){
                     if (json.msg_type ==="c1"){
+                    $("#nameUser1").text(json.email.split("@")[0]);
                     $("#scoreUser1").text('Score: '+json.score);
                     $("#historyUser1").text('W:'+json.win + ' L:'+json.lose);
                     }
                     else if (json.msg_type ==="c2"){
+                    $("#nameUser2").text(json.email.split("@")[0]);
                     $("#scoreUser2").text('Score: '+json.score);
                     $("#historyUser2").text('W:'+json.win + ' L:'+json.lose);
                     }
