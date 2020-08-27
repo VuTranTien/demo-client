@@ -239,7 +239,6 @@
                    var jy = json.y;
                    matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X).css("pointer-events", "none","important");
                    dataMatrix[ix][jy] = json.label;
-                   turn = json.turn;
                    for(var k = 0;k<size;k++){
                             for(var l = 0; l<size; l++){
                                 if(dataMatrix[k][l]==-1){
@@ -247,6 +246,13 @@
                                 }                          
                             }
                         }
+                }
+                else if(json.msg_id === "game_state_from_me"){
+                   var ix = json.x;
+                   var jy = json.y;
+                   matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X).css("pointer-events", "none","important");
+                   dataMatrix[ix][jy] = json.label;
+                   
                 }
                 else if(json.msg_id==="restart_game"){
                     for(var k = 0;k<size;k++){
@@ -257,7 +263,6 @@
                         }
                 }
                 //TODO: reset turn ve 0
-                turn = 0;
 
                 }
                 else if(json.msg_id ===""){
@@ -327,30 +332,14 @@
                         // if (turn % 2 == 0) {
                         //     $(this).html(maskOf_O);
                             
-
-                            
-                        // }
-                        // else {
-                        //     $(this).html(maskOf_X);
-                        //     dataMatrix[event.data.vi][event.data.vj] = 1;
-                        //     clearTimeout(t1);
-                        //     var state = '{\
-                        //     msg_id: "game_state",\
-                        //     name: "c1",\
-                        //     x: '+ event.data.vi +',\
-                        //     y: '+ event.data.vj +'\
-                        // }';
-                        // s.send(state);
-                        // }
-                        // // $(this).attr("style","pointer-events : none !important");
-                        // $(this).css("pointer-events", "none", "!important");
-                        // for(var k = 0;k<size;k++){
-                        //     for(var l = 0; l<size; l++){
-                        //         if(dataMatrix[k][l]==-1){
-                        //             matrix[k][l].css("pointer-events", "none"); 
-                        //         }                          
-                        //     }
-                        // }
+                        $(this).css("pointer-events", "none", "!important");
+                        for(var k = 0;k<size;k++){
+                            for(var l = 0; l<size; l++){
+                                if(dataMatrix[k][l]==-1){
+                                    matrix[k][l].css("pointer-events", "none"); 
+                                }                          
+                            }
+                        }
 
                     });
                     tdEle.append(btn);
