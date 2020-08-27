@@ -355,7 +355,7 @@
 
                 <li class="menu-item dropdown">
                   <a id="enter_board">
-                   <i class="menu-icon fa fa-th"></i>Bàn 1</a>
+                   <i class="menu-icon fa fa-th"></i>Bàn 1  <i class=" ml-5 stat-icon fa fa-spinner"></i> 1/2</a>
                 </li>
             </ul>
         </div><!-- /.navbar-collapse -->
@@ -478,8 +478,11 @@
              name:"'+ $("#nameBoard").val() +'",  \
              time:'+ $("#countdownTime").val() +'  \
                }';
-              
+              var js5 = '{\
+               msg_id: "load_list_check_board" \
+              }';
               socket.send(js3);
+              socket.send(js4);
               location.replace("http://localhost:8880/demo-client/game-caro.do?name=c1&email="+email);
           });
           $("#enter_board").click(function(){
@@ -587,6 +590,18 @@
                   </div>\
                 </div>\
           ');
+          }
+          else if(js1.msg_id==="load_list_check_board"){
+            var lst_cb = js1.list;
+            //FIXME: 
+            lst_cb.array.forEach(element => {
+              $("#").append('\
+              <li class="menu-item dropdown">\
+                  <a id="enter_board">\
+                   <i class="menu-icon fa fa-th"></i>'+element.name+'<i class=" ml-5 stat-icon fa fa-spinner"></i> '+ element.isFull?'2':'1'+'/2</a>\
+                </li>\
+              ');
+            });
           }
           else{
             console.log("Error in message recieved");

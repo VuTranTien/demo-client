@@ -212,12 +212,12 @@
                 console.log(json);
                 if(json.msg_id === "load_score"){
                     if (json.msg_type ==="c1"){
-                    $("#nameUser1").text(json.email.split("@")[0]);
+                    $("#nameUser1").text(json.email);
                     $("#scoreUser1").text('Score: '+json.score);
                     $("#historyUser1").text('W:'+json.win + ' L:'+json.lose);
                     }
                     else if (json.msg_type ==="c2"){
-                    $("#nameUser2").text(json.email.split("@")[0]);
+                    $("#nameUser2").text(json.email);
                     $("#scoreUser2").text('Score: '+json.score);
                     $("#historyUser2").text('W:'+json.win + ' L:'+json.lose);
                     }
