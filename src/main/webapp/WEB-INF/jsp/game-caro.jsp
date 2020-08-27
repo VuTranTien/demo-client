@@ -105,10 +105,10 @@
                     <h3>USER2</h3>
                 </div>
                 <div class="row justify-content-center">
-                    <span style="font-size: 18px;" id="scoreUser1"></span>
+                    <span style="font-size: 18px;" id="scoreUser2"></span>
                 </div>
                 <div class="row justify-content-center">
-                    <span style="font-size: 18px;" id="historyUser1"></span>
+                    <span style="font-size: 18px;" id="historyUser2"></span>
                 </div>
                 <div class="row justify-content-center">
                     <span id="timerUser1" , style="color: red; font-size: 25px;">00:20</span>
@@ -172,11 +172,12 @@
             socket.send(startgame);
             });
             // TODO load score user
-            var getScoreUser1 = '{\
+            var getScoreOwner = '{\
                     msg_id:"load_score",\
-                    msg_from:"chungminhde@gmail.com"}';
+                    name: "'+$("#name_of_check_board").val()+'"\
+                    }';
             
-            socket.send(getScoreUser1);
+            socket.send(getScoreOwner);
 
             var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
             function countdown1() {
@@ -209,9 +210,15 @@
             socket.onmessage = function(event){
                 var json = JSON.parse(event.data);
                 console.log(json);
-                if(json.msg_id == "load_score"){
+                if(json.msg_id === "load_score"){
+                    if (json.msg_type ==="c1"){
                     $("#scoreUser1").text('Score: '+json.score)
                     $("#historyUser1").text('W:'+json.win + ' L:'+json.lose);
+                    }
+                    else if (json.msg_type ==="c2"){
+                    $("#scoreUser2").text('Score: '+json.score)
+                    $("#historyUser2").text('W:'+json.win + ' L:'+json.lose);
+                    }
                 }
                 else if(json.msg_id === "game_state_win"){
                     alert(json.winner);
