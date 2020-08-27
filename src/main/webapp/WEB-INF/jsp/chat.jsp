@@ -376,6 +376,7 @@
                                 <button class="search-close" type="submit"><i class="fa fa-close"></i></button>
                             </form>
                         </div>
+                        
 
                     </div>
       </div>
@@ -460,6 +461,7 @@
           var load_ranked = '{\
             msg_id: load_ranked\
           }';
+          load_ch(socket);
           socket.send(load_ranked);
            var json1 = '{\
               msg_id: "load_msg",\
@@ -478,14 +480,12 @@
              name:"'+ $("#nameBoard").val() +'",  \
              time:'+ $("#countdownTime").val() +'  \
                }';
-              var js5 = '{\
-               msg_id: "load_list_check_board" \
-              }';
+      
               socket.send(js3);
-              socket.send(js5);
-              // location.replace("http://localhost:8880/demo-client/game-caro.do?name=c1&email="+email);
+              load_ch(socket);
+              location.replace("http://localhost:8880/demo-client/game-caro.do?name="+$("#nameBoard").val()+"&email="+email);
           });
-          $("#enter_board").click(function(){
+          $(".enter_board").click(function(){
             var js4 = '{\
             msg_id: "enter_board",\
             email: "'+ $("#email").val()+'",\
@@ -597,13 +597,14 @@
             //FIXME: 
             $("#list_of_check_board").empty();
             for(var jk = 0;jk<lst_cb.length;jk++){
-              // var js6 = JSON.parse("\""+lst_cb[jk]+"\"");
+              var t =lst_cb[jk].isFull == 2 ?'2':'1';
               $("#list_of_check_board").append('\
               <li class="menu-item dropdown">\
-                  <a id="enter_board">\
-                   <i class="menu-icon fa fa-th"></i>'+lst_cb[jk].name+'<i class=" ml-5 stat-icon fa fa-spinner"></i> '+lst_cb[jk].isFull?'2':'1'+'/2</a>\
+                  <a class="enter_board">\
+                   <i class="menu-icon fa fa-th"></i>'+lst_cb[jk].name+'<i class=" ml-5 stat-icon fa fa-spinner"></i> '+t+'/2</a>\
                 </li>\
               ');
+            
             }
           }
           else{
@@ -632,6 +633,12 @@
         var i1 = $('<input>');
         i1.attr("type","text");
         fm.append(i1);
+      }
+      function load_ch(socket){
+        var js5 = '{\
+               msg_id: "load_list_check_board" \
+              }';
+              socket.send(js5);
       }
     </script>
     </div>
