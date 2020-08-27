@@ -190,7 +190,7 @@
                 
                 var js2 = '{\
                     msg_id: "restart_game",\
-                    name: "'+$("#name").val()+'"\
+                    name: "'+$("#name_of_check_board").val()+'"\
                 }';
                 //TODO: reset matrix
                 socket.send(js2);
