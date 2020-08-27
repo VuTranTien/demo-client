@@ -46,11 +46,19 @@
 
         </div><br>
         <div class="row">
-
+        
             <div class="col-12">
                 <div class="row justify-content-center">
-                    <button id="btnStart" type="button" class="btn btn-warning">Start Game</button>
+                    <div class="col-4">
+                        <div class="row">
+                            <div class="col-6"><button style="width: 8em;" id="btnStart" type="button"
+                                    class="btn btn-warning">Start Game</button></div>
+                            <div class="col-6"><button id="btnRestart" style="width: 8em;" id="btnStart" type="button"
+                                    class="btn btn-warning">Restart</button></div>
+                        </div>
+                    </div>
                 </div>
+        
                 <br>
             </div>
 
@@ -168,9 +176,6 @@
                     msg_id:"load_score",\
                     msg_from:"chungminhde@gmail.com"}';
             
-            // var getScoreUser2 = '{\
-            //         msg_id:"load_score",\
-            //         msg_from:"user1@gmail.com"}';
             socket.send(getScoreUser1);
 
             var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
@@ -181,6 +186,21 @@
              alert("You Lose")
             }
             };
+            $("#btnRestart").click(function(){
+                for(var k = 0;k<size;k++){
+                        for(var l = 0; l<size; l++){
+                            matrix[ix][jy].css("pointer-events","auto");     
+                        }
+                }
+                //TODO: reset turn ve 0
+                turn = 0;
+                var js2 = '{\
+                    msg_id: "restart_game",\
+                    name: "'+$("#name").val()+'"\
+                }';
+                //TODO: reset matrix
+                socket.send(js2);
+            });
             
             
             socket.onmessage = function(event){
@@ -191,12 +211,14 @@
                     $("#historyUser1").text('W:'+json.win + ' L:'+json.lose);
                 }
                 else if(json.msg_id === "game_state_win"){
-                    if(json.winner === "me"){
-                        alert("YOU WIN");
+                    alert(json.winner);
+                    //TODO: restart game
+                    for(var k = 0;k<size;k++){
+                        for(var l = 0; l<size; l++){
+                            matrix[ix][jy].html("").css("pointer-events", "none","important");     
+                        }
                     }
-                    else{
-                        alert("YOU LOSE");
-                    }
+
                 }
                 else if(json.msg_id === "is_start"){
                     if(json.ret == 0){
@@ -308,9 +330,6 @@
                         }
                         // $(this).attr("style","pointer-events : none !important");
                         $(this).css("pointer-events", "none", "!important");
-                        // // $(this).removeClass('no_click');
-                        // $(this).addClass('have_click')
-                        // $("#gameBoard").css("pointer-events", "none");
                         for(var k = 0;k<size;k++){
                             for(var l = 0; l<size; l++){
                                 if(dataMatrix[k][l]==-1){
@@ -318,10 +337,6 @@
                                 }                          
                             }
                         }
-                        // $("#frame0").attr("style","pointer-events : none");
-
-
-
 
                     });
                     tdEle.append(btn);
