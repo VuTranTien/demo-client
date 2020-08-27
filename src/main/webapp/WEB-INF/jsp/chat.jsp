@@ -353,7 +353,7 @@
                 </li>
                 <h3 class="menu-title">Danh sách bàn cờ</h3><!-- /.menu-title -->
 
-                <li class="menu-item dropdown">
+                <li id="list_of_check_board" class="menu-item dropdown">
                   <a id="enter_board">
                    <i class="menu-icon fa fa-th"></i>Bàn 1  <i class=" ml-5 stat-icon fa fa-spinner"></i> 1/2</a>
                 </li>
@@ -482,8 +482,8 @@
                msg_id: "load_list_check_board" \
               }';
               socket.send(js3);
-              socket.send(js4);
-              location.replace("http://localhost:8880/demo-client/game-caro.do?name=c1&email="+email);
+              socket.send(js5);
+              // location.replace("http://localhost:8880/demo-client/game-caro.do?name=c1&email="+email);
           });
           $("#enter_board").click(function(){
             var js4 = '{\
@@ -592,16 +592,19 @@
           ');
           }
           else if(js1.msg_id==="load_list_check_board"){
-            var lst_cb = js1.list;
+            var lst_cb = JSON.parse(js1.list);
+            console.log(lst_cb);
             //FIXME: 
-            lst_cb.array.forEach(element => {
-              $("#").append('\
+            $("#list_of_check_board").empty();
+            for(var jk = 0;jk<lst_cb.length;jk++){
+              // var js6 = JSON.parse("\""+lst_cb[jk]+"\"");
+              $("#list_of_check_board").append('\
               <li class="menu-item dropdown">\
                   <a id="enter_board">\
-                   <i class="menu-icon fa fa-th"></i>'+element.name+'<i class=" ml-5 stat-icon fa fa-spinner"></i> '+ element.isFull?'2':'1'+'/2</a>\
+                   <i class="menu-icon fa fa-th"></i>'+lst_cb[jk].name+'<i class=" ml-5 stat-icon fa fa-spinner"></i> '+lst_cb[jk].isFull?'2':'1'+'/2</a>\
                 </li>\
               ');
-            });
+            }
           }
           else{
             console.log("Error in message recieved");
