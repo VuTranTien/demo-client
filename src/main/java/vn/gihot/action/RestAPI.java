@@ -33,7 +33,7 @@ public class RestAPI extends MultiActionController {
         Map<String,String> map = new HashMap<String, String>();
         map.put("id",room_id);
         map.put("key", MD5.getMd5(room_id+"654321"));
-        CallAPI call1 = new CallAPI("http://192.168.100.138:8080/center/room/info.do",map);
+        CallAPI call1 = new CallAPI("http://192.168.100.139:8080/center/room/info.do",map);
         String res = call1.getAPIResult(false);
         JSONObject j1 = new JSONObject(res);
 
