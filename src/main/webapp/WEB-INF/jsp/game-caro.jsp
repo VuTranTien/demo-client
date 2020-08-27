@@ -189,7 +189,7 @@
             $("#btnRestart").click(function(){
                 for(var k = 0;k<size;k++){
                         for(var l = 0; l<size; l++){
-                            matrix[ix][jy].css("pointer-events","auto");     
+                            matrix[k][l].css("pointer-events","auto");     
                         }
                 }
                 //TODO: reset turn ve 0
@@ -215,7 +215,7 @@
                     //TODO: restart game
                     for(var k = 0;k<size;k++){
                         for(var l = 0; l<size; l++){
-                            matrix[ix][jy].html("").css("pointer-events", "none","important");     
+                            matrix[k][l].html("").css("pointer-events", "none","important");     
                         }
                     }
 
