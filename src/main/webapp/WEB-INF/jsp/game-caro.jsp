@@ -189,7 +189,9 @@
             $("#btnRestart").click(function(){
                 for(var k = 0;k<size;k++){
                         for(var l = 0; l<size; l++){
-                            matrix[k][l].css("pointer-events","auto");     
+                            dataMatrix[k][l]=-1;
+                            matrix[k][l].html("").css("pointer-events","auto");    
+
                         }
                 }
                 //TODO: reset turn ve 0
