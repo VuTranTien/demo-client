@@ -512,15 +512,15 @@
               load_ch(socket);
               location.replace("http://localhost:8880/demo-client/game-caro.do?name="+$("#nameBoard").val()+"&email="+email);
           });
-          $(".enter_board").click(function(){
-            var js4 = '{\
-            msg_id: "enter_board",\
-            email: "'+ $("#email").val()+'",\
-            name:"'+$("#name_of_check_board").val()+'"\
-            }';
-            socket.send(js4);
-            location.replace("http://localhost:8880/demo-client/game-caro.do?name="+$("#name_of_check_board").val()+"&email="+email);
-          });     
+          // $(".enter_board").click(function(){
+          //   var js4 = '{\
+          //   msg_id: "enter_board",\
+          //   email: "'+ $("#email").val()+'",\
+          //   name:"'+$("#name_of_check_board").val()+'"\
+          //   }';
+          //   socket.send(js4);
+          //   location.replace("http://localhost:8880/demo-client/game-caro.do?name="+$("#name_of_check_board").val()+"&email="+email);
+          // });     
 
           $("#send").click(function () {
 
@@ -647,14 +647,14 @@
                 btn.addClass('btn btn-success btn-lg btn-block');
                 btn.html(lst_cb[jk].name);
                 $("#list_of_check_board").append(btn);
-                btn.click({ vi: lst_cb[jk].name }, function (event){
+                btn.click({ vi: lst_cb[jk].name, eml: email }, function (event){
                   var js4 = '{\
                       msg_id: "enter_board",\
                       email: "'+ $("#email").val()+'",\
                       name:"'+event.data.vi+'"\
                       }';
                 socket.send(js4);
-                location.replace("http://localhost:8880/demo-client/game-caro.do?name="+event.data.vi+"&email="+$("#email").val());
+                location.replace("http://localhost:8880/demo-client/game-caro.do?name="+event.data.vi+"&email="+event.data.eml);
                 });
               }
             }
