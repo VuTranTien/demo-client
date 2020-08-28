@@ -516,10 +516,10 @@
             var js4 = '{\
             msg_id: "enter_board",\
             email: "'+ $("#email").val()+'",\
-            name:'+'"c1"'+'\
+            name:"'+$("#name_of_check_board").val()+'"\
             }';
             socket.send(js4);
-            location.replace("http://localhost:8880/demo-client/game-caro.do?name=c1&email="+email);
+            location.replace("http://localhost:8880/demo-client/game-caro.do?name="+$("#name_of_check_board").val()+"&email="+email);
           });     
 
           $("#send").click(function () {

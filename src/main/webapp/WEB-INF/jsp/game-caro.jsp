@@ -199,7 +199,7 @@
             var js1 = '{\
             msg_id: "overide_channel",\
             email:"'+$("#email").val()+'",\
-            name: "c1"\
+            name: "'+$("#name_of_check_board").val()+'"\
             }';
             socket.send(js1);
             $("#btnStart").click(function(){
@@ -380,7 +380,7 @@
                         // console.log(matrix);
                         var state = '{\
                             msg_id: "game_state",\
-                            name: "c1",\
+                            name: "'+$("#name_of_check_board").val()+'"",\
                             x: '+ event.data.vi +',\
                             y: '+ event.data.vj +'\
                         }';
