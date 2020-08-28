@@ -380,7 +380,7 @@
                         // console.log(matrix);
                         var state = '{\
                             msg_id: "game_state",\
-                            name: "'+$("#name_of_check_board").val()+'"",\
+                            name: "'+$("#name_of_check_board").val()+'",\
                             x: '+ event.data.vi +',\
                             y: '+ event.data.vj +'\
                         }';
