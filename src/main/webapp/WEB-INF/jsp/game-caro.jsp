@@ -10,6 +10,33 @@
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
+    <script>
+    function parseJwt(token) {
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return String(jsonPayload);
+        }
+        function checkToken() {
+            
+        if (!(document.cookie === "")) {//check xem token con hieu luc khong
+        token = document.cookie.split(";")[0].split("=")[1];
+            var objToken = JSON.parse(parseJwt(token));
+            console.log(objToken);
+            var t = objToken.exp*1000 < new Date().getTime();
+            if(t){
+            location.replace("http://localhost:8880/demo-client/login.do");
+            }
+            
+        }
+        
+        }
+        checkToken();
+    </script>
+
     <style>
         body {
             /* background-image: linear-gradient(to right, #c4e0e5, #4ca1af ); */
@@ -47,7 +74,7 @@
         </div>
         <div class="row justify-content-end">
             <div class = 'col-3'>
-                <button type="button" class="btn btn-secondary btn-lg active">BACK</button>
+                <button type="button" class="btn btn-secondary btn-lg active" id = "call_back">BACK</button>
             </div>
 
         </div>
@@ -159,6 +186,10 @@
 
         //-------------------------------------------------------------------------------
         function load(){
+            
+            $("#call_back").click(function(){
+                location.replace('http://localhost:8880/demo-client/chat.do');
+            });
             //Connection Server
             let socket = new WebSocket(url+ "9000");
             socket.onopen = function (e) {
