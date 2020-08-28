@@ -37,14 +37,21 @@
 <body onload="load()">
 
     <div class="container-fluid" style="margin-top: 20px;">
-        <div class="row justify-content-center ">
+        <div class="row justify-content-center">
             <h1> GAME BOARD </h1>
             <input id="name_of_check_board" type="text" hidden value="${name}">
             <input type="text" value="${email}" hidden id="email">
+        
 
 
+        </div>
+        <div class="row justify-content-end">
+            <div class = 'col-3'>
+                <button type="button" class="btn btn-secondary btn-lg active">BACK</button>
+            </div>
 
-        </div><br>
+        </div>
+        <br>
         <div class="row">
         
             <div class="col-12">
@@ -244,7 +251,7 @@
                     if(json.ret == 0){
                         $('.isClick').css("pointer-events", "auto");
                         //set countdown time
-                        countdown1();
+                        // countdown1();
 
                     }
                     else{
@@ -332,6 +339,7 @@
                     var btn = $('<button>');
                     btn.addClass('cell btn btn-light isClick');
                     btn.css("pointer-events", "none");
+                    
                     matrix[i][j] = btn;
                     dataMatrix[i][j] = -1;
                     // btn.append("x");

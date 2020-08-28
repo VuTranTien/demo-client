@@ -597,14 +597,39 @@
             //FIXME: 
             $("#list_of_check_board").empty();
             for(var jk = 0;jk<lst_cb.length;jk++){
-              var t =lst_cb[jk].isFull == 2 ?'2':'1';
-              $("#list_of_check_board").append('\
-              <li class="menu-item dropdown">\
-                  <a class="enter_board">\
-                   <i class="menu-icon fa fa-th"></i>'+lst_cb[jk].name+'<i class=" ml-5 stat-icon fa fa-spinner"></i> '+t+'/2</a>\
-                </li>\
-              ');
-            
+              if (lst_cb[jk].isFull == 2) {
+                var btn = $('<button>');
+                btn.addClass('btn btn-danger btn-lg btn-block');
+                    // btn.css("pointer-events", "none");
+                btn.html(lst_cb[jk].name);
+                
+                // $("#list_of_check_board").append('<button type="button" class="btn btn-danger btn-lg btn-block">'+lst_cb[jk].name+'</button>');
+                // btn.click( function () {
+                //   var js4 = '{\
+                //       msg_id: "enter_board",\
+                //       email: "'+ $("#email").val()+'",\
+                //       name:"'+lst_cb[jk].name+'"\
+                //       }';
+                // socket.send(js4);
+                // location.replace("http://localhost:8880/demo-client/game-caro.do?name="+lst_cb[jk].name+"&email="+email);
+                // });
+                $("#list_of_check_board").append(btn);
+              }
+              else if (lst_cb[jk].isFull == 1){
+                var btn = $('<button>');
+                btn.addClass('btn btn-success btn-lg btn-block');
+                btn.html(lst_cb[jk].name);
+                $("#list_of_check_board").append(btn);
+                btn.click({ vi: lst_cb[jk].name }, function (event){
+                  var js4 = '{\
+                      msg_id: "enter_board",\
+                      email: "'+ $("#email").val()+'",\
+                      name:"'+event.data.vi+'"\
+                      }';
+                socket.send(js4);
+                location.replace("http://localhost:8880/demo-client/game-caro.do?name="+event.data.vi+"&email="+$("#email").val());
+                });
+              }
             }
           }
           else{
