@@ -178,9 +178,6 @@
                 <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
                 <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\
                 </svg>';
-        // var maskOf_O = '<svg width="1.8em" height="1.8em" viewBox="0.4 0.7 45 35" class="bi bi-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
-        //         <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>\
-        //         </svg>';
         var maskOf_O = '<svg width="1.8em" height="1.8em" viewBox="0.4 0.7 45 35" class="bi bi-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                         <circle cx="10" cy="10" r="10"/>\
                         </svg>';
@@ -319,21 +316,24 @@
                 else if(json.msg_id==="reload_data_matrix"){
                     dataMatrix = json.matrix;
                     console.log(dataMatrix);
-
+                    // $("#gameBoard").css("pointer-events", "auto");
                     for(var k = 0;k<size;k++){
                             for(var l = 0; l<size; l++){
                                 if(json.is_your_turn==-1){
                                         matrix[k][l].css("pointer-events", "none");
                                         if(dataMatrix[k][l]!=-1){
-                                            matrix[k][k].html(json.label==0?maskOf_O:maskOf_X);
+                                            matrix[k][l].html(dataMatrix[k][l]==0?maskOf_O:maskOf_X);
                                         }
 
                                     }
                                     else{
                                         if(dataMatrix[k][l]!=-1){
                                             matrix[k][l].css("pointer-events", "none","important");
-                                            matrix[k][l].html(json.label==0?maskOf_O:maskOf_X);
+                                            matrix[k][l].html(dataMatrix[k][l]==0?maskOf_O:maskOf_X);
+                                            continue;
                                         }
+                                        matrix[k][l].css("pointer-events","auto");
+
                                         
                                     }
                                                   
