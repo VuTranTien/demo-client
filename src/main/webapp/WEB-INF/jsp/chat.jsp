@@ -344,7 +344,7 @@
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                          <button  id = "createBoard" type="button" class="btn btn-primary">Xong</button>
+                          <button id = "createBoard" type="button" class="btn btn-primary">Xong</button>
                         </div>
                       </div>
                     </div>

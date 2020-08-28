@@ -11,6 +11,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
     <script>
+        var email="error_email";
     function parseJwt(token) {
         var base64Url = token.split('.')[1];
         var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -192,16 +193,12 @@
             });
             //Connection Server
             let socket = new WebSocket(url+ "9000");
+        
             socket.onopen = function (e) {
                 console.log("-------------Room Connection------------");
             
             // thieu email------------------------------------
-            var js1 = '{\
-            msg_id: "overide_channel",\
-            email:"'+$("#email").val()+'",\
-            name: "'+$("#name_of_check_board").val()+'"\
-            }';
-            socket.send(js1);
+            overide_channel_reload(socket);
             $("#btnStart").click(function(){
             var startgame = '{\
             msg_id: "game_start",\
@@ -318,8 +315,35 @@
                         }
                 }
                 //TODO: reset turn ve 0
+                }
+                else if(json.msg_id==="reload_data_matrix"){
+                    dataMatrix = json.matrix;
+                    console.log(dataMatrix);
+
+                    for(var k = 0;k<size;k++){
+                            for(var l = 0; l<size; l++){
+                                if(json.is_your_turn==-1){
+                                        matrix[ix][jy].css("pointer-events", "none");
+                                        if(dataMatrix[ix][jy]!=-1){
+                                            matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X);
+                                        }
+
+                                    }
+                                    else{
+                                        if(dataMatrix[ix][jy]!=-1){
+                                            matrix[ix][jy].css("pointer-events", "none","important");
+                                            matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X);
+                                        }
+                                        
+                                    }
+                                                  
+                            }
+                        }
+                    
+                    
 
                 }
+                
                 else if(json.msg_id ===""){
 
                 }
@@ -425,6 +449,15 @@
 
 
         };
+        function overide_channel_reload(socket){
+            var js1 = '{\
+            msg_id: "overide_channel",\
+            email:"'+$("#email").val()+'",\
+            name: "'+$("#name_of_check_board").val()+'"\
+            }';
+            socket.send(js1);
+
+        }
         
     </script>
     
