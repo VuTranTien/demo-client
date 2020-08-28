@@ -323,16 +323,16 @@
                     for(var k = 0;k<size;k++){
                             for(var l = 0; l<size; l++){
                                 if(json.is_your_turn==-1){
-                                        matrix[ix][jy].css("pointer-events", "none");
-                                        if(dataMatrix[ix][jy]!=-1){
-                                            matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X);
+                                        matrix[k][l].css("pointer-events", "none");
+                                        if(dataMatrix[k][l]!=-1){
+                                            matrix[k][k].html(json.label==0?maskOf_O:maskOf_X);
                                         }
 
                                     }
                                     else{
-                                        if(dataMatrix[ix][jy]!=-1){
-                                            matrix[ix][jy].css("pointer-events", "none","important");
-                                            matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X);
+                                        if(dataMatrix[k][l]!=-1){
+                                            matrix[k][l].css("pointer-events", "none","important");
+                                            matrix[k][l].html(json.label==0?maskOf_O:maskOf_X);
                                         }
                                         
                                     }
