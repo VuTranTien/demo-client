@@ -320,13 +320,13 @@
                 
                     if(json.label == 0){
                         
-                        countdown1();
+                        countdown1(socket);
                         clearTimeout(t2);
                         seconds2 = 20;
                     }
                     else{
                         
-                        countdown2();
+                        countdown2(socket);
                         clearTimeout(t1);
                         seconds1 = 20;
                     }
@@ -347,13 +347,13 @@
                 else if(json.msg_id === "game_state_from_me"){
                     if(json.label == 0){
                         
-                        countdown1();
+                        countdown1(socket);
                         clearTimeout(t2);
                         seconds2 = 20;
                     }
                     else{
                         
-                        countdown2();
+                        countdown2(socket);
                         clearTimeout(t1);
                         seconds1 = 20;
                     }
