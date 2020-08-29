@@ -87,9 +87,9 @@
                 <div class="row justify-content-center">
                     <div class="col-4">
                         <div class="row">
-                            <div class="col-6"><button style="width: 8em;" id="btnStart" type="button"
+                            <div class="col-8"><button style="width: 8em;" id="btnStart" type="button"
                                     class="btn btn-warning">Start Game</button></div>
-                            <div class="col-6"><button id="btnRestart" style="width: 8em;" id="btnStart" type="button"
+                            <div class="col-4"><button id="btnRestart" style="width: 8em;" id="btnStart" type="button"
                                     class="btn btn-warning">Restart</button></div>
                         </div>
                     </div>
@@ -170,7 +170,7 @@
     <script>
         var checkerBoard = [];
         var x,y;
-        var size = 22;
+        var size = 23;
         var turn = size ** 2;
         var matrix = [[]];
         var dataMatrix=[[]];
