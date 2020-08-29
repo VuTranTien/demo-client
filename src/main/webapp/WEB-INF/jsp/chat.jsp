@@ -423,43 +423,38 @@
     </header>
 
     <div class="content mt-3 " >
-      <div class="container-fluid "id="game_area">
-
-
-        <div class="messaging">
-          <div class="inbox_msg">
-            <div class="inbox_people">
-              <div class="headind_srch">
-                <div class="recent_heading">
-                  <h4>Đang hoạt động</h4>
-                  <input type="text" hidden value="${room_id}" id="room_name">
-                  <input type="text" hidden value="${email}" id="email">
-                </div>
-                <div class="srch_bar">
-
-                </div>
+      <div class="messaging">
+        <div class="inbox_msg">
+          <div class="inbox_people">
+            <div class="headind_srch">
+              <div class="recent_heading">
+                <h4>Đang hoạt động</h4>
+                <input type="text" hidden value="${room_id}" id="room_name">
+                <input type="text" hidden value="${email}" id="email">
               </div>
-              <div class="inbox_chat" id="list_online">
+              <div class="srch_bar">
+
               </div>
             </div>
-            <div class="mesgs">
-              <div class="msg_history" id="msg_history">
+            <div class="inbox_chat" id="list_online">
+            </div>
+          </div>
+          <div class="mesgs">
+            <div class="msg_history" id="msg_history">
 
 
-              </div>
-              <div class="type_msg">
-                <div class="input_msg_write">
-                  <input type="text" class="write_msg" id="message" placeholder="Type a message" />
-                  <button class="msg_send_btn" id="send" type="button"><i class="fa fa-paper-plane-o"
-                      aria-hidden="true"></i></button>
-                </div>
+            </div>
+            <div class="type_msg">
+              <div class="input_msg_write">
+                <input type="text" class="write_msg" id="message" placeholder="Type a message" />
+                <button class="msg_send_btn" id="send" type="button"><i class="fa fa-paper-plane-o"
+                    aria-hidden="true"></i></button>
               </div>
             </div>
           </div>
-
         </div>
-         </div>
 
+      </div>
 
 
 
@@ -478,21 +473,7 @@
       var port = "";
       var idx = 0;
       var url = "ws://192.168.100.139:";
-      var checkerBoard = [];
-        var x,y;
-        var size = 22;
-        var turn = size ** 2;
-        var matrix = [[]];
-        var dataMatrix=[[]];
-        // var url = "ws://192.168.100.139:" ;
-        var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
-                <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
-                <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\
-                </svg>';
-        var maskOf_O = '<svg width="1.8em" height="1.8em" viewBox="0.4 0.7 45 35" class="bi bi-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
-                        <circle cx="10" cy="10" r="10"/>\
-                        </svg>';
-
+     
 
 
       function load() {//load room tra ve tu api 
@@ -711,21 +692,12 @@
                       name:"'+ event.data.vi + '"\
                       }';
                   socket.send(js4);
-                  $("#game_area").empty();
-                  var game_frame = $('<div>');
-                  game_frame.html('\
-                  <div class="row justify-content-left" id="frame0">\
-                    <table id="gameBoard">\
-                        <tbody></tbody>\
-                    </table>\
-                  </div>');
-
-                  $("#game_area").html(game_frame);
-                  create_checkBoard(event.data.v_socket);
+                 
+                  $(this).css("pointer-events", "none");
 
 
 
-                  // location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.vi + "&email=" + event.data.eml);
+                  location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.vi + "&email=" + event.data.eml);
                 });
               }
             }
@@ -738,6 +710,7 @@
 
         socket.onclose = function (event) {
           if (event.wasClean) {
+            socket.close();
             alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
           } else {
             // e.g. server process killed or network down
@@ -763,84 +736,6 @@
               }';
         socket.send(js5);
       }
-
-      function create_checkBoard (s) {
-
-        for (var i = 0; i < size; i++) {
-
-            var trOdd = $('<tr>').addClass('odd');//le
-            var trEven = $('<tr>').addClass('even');//chan
-            matrix[i] = [];
-            dataMatrix[i] =[];
-            if (i % 2 !== 0) {
-                checkerBoard.push(trEven);
-            }
-            else {
-                checkerBoard.push(trOdd);
-            }
-
-            for (var j = 0; j < size; j++) {
-
-                var tdEle = $('<td>');
-                tdEle.addClass('cell');
-                var btn = $('<button>');
-                btn.addClass('cell btn btn-outline-primary isClick');
-                btn.css("pointer-events", "none");
-
-                matrix[i][j] = btn;
-                dataMatrix[i][j] = -1;
-                // btn.append("x");
-                btn.click({ vi: i, vj: j }, function (event) {
-
-                    // var p_tag = $('<p>');
-                    // console.log(matrix);
-                    var state = '{\
-                        msg_id: "game_state",\
-                        name: "'+$("#name_of_check_board").val()+'",\
-                        x: '+ event.data.vi +',\
-                        y: '+ event.data.vj +'\
-                    }';
-                    s.send(state);
-                    // if (turn % 2 == 0) {
-                    //     $(this).html(maskOf_O);
-
-                    $(this).css("pointer-events", "none", "!important");
-                    for(var k = 0;k<size;k++){
-                        for(var l = 0; l<size; l++){
-                            if(dataMatrix[k][l]==-1){
-                                matrix[k][l].css("pointer-events", "none");
-                            }
-                        }
-                    }
-
-                });
-                tdEle.append(btn);
-                checkerBoard[i].append(tdEle);
-            }
-        }
-
-
-        $('tbody').html(checkerBoard);
-        $(".odd td:odd").css("background-color", "white");
-        $(".odd td:even").css("background-color", "white");
-        $(".even td:odd").css("background-color", "white");
-        $(".even td:even").css("background-color", "white");
-
-        $('#gameBoard').css({
-            'border-collapse': 'collapse',
-            'border': 'solid 1px black'
-        });
-
-        $('.cell').css({
-            'width': '30px',
-            'height': '30px',
-            'background-color': 'azure',
-            // 'border' : '1px solid black'
-
-        });
-
-
-        };
 
     </script>
   </div>

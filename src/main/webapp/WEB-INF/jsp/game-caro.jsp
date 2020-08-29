@@ -116,7 +116,7 @@
                 <br>
                 <br>
                 <div class="row justify-content-center">
-                    <svg width="6em" height="6em" viewBox="0 0 16 16" class="bi bi-x align-center" fill="currentColor"
+                    <svg width="6em" height="6em" viewBox="0 0 16 16" class="bi bi-x align-center btn-outline-danger" fill="currentColor"
                         xmlns="http://www.w3.org/2000/svg">\
                         <path fill-rule="evenodd"
                             d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z" />\
@@ -175,11 +175,11 @@
         var matrix = [[]];
         var dataMatrix=[[]];
         var url = "ws://192.168.100.139:" ;
-        var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
+        var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center btn-outline-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                 <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
                 <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\
                 </svg>';
-        var maskOf_O = '<svg width="1.8em" height="1.8em" viewBox="0.4 0.7 45 35" class="bi bi-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
+        var maskOf_O = '<svg width="1.8em" height="1.8em" viewBox="0.4 0.7 45 35" class="bi bi-circle-fill text-dark" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                         <circle cx="10" cy="10" r="10"/>\
                         </svg>';
 
@@ -203,6 +203,7 @@
             name:"'+$("#name_of_check_board").val() + '"\
             }';
             socket.send(startgame);
+            $("#btnStart").css("pointer-events", "none");
             });
             // TODO load score user
             var getScoreOwner = '{\
@@ -278,6 +279,7 @@
                         $('.isClick').css("pointer-events", "auto");
                         //set countdown time
                         // countdown1();
+                        $("#btnStart").css("pointer-events", "none");
 
                     }
                     else{
