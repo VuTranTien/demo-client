@@ -242,14 +242,6 @@
             
             socket.send(getScoreOwner);
 
-            // var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
-            // function countdown1() {
-            // $seconds1.textContent = '00:' + seconds1
-            // if (seconds1-- > 0)  t1 = setTimeout(countdown1, 1000)
-            // if (seconds1 == 0) {
-            //  alert("You Lose")
-            // }
-            // };
             $("#btnRestart").click(function(){
                 for(var k = 0;k<size;k++){
                         for(var l = 0; l<size; l++){
@@ -270,7 +262,7 @@
             });
             
             
-            socket.onmessage = function(event){
+            socket.onmessage = function({s: socket},event){
                 var json = JSON.parse(event.data);
                 console.log(json);
                 if(json.msg_id === "load_score"){
@@ -306,8 +298,6 @@
                 else if(json.msg_id === "is_start"){
                     if(json.ret == 0){
                         $('.isClick').css("pointer-events", "auto");
-                        //set countdown time
-                        // countdown1();
                         $("#btnStart").css("pointer-events", "none");
 
                     }
@@ -319,12 +309,12 @@
                 
                     if(json.label == 0){
                         
-                        countdown1(this);
+                        countdown1(event.data.s);
                         clearTimeout(t2);
                         seconds2 = 20;
                     }
                     else{                       
-                        countdown2(this);
+                        countdown2(event.data.s);
                         clearTimeout(t1);
                         seconds1 = 20;
                     }
@@ -345,13 +335,13 @@
                 else if(json.msg_id === "game_state_from_me"){
                     if(json.label == 0){
                         
-                        countdown1(this);
+                        countdown1(event.data.s);
                         clearTimeout(t2);
                         seconds2 = 20;
                     }
                     else{
                         
-                        countdown2(this);
+                        countdown2(event.data.s);
                         clearTimeout(t1);
                         seconds1 = 20;
                     }
