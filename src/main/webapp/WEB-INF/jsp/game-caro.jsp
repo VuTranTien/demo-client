@@ -47,9 +47,7 @@
         }
 
 
-        td {
-            border: 1px solid #000;
-        }
+        
         button.cell:hover {
             border: 3px solid blue !important;
 
@@ -111,7 +109,7 @@
                     <span style="font-size: 18px;" id = "historyUser1"></span>
                 </div>
                 <div class="row justify-content-center">
-                    <span id="timerUser1" , style="color: red; font-size: 25px;">00:20</span>
+                    <span id="timerUser1" , style="color: red; font-size: 25px;">0:20</span>
                 </div>
                 <br>
                 <br>
@@ -147,7 +145,7 @@
                     <span style="font-size: 18px;" id="historyUser2"></span>
                 </div>
                 <div class="row justify-content-center">
-                    <span id="timerUser1" , style="color: red; font-size: 25px;">00:20</span>
+                    <span id="timerUser2" , style="color: red; font-size: 25px;">0:20</span>
                 </div>
                 <br>
                 <br>
@@ -182,9 +180,41 @@
         var maskOf_O = '<svg width="1.8em" height="1.8em" viewBox="0.4 0.7 45 35" class="bi bi-circle-fill text-dark" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                         <circle cx="10" cy="10" r="10"/>\
                         </svg>';
-
+        var t1;
+        var t2;
+        var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
+        var seconds2 = 20, $seconds2 = document.querySelector('#timerUser2');
+        
+        function countdown1(s) {
+                $seconds1.textContent = '0:' + seconds1;
+                if (seconds1-- > 0)  t1 = setTimeout(countdown1, 1000)
+                if (seconds1 == 0) {
+                    var state = '{\
+                            msg_id: "game_state",\
+                            name: "'+$("#name_of_check_board").val()+'",\
+                            x: '+ -1 +',\
+                            y: '+ -1 +'\
+                        }';
+                        s.send(state);
+               
+                    }
+                };
+        function countdown2(s) {
+                $seconds2.textContent = '0:' + seconds2;
+                if (seconds2-- > 0)  t2 = setTimeout(countdown2, 1000)
+                if (seconds2 == 0) {
+                    var state = '{\
+                            msg_id: "game_state",\
+                            name: "'+$("#name_of_check_board").val()+'",\
+                            x: '+ -1 +',\
+                            y: '+ -1 +'\
+                        }';
+                        s.send(state);
+                    }
+                };
         //-------------------------------------------------------------------------------
         function load(){
+            
             
             $("#call_back").click(function(){
                 location.replace('http://localhost:8880/demo-client/chat.do');
@@ -287,10 +317,25 @@
                     }
                 }
                 else if(json.msg_id === "game_state"){
-                   var ix = json.x;
+                
+                    if(json.label == 0){
+                        
+                        countdown1();
+                        clearTimeout(t2);
+                        seconds2 = 20;
+                    }
+                    else{
+                        
+                        countdown2();
+                        clearTimeout(t1);
+                        seconds1 = 20;
+                    }
+                    var ix = json.x;
                    var jy = json.y;
-                   matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X).css("pointer-events", "none","important");
+                   if (json.x != -1){
+                    matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X).css("pointer-events", "none","important");
                    dataMatrix[ix][jy] = json.label;
+                   }
                    for(var k = 0;k<size;k++){
                             for(var l = 0; l<size; l++){
                                 if(dataMatrix[k][l]==-1){
@@ -300,10 +345,25 @@
                         }
                 }
                 else if(json.msg_id === "game_state_from_me"){
+                    if(json.label == 0){
+                        
+                        countdown1();
+                        clearTimeout(t2);
+                        seconds2 = 20;
+                    }
+                    else{
+                        
+                        countdown2();
+                        clearTimeout(t1);
+                        seconds1 = 20;
+                    }
+
                    var ix = json.x;
                    var jy = json.y;
-                   matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X).css("pointer-events", "none","important");
+                   if (json.x != -1){
+                    matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X).css("pointer-events", "none","important");
                    dataMatrix[ix][jy] = json.label;
+                   }
                    
                 }
                 else if(json.msg_id==="restart_game"){
@@ -405,6 +465,7 @@
 
                         // var p_tag = $('<p>');
                         // console.log(matrix);
+                        // clearTimeout(t1);
                         var state = '{\
                             msg_id: "game_state",\
                             name: "'+$("#name_of_check_board").val()+'",\
