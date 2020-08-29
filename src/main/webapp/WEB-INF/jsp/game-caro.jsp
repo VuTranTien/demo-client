@@ -196,7 +196,6 @@
                             y: '+ -1 +'\
                         }';
                         s.send(state);
-               
                     }
                 };
         function countdown2(s) {
@@ -320,13 +319,12 @@
                 
                     if(json.label == 0){
                         
-                        countdown1(socket);
+                        countdown1(this);
                         clearTimeout(t2);
                         seconds2 = 20;
                     }
-                    else{
-                        
-                        countdown2(socket);
+                    else{                       
+                        countdown2(this);
                         clearTimeout(t1);
                         seconds1 = 20;
                     }
@@ -347,13 +345,13 @@
                 else if(json.msg_id === "game_state_from_me"){
                     if(json.label == 0){
                         
-                        countdown1(socket);
+                        countdown1(this);
                         clearTimeout(t2);
                         seconds2 = 20;
                     }
                     else{
                         
-                        countdown2(socket);
+                        countdown2(this);
                         clearTimeout(t1);
                         seconds1 = 20;
                     }
