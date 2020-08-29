@@ -290,6 +290,8 @@
       height: 516px;
       overflow-y: auto;
     }
+
+    
   </style>
 
 </head>
@@ -383,7 +385,8 @@
                 </div>
               </div>
             </div>
-            
+            <div id="all_form"></div>
+
           </li>
           <h3 class="menu-title">Danh sách bàn cờ</h3><!-- /.menu-title -->
 
@@ -591,49 +594,27 @@
             var list_user = js1.list_user;
             $("#list_online").empty();
             for (var i = 0; i < list_user.length; i++) {
+
+              var btn = $('<button>');
+              $("#list_online").append(btn);
+              btn.addClass("btn btn-outline-secondary btn-lg btn-block");
+              btn.append('\
+              <div class="chat_list">\
+                <div class="chat_people">\
+                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>\
+                  <div class="chat_ib">\
+                  <h5>'+ list_user[i].email + '</h5>\
+                  <input type="text" hidden value="msg'+ i + '" id="msg' + i + '">\
+                  <input type="text" hidden value="btn'+ i + '" id="btn' + i + '">\
+                  </div>\
+                </div>\
+              </div>\
+              ');
+
               if (list_user[i].email != email) {
-                var btn = $('<button data-target = "#form_message" data-toggle = "modal">');
-                btn.addClass("btn btn-outline-secondary btn-lg btn-block");
-                btn.append('\
-              <div class="chat_list">\
-                <div class="chat_people">\
-                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>\
-                  <div class="chat_ib">\
-                  <h5>'+ list_user[i].email + '</h5>\
-                  </div>\
-                </div>\
-              </div>\
-              ');
-                btn.click({ reiEmail: list_user[i].email, fromEmail: email }, function (event) {
-                  $("#sendMsg").click({ rEmail: event.data.reiEmail, fEmail: event.data.fromEmail }, function (rs) {
-                    var sendMsg = '{\
-                    msg_id: "user_to_user",\
-                    msg: "'+ String($("#msgUser").val()) + '",\
-                    msg_from: "'+ rs.data.fEmail + '",\
-                    msg_reic: "'+ rs.data.rEmail + '"\
-                  }';
-                    socket.send(sendMsg);
-                  });
-                });
-                $("#list_online").append(btn);
-              }
-              else {
-                var btn = $('<button>');
-                btn.addClass("btn btn-outline-secondary btn-lg btn-block");
-                btn.append('\
-              <div class="chat_list">\
-                <div class="chat_people">\
-                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>\
-                  <div class="chat_ib">\
-                  <h5>'+ list_user[i].email + '</h5>\
-                  </div>\
-                </div>\
-              </div>\
-              ');
-                btn.click({ reiEmail: list_user[i].email, fromEmail: email }, function (event) {
-                  var formMsg = $('<div>');
-                  formMsg.append('\
-                          <div class="modal fade" id="form_message" tabindex="-1" role="dialog"\
+                var formMsg = $('<div>');
+                formMsg.append('\
+                      <div class="modal fade" id="form_message'+ i + '" tabindex="-1" role="dialog"\
                       aria-labelledby="exampleModalCenterTitle" aria-hidden="true">\
                       <div class="modal-dialog modal-dialog-centered" role="document">\
                         <div class="modal-content">\
@@ -647,47 +628,43 @@
                             <div>\
                               <div class="form-group">\
                                 <label for="recipient-name" class="col-form-label">Tin nhắn</label>\
-                                <input type="text" class="form-control" id="msgUser">\
+                                <input type="text" class="form-control" id="'+ i + '">\
                               </div>\
                             </div>\
                           </div>\
                           <div class="modal-footer">\
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>\
-                            <button id="sendMsg" type="button" class="btn btn-primary"> Gửi</button>\
+                            <button id="sendMsg'+ i + '" type="button" class="btn btn-primary" data-dismiss="modal"> Gửi</button>\
                           </div>\
                         </div>\
                       </div>\
                     </div>\
                   ');
-                  $("#form_message").modal();
+                btn.click({ reiEmail: list_user[i].email, fromEmail: email, ix: i }, function (event) {
+                  $("#all_form").html(formMsg);
+                  $("#form_message" + event.data.ix).modal("show");
 
-                  $("#sendMsg").click({ rEmail: event.data.reiEmail, fEmail: event.data.fromEmail }, function (rs) {
+                  $("#sendMsg" + event.data.ix).click({ rEmail: event.data.reiEmail, fEmail: event.data.fromEmail, index: event.data.ix}, function (rs) {
                     var sendMsg = '{\
                     msg_id: "user_to_user",\
-                    msg: "'+ String($("#msgUser").val()) + '",\
+                    msg: "'+ String($("#"+String(rs.data.index)).val()) + '",\
                     msg_from: "'+ rs.data.fEmail + '",\
                     msg_reic: "'+ rs.data.rEmail + '"\
                   }';
+                    console.log(String($("#"+String(rs.data.index)).val()));
                     socket.send(sendMsg);
+                    $("#form_message" + event.data.ix);
+              
                   });
+
                 });
-                $("#list_online").append(btn);
               }
-              // $("#list_online").append('\
-              // <div class="chat_list">\
-              //   <div class="chat_people">\
-              //     <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>\
-              //     <div class="chat_ib">\
-              //     <h5>'+list_user[i].email+'</h5>\
-              //     </div>\
-              //   </div>\
-              // </div>\
-              // ');
+
 
             }
           }
           else if (js1.msg_id === "normal") {
-            console.log("IN NORMALLLLLLLLLLLL");
+            console.log("Message Normal");
             $("#msg_history").append('\
               <div class="incoming_msg">\
                   <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">\
