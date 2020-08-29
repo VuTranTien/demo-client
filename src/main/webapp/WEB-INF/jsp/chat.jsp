@@ -387,7 +387,8 @@
                 </div>
               </div>
             </div>
-            
+            <div id="all_form"></div>
+
           </li>
           <h3 class="menu-title">Danh sách bàn cờ</h3><!-- /.menu-title -->
 
@@ -423,7 +424,7 @@
 
     <div class="content mt-3 " >
       <div class="container-fluid "id="game_area">
-        
+
 
         <div class="messaging">
           <div class="inbox_msg">
@@ -435,7 +436,7 @@
                   <input type="text" hidden value="${email}" id="email">
                 </div>
                 <div class="srch_bar">
-  
+
                 </div>
               </div>
               <div class="inbox_chat" id="list_online">
@@ -443,8 +444,8 @@
             </div>
             <div class="mesgs">
               <div class="msg_history" id="msg_history">
-  
-  
+
+
               </div>
               <div class="type_msg">
                 <div class="input_msg_write">
@@ -455,11 +456,11 @@
               </div>
             </div>
           </div>
-  
+
         </div>
          </div>
 
-     
+
 
 
 
@@ -531,7 +532,7 @@
             load_ch(socket);
             location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + $("#nameBoard").val() + "&email=" + email);
           });
-        
+
 
           $("#send").click(function () {
 
@@ -601,49 +602,28 @@
             var list_user = js1.list_user;
             $("#list_online").empty();
             for (var i = 0; i < list_user.length; i++) {
+
+              var btn = $('<button>');
+              $("#list_online").append(btn);
+              btn.addClass("btn btn-outline-secondary btn-lg btn-block");
+              btn.append('\
+              <div class="chat_list">\
+                <div class="chat_people">\
+                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>\
+                  <div class="chat_ib">\
+                  <h5>'+ list_user[i].email + '</h5>\
+                  <input type="text" hidden value="msg'+ i + '" id="msg' + i + '">\
+                  <input type="text" hidden value="btn'+ i + '" id="btn' + i + '">\
+                  </div>\
+                </div>\
+              </div>\
+              ');
+
               if (list_user[i].email != email) {
-                var btn = $('<button data-target = "#form_message" data-toggle = "modal">');
-                btn.addClass("btn btn-outline-secondary btn-lg btn-block");
-                btn.append('\
-              <div class="chat_list">\
-                <div class="chat_people">\
-                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>\
-                  <div class="chat_ib">\
-                  <h5>'+ list_user[i].email + '</h5>\
-                  </div>\
-                </div>\
-              </div>\
-              ');
-                btn.click({ reiEmail: list_user[i].email, fromEmail: email }, function (event) {
-                  $("#sendMsg").click({ rEmail: event.data.reiEmail, fEmail: event.data.fromEmail }, function (rs) {
-                    var sendMsg = '{\
-                    msg_id: "user_to_user",\
-                    msg: "'+ String($("#msgUser").val()) + '",\
-                    msg_from: "'+ rs.data.fEmail + '",\
-                    msg_reic: "'+ rs.data.rEmail + '"\
-                  }';
-                    socket.send(sendMsg);
-                  });
-                });
-                $("#list_online").append(btn);
-              }
-              else {
-                var btn = $('<button>');
-                btn.addClass("btn btn-outline-secondary btn-lg btn-block");
-                btn.append('\
-              <div class="chat_list">\
-                <div class="chat_people">\
-                  <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>\
-                  <div class="chat_ib">\
-                  <h5>'+ list_user[i].email + '</h5>\
-                  </div>\
-                </div>\
-              </div>\
-              ');
-                btn.click({ reiEmail: list_user[i].email, fromEmail: email }, function (event) {
-                  var formMsg = $('<div class="modal fade" id="form_message" tabindex="-1" role="dialog"\
-                      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">');
-                  formMsg.append('\
+                var formMsg = $('<div>');
+                formMsg.append('\
+                      <div class="modal fade" id="form_message'+ i + '" tabindex="-1" role="dialog"\
+                      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">\
                       <div class="modal-dialog modal-dialog-centered" role="document">\
                         <div class="modal-content">\
                           <div class="modal-header">\
@@ -656,46 +636,43 @@
                             <div>\
                               <div class="form-group">\
                                 <label for="recipient-name" class="col-form-label">Tin nhắn</label>\
-                                <input type="text" class="form-control" id="msgUser">\
+                                <input type="text" class="form-control" id="'+ i + '">\
                               </div>\
                             </div>\
                           </div>\
                           <div class="modal-footer">\
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>\
-                            <button id="sendMsg" type="button" class="btn btn-primary"> Gửi</button>\
+                            <button id="sendMsg'+ i + '" type="button" class="btn btn-primary" data-dismiss="modal"> Gửi</button>\
                           </div>\
                         </div>\
                       </div>\
+                    </div>\
                   ');
-                  $("#form_message").load;
+                btn.click({ reiEmail: list_user[i].email, fromEmail: email, ix: i }, function (event) {
+                  $("#all_form").html(formMsg);
+                  $("#form_message" + event.data.ix).modal("show");
 
-                  $("#sendMsg").click({ rEmail: event.data.reiEmail, fEmail: event.data.fromEmail }, function (rs) {
+                  $("#sendMsg" + event.data.ix).click({ rEmail: event.data.reiEmail, fEmail: event.data.fromEmail, index: event.data.ix}, function (rs) {
                     var sendMsg = '{\
                     msg_id: "user_to_user",\
-                    msg: "'+ String($("#msgUser").val()) + '",\
+                    msg: "'+ String($("#"+String(rs.data.index)).val()) + '",\
                     msg_from: "'+ rs.data.fEmail + '",\
                     msg_reic: "'+ rs.data.rEmail + '"\
                   }';
+                    console.log(String($("#"+String(rs.data.index)).val()));
                     socket.send(sendMsg);
+                    $("#form_message" + event.data.ix);
+
                   });
+
                 });
-                $("#list_online").append(btn);
               }
-              // $("#list_online").append('\
-              // <div class="chat_list">\
-              //   <div class="chat_people">\
-              //     <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>\
-              //     <div class="chat_ib">\
-              //     <h5>'+list_user[i].email+'</h5>\
-              //     </div>\
-              //   </div>\
-              // </div>\
-              // ');
+
 
             }
           }
           else if (js1.msg_id === "normal") {
-            console.log("IN NORMALLLLLLLLLLLL");
+            console.log("Message Normal");
             $("#msg_history").append('\
               <div class="incoming_msg">\
                   <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">\
@@ -809,7 +786,7 @@
                 var btn = $('<button>');
                 btn.addClass('cell btn btn-outline-primary isClick');
                 btn.css("pointer-events", "none");
-                
+
                 matrix[i][j] = btn;
                 dataMatrix[i][j] = -1;
                 // btn.append("x");
@@ -826,13 +803,13 @@
                     s.send(state);
                     // if (turn % 2 == 0) {
                     //     $(this).html(maskOf_O);
-                        
+
                     $(this).css("pointer-events", "none", "!important");
                     for(var k = 0;k<size;k++){
                         for(var l = 0; l<size; l++){
                             if(dataMatrix[k][l]==-1){
-                                matrix[k][l].css("pointer-events", "none"); 
-                            }                          
+                                matrix[k][l].css("pointer-events", "none");
+                            }
                         }
                     }
 
