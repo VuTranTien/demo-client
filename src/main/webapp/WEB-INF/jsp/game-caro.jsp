@@ -262,7 +262,7 @@
             });
             
             
-            socket.onmessage = function({s: socket},event){
+            socket.onmessage = function(event){
                 var json = JSON.parse(event.data);
                 console.log(json);
                 if(json.msg_id === "load_score"){
@@ -309,12 +309,12 @@
                 
                     if(json.label == 0){
                         
-                        countdown1(event.data.s);
+                        countdown1($(this));
                         clearTimeout(t2);
                         seconds2 = 20;
                     }
                     else{                       
-                        countdown2(event.data.s);
+                        countdown2($(this));
                         clearTimeout(t1);
                         seconds1 = 20;
                     }
@@ -335,13 +335,13 @@
                 else if(json.msg_id === "game_state_from_me"){
                     if(json.label == 0){
                         
-                        countdown1(event.data.s);
+                        countdown1($(this));
                         clearTimeout(t2);
                         seconds2 = 20;
                     }
                     else{
                         
-                        countdown2(event.data.s);
+                        countdown2($(this));
                         clearTimeout(t1);
                         seconds1 = 20;
                     }
