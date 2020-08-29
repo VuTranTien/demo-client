@@ -50,15 +50,16 @@
         td {
             border: 1px solid #000;
         }
+        button.cell:hover {
+            border: 3px solid blue !important;
+
+        }
 
         p {
             text-align: center !important;
         }
 
-        button.cell:hover {
-            border: 3px solid blue !important;
-
-        }
+        
     </style>
 </head>
 
@@ -392,7 +393,7 @@
                     var tdEle = $('<td>');
                     tdEle.addClass('cell');
                     var btn = $('<button>');
-                    btn.addClass('cell btn btn-light isClick');
+                    btn.addClass('cell btn btn-outline-primary isClick');
                     btn.css("pointer-events", "none");
                     
                     matrix[i][j] = btn;
@@ -449,6 +450,7 @@
 
 
         };
+        
         function overide_channel_reload(socket){
             var js1 = '{\
             msg_id: "overide_channel",\
