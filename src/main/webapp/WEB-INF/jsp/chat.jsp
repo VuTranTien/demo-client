@@ -431,6 +431,8 @@
                 <h4>Đang hoạt động</h4>
                 <input type="text" hidden value="${room_id}" id="room_name">
                 <input type="text" hidden value="${email}" id="email">
+                <input type="text" hidden value="${port}" id="port">
+                <input type="text" hidden value="${ip}" id="ip">
               </div>
               <div class="srch_bar">
 
@@ -469,18 +471,19 @@
 
       var listRooms;
 
-      var ip = "";
-      var port = "";
+      var ip = $("#ip").val();
+      var port = $("#port").val();
       var idx = 0;
-      var url = "ws://192.168.100.139:";
+      // var url = "ws://192.168.100.138:";
      
 
 
       function load() {//load room tra ve tu api 
         console.log($("#room_name").val());
-
-
-        let socket = new WebSocket(url + "9000");
+        console.log($("#port").val());
+        console.log($("#ip").val());
+      
+        let socket = new WebSocket('ws://'+ip +':' + port);
 
         //Gui tin nhan di
         socket.onopen = function (e) {

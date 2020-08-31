@@ -27,6 +27,7 @@ public class ClientController extends MultiActionController {
     private static String token = "";
     private ChatClient client=null;
     public static String email ="no-email";
+    public String roomID = "";
 
     @RequestMapping(value = "login",method = RequestMethod.GET)
     public String login(){
@@ -39,7 +40,7 @@ public class ClientController extends MultiActionController {
         Map<String,String> map = new HashMap<String, String>();
         map.put("email",email);
         map.put("password", password);
-        CallAPI call1 = new CallAPI("http://192.168.100.139:8080/center/user/login.do",map);
+        CallAPI call1 = new CallAPI("http://192.168.100.138:8080/center/user/login.do",map);
         String res = call1.getAPIResult(false);
         JSONObject j1 = new JSONObject(res);
         System.out.println(j1.toString());
@@ -93,9 +94,10 @@ public class ClientController extends MultiActionController {
         return "chat";
     }
     @RequestMapping(value = "/chat",method=RequestMethod.POST)
-    public String showChat2(@RequestParam(value = "id") String id, Model model){
+    public String showChat2(@RequestParam(value = "id") String id,@RequestParam(value = "port")String port,@RequestParam(value = "ip")String ip, Model model){
         //start room
-
+        model.addAttribute("ip",ip);
+        model.addAttribute("port",port);
         model.addAttribute("room_id",id);
         model.addAttribute("email",ClientController.email);
         return "chat";

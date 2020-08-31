@@ -11,29 +11,29 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
     <script>
-        var email="error_email";
-    function parseJwt(token) {
-        var base64Url = token.split('.')[1];
-        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
+        var email = "error_email";
+        function parseJwt(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
 
-        return String(jsonPayload);
+            return String(jsonPayload);
         }
         function checkToken() {
-            
-        if (!(document.cookie === "")) {//check xem token con hieu luc khong
-        token = document.cookie.split(";")[0].split("=")[1];
-            var objToken = JSON.parse(parseJwt(token));
-            console.log(objToken);
-            var t = objToken.exp*1000 < new Date().getTime();
-            if(t){
-            location.replace("http://localhost:8880/demo-client/login.do");
+
+            if (!(document.cookie === "")) {//check xem token con hieu luc khong
+                token = document.cookie.split(";")[0].split("=")[1];
+                var objToken = JSON.parse(parseJwt(token));
+                console.log(objToken);
+                var t = objToken.exp * 1000 < new Date().getTime();
+                if (t) {
+                    location.replace("http://localhost:8880/demo-client/login.do");
+                }
+
             }
-            
-        }
-        
+
         }
         checkToken();
     </script>
@@ -47,7 +47,7 @@
         }
 
 
-        
+
         button.cell:hover {
             border: 3px solid blue !important;
 
@@ -56,8 +56,6 @@
         p {
             text-align: center !important;
         }
-
-        
     </style>
 </head>
 
@@ -68,19 +66,23 @@
             <h1> GAME BOARD </h1>
             <input id="name_of_check_board" type="text" hidden value="${name}">
             <input type="text" value="${email}" hidden id="email">
-        
+            <input type="text" hidden id="count1">
+            <input type="text" hidden id = "count2">
+            <input type="text"hidden id = "state_countdown" value="">
+            
+
 
 
         </div>
         <div class="row justify-content-end">
-            <div class = 'col-3'>
-                <button type="button" class="btn btn-secondary btn-lg active" id = "call_back">BACK</button>
+            <div class='col-3'>
+                <button type="button" class="btn btn-secondary btn-lg active" id="call_back">BACK</button>
             </div>
 
         </div>
         <br>
         <div class="row">
-        
+
             <div class="col-12">
                 <div class="row justify-content-center">
                     <div class="col-4">
@@ -92,7 +94,7 @@
                         </div>
                     </div>
                 </div>
-        
+
                 <br>
             </div>
 
@@ -100,13 +102,13 @@
             <div class="col-3 background-left">
                 <br>
                 <div class="row justify-content-center">
-                    <h3 id = "nameUser1">USER1</h3>
+                    <h3 id="nameUser1">USER1</h3>
                 </div>
                 <div class="row justify-content-center">
-                        <span style="font-size: 18px;" id = "scoreUser1"></span>
+                    <span style="font-size: 18px;" id="scoreUser1"></span>
                 </div>
                 <div class="row justify-content-center">
-                    <span style="font-size: 18px;" id = "historyUser1"></span>
+                    <span style="font-size: 18px;" id="historyUser1"></span>
                 </div>
                 <div class="row justify-content-center">
                     <span id="timerUser1" , style="color: red; font-size: 25px;">0:20</span>
@@ -114,8 +116,8 @@
                 <br>
                 <br>
                 <div class="row justify-content-center">
-                    <svg width="6em" height="6em" viewBox="0 0 16 16" class="bi bi-x align-center btn-outline-danger" fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg">\
+                    <svg width="6em" height="6em" viewBox="0 0 16 16" class="bi bi-x align-center btn-outline-danger"
+                        fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                         <path fill-rule="evenodd"
                             d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z" />\
                         <path fill-rule="evenodd"
@@ -136,7 +138,7 @@
             <div class="col-3 background-right">
                 <br>
                 <div class="row justify-content-center">
-                    <h3 id = "nameUser2">USER2</h3>
+                    <h3 id="nameUser2">USER2</h3>
                 </div>
                 <div class="row justify-content-center">
                     <span style="font-size: 18px;" id="scoreUser2"></span>
@@ -167,12 +169,12 @@
 
     <script>
         var checkerBoard = [];
-        var x,y;
+        var x, y;
         var size = 23;
         var turn = size ** 2;
         var matrix = [[]];
-        var dataMatrix=[[]];
-        var url = "ws://192.168.100.139:" ;
+        var dataMatrix = [[]];
+        var url = "ws://192.168.100.138:";
         var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center btn-outline-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                 <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
                 <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\
@@ -180,257 +182,293 @@
         var maskOf_O = '<svg width="1.8em" height="1.8em" viewBox="0.4 0.7 45 35" class="bi bi-circle-fill text-dark" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                         <circle cx="10" cy="10" r="10"/>\
                         </svg>';
-        var t1;
-        var t2;
+        var t1,t2,t3,t4;
         var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
         var seconds2 = 20, $seconds2 = document.querySelector('#timerUser2');
-        
-        function countdown1(s) {
-                $seconds1.textContent = '0:' + seconds1;
-                if (seconds1-- > 0)  t1 = setTimeout(countdown1, 1000)
-                if (seconds1 == 0) {
-                    var state = '{\
-                            msg_id: "game_state",\
-                            name: "'+$("#name_of_check_board").val()+'",\
-                            x: '+ -1 +',\
-                            y: '+ -1 +'\
-                        }';
-                        s.send(state);
-                    }
-                };
-        function countdown2(s) {
-                $seconds2.textContent = '0:' + seconds2;
-                if (seconds2-- > 0)  t2 = setTimeout(countdown2, 1000)
-                if (seconds2 == 0) {
-                    var state = '{\
-                            msg_id: "game_state",\
-                            name: "'+$("#name_of_check_board").val()+'",\
-                            x: '+ -1 +',\
-                            y: '+ -1 +'\
-                        }';
-                        s.send(state);
-                    }
-                };
+        function countdown3() {
+            $seconds1.textContent = '0:' + seconds1;
+            if (seconds1-- > 0) t3 = setTimeout(countdown3, 1000)
+            };
+        function countdown4() {
+            $seconds2.textContent = '0:' + seconds2;
+            if (seconds2-- > 0) t4 = setTimeout(countdown4, 1000)
+            };
+
         //-------------------------------------------------------------------------------
-        function load(){
-            
-            
-            $("#call_back").click(function(){
+        function load() {
+
+
+            $("#call_back").click(function () {
                 location.replace('http://localhost:8880/demo-client/chat.do');
             });
             //Connection Server
-            let socket = new WebSocket(url+ "9000");
-        
+            let socket = new WebSocket(url + "9000");
+            
+
+            function countdown1() {
+            $seconds1.textContent = '0:' + seconds1;
+            if (seconds1-- > 0) t1 = setTimeout(countdown1, 1000)
+            if (seconds1 == 0) {
+                for (var k = 0; k < size; k++) {
+                    for (var l = 0; l < size; l++) {
+                        if (dataMatrix[k][l] == -1) {
+                            matrix[k][l].css("pointer-events", "auto");
+                        }
+                    }
+                }
+                sendState(socket);
+            }
+            };
+            function sendState(socket){
+                var state_count_down = '{\
+                    msg_id: "game_state",\
+                    name: "'+$("#name_of_check_board").val()+'",\
+                    x: '+ -1 +',\
+                    y: '+ -1 +'\
+                    }';
+                socket.send(state_count_down);
+            }
+            function countdown2() { 
+                $seconds2.textContent = '0:' + seconds2;
+                if (seconds2-- > 0) t2 = setTimeout(countdown2, 1000)
+                if (seconds2 == 0) {
+                    for (var k = 0; k < size; k++) {
+                        for (var l = 0; l < size; l++) {
+                            if (dataMatrix[k][l] == -1) {
+                                matrix[k][l].css("pointer-events", "auto");
+                        }
+                    }
+                }
+                    sendState(socket);
+                }
+            };
+
             socket.onopen = function (e) {
                 console.log("-------------Room Connection------------");
-            
-            // thieu email------------------------------------
-            overide_channel_reload(socket);
-            $("#btnStart").click(function(){
-            var startgame = '{\
-            msg_id: "game_start",\
-            name:"'+$("#name_of_check_board").val() + '"\
-            }';
-            socket.send(startgame);
-            $("#btnStart").css("pointer-events", "none");
-            });
-            // TODO load score user
-            var getScoreOwner = '{\
-                    msg_id:"load_score",\
-                    name: "'+$("#name_of_check_board").val()+'"\
-                    }';
-            
-            socket.send(getScoreOwner);
 
-            $("#btnRestart").click(function(){
-                for(var k = 0;k<size;k++){
-                        for(var l = 0; l<size; l++){
-                            dataMatrix[k][l]=-1;
-                            matrix[k][l].html("").css("pointer-events","auto");    
 
-                        }
-                }
-                //TODO: reset turn ve 0
-                turn = 0;
-                
-                var js2 = '{\
-                    msg_id: "restart_game",\
-                    name: "'+$("#name_of_check_board").val()+'"\
+                overide_channel_reload(socket);
+                $("#btnStart").click(function () {
+                    var startgame = '{\
+                msg_id: "game_start",\
+                name:"'+ $("#name_of_check_board").val() + '"\
                 }';
-                //TODO: reset matrix
-                socket.send(js2);
-            });
-            
-            
-            socket.onmessage = function(event){
-                var json = JSON.parse(event.data);
-                console.log(json);
-                if(json.msg_id === "load_score"){
-                    if (json.msg_type ==="c1"){
-                    $("#nameUser1").text(json.email);
-                    $("#scoreUser1").text('Score: '+json.score);
-                    $("#historyUser1").text('W:'+json.win + ' L:'+json.lose);
-                    }
-                    else if (json.msg_type ==="c2"){
-                    $("#nameUser2").text(json.email);
-                    $("#scoreUser2").text('Score: '+json.score);
-                    $("#historyUser2").text('W:'+json.win + ' L:'+json.lose);
-                    }
-                }
-                else if(json.msg_id ==="update_score"){
-                    var list_score = JSON.parse(json.list);
-                    $("#scoreUser1").text('Score: '+list_score[0].score);
-                    $("#historyUser1").text('W:'+list_score[0].win + ' L:'+list_score[0].lose);
+                    socket.send(startgame);
+                    $("#btnStart").css("pointer-events", "none");
+                });
+                // TODO load score user
+                var getScoreOwner = '{\
+                    msg_id:"load_score",\
+                    name: "'+ $("#name_of_check_board").val() + '"\
+                    }';
 
-                    $("#scoreUser2").text('Score: '+list_score[1].score);
-                    $("#historyUser2").text('W:'+list_score[1].score + ' L:'+list_score[1].lose);
-                }
-                else if(json.msg_id === "game_state_win"){
-                    alert(json.winner);
-                    //TODO: restart game
-                    for(var k = 0;k<size;k++){
-                        for(var l = 0; l<size; l++){
-                            matrix[k][l].html("").css("pointer-events", "none","important");     
+                socket.send(getScoreOwner);
+
+                $("#btnRestart").click(function () {
+                    clearTimeout(t1);
+                    clearTimeout(t2);
+                    $("#timerUser1").text("0:20");
+                    $("#timerUser2").text("0:20");
+                    for (var k = 0; k < size; k++) {
+                        for (var l = 0; l < size; l++) {
+                            dataMatrix[k][l] = -1;
+                            matrix[k][l].html("").css("pointer-events", "auto");
                         }
                     }
+                    //TODO: reset turn ve 0
+                    turn = 0;
 
-                }
-                else if(json.msg_id === "is_start"){
-                    if(json.ret == 0){
-                        $('.isClick').css("pointer-events", "auto");
-                        $("#btnStart").css("pointer-events", "none");
+                    var js2 = '{\
+                    msg_id: "restart_game",\
+                    name: "'+ $("#name_of_check_board").val() + '"\
+                     }';
+                    //TODO: reset matrix
+                    socket.send(js2);
+                    });
 
+
+                socket.onmessage = function (event) {
+                    var json = JSON.parse(event.data);
+                    console.log(json);
+                    if (json.msg_id === "load_score") {
+                        if (json.msg_type === "c1") {
+                            $("#nameUser1").text(json.email);
+                            $("#scoreUser1").text('Score: ' + json.score);
+                            $("#historyUser1").text('W:' + json.win + ' L:' + json.lose);
+                        }
+                        else if (json.msg_type === "c2") {
+                            $("#nameUser2").text(json.email);
+                            $("#scoreUser2").text('Score: ' + json.score);
+                            $("#historyUser2").text('W:' + json.win + ' L:' + json.lose);
+                        }
                     }
-                    else{
-                        alert("Vui lòng chờ...");
+                    else if (json.msg_id === "update_score") {
+                        var list_score = JSON.parse(json.list);
+                        $("#scoreUser1").text('Score: ' + list_score[0].score);
+                        $("#historyUser1").text('W:' + list_score[0].win + ' L:' + list_score[0].lose);
+
+                        $("#scoreUser2").text('Score: ' + list_score[1].score);
+                        $("#historyUser2").text('W:' + list_score[1].score + ' L:' + list_score[1].lose);
                     }
-                }
-                else if(json.msg_id === "game_state"){
-                
-                    if(json.label == 0){
-                        
-                        countdown1($(this));
-                        clearTimeout(t2);
-                        seconds2 = 20;
-                    }
-                    else{                       
-                        countdown2($(this));
+                    else if (json.msg_id === "game_state_win") {
                         clearTimeout(t1);
-                        seconds1 = 20;
-                    }
-                    var ix = json.x;
-                   var jy = json.y;
-                   if (json.x != -1){
-                    matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X).css("pointer-events", "none","important");
-                   dataMatrix[ix][jy] = json.label;
-                   }
-                   for(var k = 0;k<size;k++){
-                            for(var l = 0; l<size; l++){
-                                if(dataMatrix[k][l]==-1){
-                                    matrix[k][l].css("pointer-events", "auto"); 
-                                }                          
+                        clearTimeout(t2);
+                        $("#timerUser1").text("0:20");
+                        $("#timerUser2").text("0:20");
+                        alert(json.winner);
+                        //TODO: restart game
+                        for (var k = 0; k < size; k++) {
+                            for (var l = 0; l < size; l++) {
+                                matrix[k][l].html("").css("pointer-events", "none", "important");
                             }
                         }
-                }
-                else if(json.msg_id === "game_state_from_me"){
-                    if(json.label == 0){
-                        
-                        countdown1($(this));
-                        clearTimeout(t2);
-                        seconds2 = 20;
-                    }
-                    else{
-                        
-                        countdown2($(this));
-                        clearTimeout(t1);
-                        seconds1 = 20;
-                    }
 
-                   var ix = json.x;
-                   var jy = json.y;
-                   if (json.x != -1){
-                    matrix[ix][jy].html(json.label==0?maskOf_O:maskOf_X).css("pointer-events", "none","important");
-                   dataMatrix[ix][jy] = json.label;
-                   }
-                   
-                }
-                else if(json.msg_id==="restart_game"){
-                    for(var k = 0;k<size;k++){
-                        for(var l = 0; l<size; l++){
-                            dataMatrix[k][l]=-1;
-                            matrix[k][l].html("").css("pointer-events","auto");    
+                    }
+                    else if (json.msg_id === "is_start") {
+                        if (json.ret == 0) {
+                            $('.isClick').css("pointer-events", "auto");
+                            $("#btnStart").css("pointer-events", "none");
 
                         }
-                }
-                //TODO: reset turn ve 0
-                }
-                else if(json.msg_id==="reload_data_matrix"){
-                    dataMatrix = json.matrix;
-                    console.log(dataMatrix);
-                    // $("#gameBoard").css("pointer-events", "auto");
-                    for(var k = 0;k<size;k++){
-                            for(var l = 0; l<size; l++){
-                                if(json.is_your_turn==-1){
+                        else {
+                            alert("Vui lòng chờ...");
+                        }
+                    }
+                    else if (json.msg_id === "game_state") {
+                        if (json.user === "c1") {
+                            clearTimeout(t1);
+                            clearTimeout(t3);
+                            countdown2();
+                            seconds1 = 20;
+                        }
+                        else if (json.user === "c2") {
+                            clearTimeout(t2);
+                            clearTimeout(t4);
+                            countdown1();
+                            seconds2 = 20;
+                        }
+                        var ix = json.x;
+                        var jy = json.y;
+                        if (json.x != -1) {
+                            matrix[ix][jy].html(json.label == 0 ? maskOf_O : maskOf_X).css("pointer-events", "none", "important");
+                            dataMatrix[ix][jy] = json.label;
+                        }
+                        for (var k = 0; k < size; k++) {
+                            for (var l = 0; l < size; l++) {
+                                if (dataMatrix[k][l] == -1) {
+                                    matrix[k][l].css("pointer-events", "auto");
+                                }
+                            }
+                        }
+                    }
+                    else if (json.msg_id === "game_state_from_me") {
+                        if (json.user === "c1") {
+                            clearTimeout(t1);
+                            countdown4();
+                            seconds1 = 20;
+                        }
+                        else if (json.user === "c2") {
+                            clearTimeout(t2);
+                            countdown3();
+                            seconds2 = 20;
+                        }
+                        var ix = json.x;
+                        var jy = json.y;
+                        if (json.x != -1) {
+                            matrix[ix][jy].html(json.label == 0 ? maskOf_O : maskOf_X).css("pointer-events", "none", "important");
+                            dataMatrix[ix][jy] = json.label;
+                        }
+                        else{
+                            for (var k = 0; k < size; k++) {
+                                for (var l = 0; l < size; l++) {
+                                    if (dataMatrix[k][l] == -1) {
                                         matrix[k][l].css("pointer-events", "none");
-                                        if(dataMatrix[k][l]!=-1){
-                                            matrix[k][l].html(dataMatrix[k][l]==0?maskOf_O:maskOf_X);
-                                        }
-
                                     }
-                                    else{
-                                        if(dataMatrix[k][l]!=-1){
-                                            matrix[k][l].css("pointer-events", "none","important");
-                                            matrix[k][l].html(dataMatrix[k][l]==0?maskOf_O:maskOf_X);
-                                            continue;
-                                        }
-                                        matrix[k][l].css("pointer-events","auto");
-
-                                        
-                                    }
-                                                  
+                                }
                             }
                         }
-                    
-                    
 
-                }
-                
-                else if(json.msg_id ===""){
+                    }
+                    else if (json.msg_id === "restart_game") {
+                        for (var k = 0; k < size; k++) {
+                            for (var l = 0; l < size; l++) {
+                                dataMatrix[k][l] = -1;
+                                matrix[k][l].html("").css("pointer-events", "auto");
+                            }
+                        }
+                        clearTimeout(t1);
+                        clearTimeout(t2);
+                        $("#timerUser1").text("0:20");
+                        $("#timerUser2").text("0:20");
+                        //TODO: reset turn ve 0
+                    }
+                    else if (json.msg_id === "reload_data_matrix") {
+                        dataMatrix = json.matrix;
+                        console.log(dataMatrix);
+                        // $("#gameBoard").css("pointer-events", "auto");
+                        for (var k = 0; k < size; k++) {
+                            for (var l = 0; l < size; l++) {
+                                if (json.is_your_turn == -1) {
+                                    matrix[k][l].css("pointer-events", "none");
+                                    if (dataMatrix[k][l] != -1) {
+                                        matrix[k][l].html(dataMatrix[k][l] == 0 ? maskOf_O : maskOf_X);
+                                    }
 
-                }
+                                }
+                                else {
+                                    if (dataMatrix[k][l] != -1) {
+                                        matrix[k][l].css("pointer-events", "none", "important");
+                                        matrix[k][l].html(dataMatrix[k][l] == 0 ? maskOf_O : maskOf_X);
+                                        continue;
+                                    }
+                                    matrix[k][l].css("pointer-events", "auto");
 
-            };
+
+                                }
+
+                            }
+                        }
 
 
-            socket.onclose = function (event) {
-            if (event.wasClean) {
-            alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-            } else {
-            // e.g. server process killed or network down
-            // event.code is usually 1006 in this case
-            alert('[close] Connection died');
-                }
-            };
 
-        socket.onerror = function (error) {
-          alert(`[error] ${error.message}`);
-        };
+                    }
 
-        create_checkBoard(socket);
-        
-        
+                    else if (json.msg_id === "") {
+
+                    }
+
+                };
+
+
+                socket.onclose = function (event) {
+                    if (event.wasClean) {
+                        alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+                    } else {
+                        // e.g. server process killed or network down
+                        // event.code is usually 1006 in this case
+                        alert('[close] Connection died');
+                    }
+                };
+
+                socket.onerror = function (error) {
+                    alert(`[error] ${error.message}`);
+                };
+
+                create_checkBoard(socket);
+
+
             }
         }
         //-------------------------------------------------------------------------------
 
-        function create_checkBoard (s) {
+        function create_checkBoard(s) {
 
             for (var i = 0; i < size; i++) {
 
                 var trOdd = $('<tr>').addClass('odd');//le
                 var trEven = $('<tr>').addClass('even');//chan
                 matrix[i] = [];
-                dataMatrix[i] =[];
+                dataMatrix[i] = [];
                 if (i % 2 !== 0) {
                     checkerBoard.push(trEven);
                 }
@@ -445,31 +483,29 @@
                     var btn = $('<button>');
                     btn.addClass('cell btn btn-outline-primary isClick');
                     btn.css("pointer-events", "none");
-                    
                     matrix[i][j] = btn;
                     dataMatrix[i][j] = -1;
                     // btn.append("x");
                     btn.click({ vi: i, vj: j }, function (event) {
-
                         // var p_tag = $('<p>');
                         // console.log(matrix);
                         // clearTimeout(t1);
                         var state = '{\
                             msg_id: "game_state",\
-                            name: "'+$("#name_of_check_board").val()+'",\
-                            x: '+ event.data.vi +',\
-                            y: '+ event.data.vj +'\
+                            name: "'+ $("#name_of_check_board").val() + '",\
+                            x: '+ event.data.vi + ',\
+                            y: '+ event.data.vj + '\
                         }';
                         s.send(state);
                         // if (turn % 2 == 0) {
                         //     $(this).html(maskOf_O);
-                            
+
                         $(this).css("pointer-events", "none", "!important");
-                        for(var k = 0;k<size;k++){
-                            for(var l = 0; l<size; l++){
-                                if(dataMatrix[k][l]==-1){
-                                    matrix[k][l].css("pointer-events", "none"); 
-                                }                          
+                        for (var k = 0; k < size; k++) {
+                            for (var l = 0; l < size; l++) {
+                                if (dataMatrix[k][l] == -1) {
+                                    matrix[k][l].css("pointer-events", "none");
+                                }
                             }
                         }
 
@@ -478,7 +514,7 @@
                     checkerBoard[i].append(tdEle);
                 }
             }
-            
+
 
             $('tbody').append(checkerBoard);
             $(".odd td:odd").css("background-color", "white");
@@ -501,18 +537,19 @@
 
 
         };
-        
-        function overide_channel_reload(socket){
+
+
+        function overide_channel_reload(socket) {
             var js1 = '{\
             msg_id: "overide_channel",\
-            email:"'+$("#email").val()+'",\
-            name: "'+$("#name_of_check_board").val()+'"\
+            email:"'+ $("#email").val() + '",\
+            name: "'+ $("#name_of_check_board").val() + '"\
             }';
             socket.send(js1);
 
         }
-        
+
     </script>
-    
+
 
 </body>
