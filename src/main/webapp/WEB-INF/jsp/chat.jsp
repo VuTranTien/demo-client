@@ -307,8 +307,8 @@
           aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
           <i class="fa fa-bars"></i>
         </button>
-        <a class="navbar-brand" href="./"><img src="${pageContext.request.contextPath}/images/logo.png" alt="Logo"></a>
-        <a class="navbar-brand hidden" href="./"><img src="${pageContext.request.contextPath}/images/logo2.png"
+        <a class="navbar-brand"><b>Phòng Trò Chuyện</b></a>
+        <a class="navbar-brand hidden" ><img src="${pageContext.request.contextPath}/images/logo2.png"
             alt="Logo"></a>
       </div>
 
@@ -673,15 +673,9 @@
                 btn.html(lst_cb[jk].name);
                 $("#list_of_check_board").append(btn);
                 btn.click({ vi: lst_cb[jk].name, eml: email, v_socket : socket }, function (event) {
-                  var js4 = '{\
-                      msg_id: "watch_match",\
-                      email: "'+ $("#email").val() + '",\
-                      name:"'+ event.data.vi + '"\
-                      }';
-                  socket.send(js4);
-                 
 
                   location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.vi + "&email=" + event.data.eml);
+                
                 });
               }
               else if (lst_cb[jk].isFull == 1) {

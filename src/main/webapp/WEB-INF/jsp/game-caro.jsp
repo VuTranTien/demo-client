@@ -199,12 +199,10 @@
 
 
             $("#call_back").click(function () {
-                location.replace('http://localhost:8880/demo-client/chat.do');
+                location.replace('http://localhost:8880/demo-client/list-room.do');
             });
             //Connection Server
             let socket = new WebSocket(url + "9000");
-            
-
             function countdown1() {
             $seconds1.textContent = '0:' + seconds1;
             if (seconds1-- > 0) t1 = setTimeout(countdown1, 1000)
@@ -242,7 +240,7 @@
                     sendState(socket);
                 }
             };
-
+            
             socket.onopen = function (e) {
                 console.log("-------------Room Connection------------");
 
@@ -288,8 +286,9 @@
                     socket.send(js2);
                     });
 
-
+                
                 socket.onmessage = function (event) {
+                   
                     var json = JSON.parse(event.data);
                     console.log(json);
                     if (json.msg_id === "load_score") {
@@ -333,7 +332,7 @@
                         }
                         else {
                             $("#btnStart").css("pointer-events", "auto");
-                            alert("Vui lòng chờ...");
+                            alert("Waiting another player...");
 
                         }
                     }
@@ -481,8 +480,8 @@
 
                 };
 
-
                 socket.onclose = function (event) {
+                   
                     if (event.wasClean) {
                         alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
                     } else {
