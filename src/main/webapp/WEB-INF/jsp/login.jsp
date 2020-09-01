@@ -16,29 +16,9 @@
         background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%);
       }
     </style>
+    <script src="${pageContext.request.contextPath}/js/check_token.js"></script>
   <script>
-    function parseJwt(token) {
-      var base64Url = token.split('.')[1];
-      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-
-      return String(jsonPayload);
-    }
-    function checkToken() {
-        chrome.cookies.get({ url: "http://localhost:8880/demo-client/", name: 'PHPSESSID' }, function (cookie) {
-          // do something with the cookie
-          console.log(cookie);
-          alert(cookie.name + ' found, value: ' + cookie.value);
-        });
-      if (!(document.cookie === "")) {//check xem token con hieu luc khong
-        // var objToken = JSON.parse(parseJwt(document.cookie.split(";")[0].split("=")[1]));
-        // alert(document.cookie.split(";")[0].split("=")[1]);
-        location.replace("http://localhost:8880/demo-client/list-room.do");
-      }
-    }
-    // checkToken();
+    checkToken('http://localhost:8880/demo-client/list-room.do',true);
   </script>
 </head>
 
@@ -95,15 +75,7 @@
         );
       
     }
-    function parseJwt(token) {
-      var base64Url = token.split('.')[1];
-      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
 
-      return String(jsonPayload);
-    }
 
   </script>
 

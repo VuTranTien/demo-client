@@ -9,33 +9,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/check_token.js"></script>
 
-    <script>
-        var email = "error_email";
-        function parseJwt(token) {
-            var base64Url = token.split('.')[1];
-            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-
-            return String(jsonPayload);
-        }
-        function checkToken() {
-
-            if (!(document.cookie === "")) {//check xem token con hieu luc khong
-                token = document.cookie.split(";")[0].split("=")[1];
-                var objToken = JSON.parse(parseJwt(token));
-                console.log(objToken);
-                var t = objToken.exp * 1000 < new Date().getTime();
-                if (t) {
-                    location.replace("http://localhost:8880/demo-client/login.do");
-                }
-
-            }
-
-        }
-        checkToken();
+    <script>  
+    checkToken('http://localhost:8880/demo-client/login.do',false);
     </script>
 
     <style>
@@ -70,8 +47,6 @@
             <input type="text" hidden id = "count2">
             <input type="text"hidden id = "state_countdown" value="">
             
-
-
 
         </div>
         <div class="row justify-content-end">
@@ -174,7 +149,7 @@
         var turn = size ** 2;
         var matrix = [[]];
         var dataMatrix = [[]];
-        var url = "ws://192.168.100.138:";
+        var url = "ws://192.168.100.139:";
         var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center btn-outline-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                 <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
                 <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\
@@ -331,7 +306,7 @@
                         }
                         else {
                             $("#btnStart").css("pointer-events", "auto");
-                            alert("Vui lòng chờ...");
+                            alert("Vui lòng chờ");
 
                         }
                     }

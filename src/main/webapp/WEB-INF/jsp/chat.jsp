@@ -474,8 +474,7 @@
       var ip = $("#ip").val();
       var port = $("#port").val();
       var idx = 0;
-      // var url = "ws://192.168.100.138:";
-     
+
 
 
       function load() {//load room tra ve tu api 
@@ -507,7 +506,7 @@
           $("#createBoard").click(function () {
             var js3 = '{\
              msg_id: "create_board",\
-             email: "'+ $("#email").val() + '",\
+             email: "'+email+ '",\
              name:"'+ $("#nameBoard").val() + '",  \
              time:'+ $("#countdownTime").val() + '  \
                }';
@@ -691,7 +690,7 @@
                 btn.click({ vi: lst_cb[jk].name, eml: email, v_socket : socket }, function (event) {
                   var js4 = '{\
                       msg_id: "enter_board",\
-                      email: "'+ $("#email").val() + '",\
+                      email: "'+ event.data.eml + '",\
                       name:"'+ event.data.vi + '"\
                       }';
                   socket.send(js4);
