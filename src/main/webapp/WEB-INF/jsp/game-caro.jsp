@@ -86,7 +86,7 @@
                     <span style="font-size: 18px;" id="historyUser1"></span>
                 </div>
                 <div class="row justify-content-center">
-                    <span id="timerUser1" , style="color: red; font-size: 25px;">0:20</span>
+                    <span id="timerUser1" , style="color: red; font-size: 25px;">0:00</span>
                 </div>
                 <br>
                 <br>
@@ -113,7 +113,7 @@
             <div class="col-3 background-right">
                 <br>
                 <div class="row justify-content-center">
-                    <h3 id="nameUser2">USER2</h3>
+                    <h3 id="nameUser2">User2</h3>
                 </div>
                 <div class="row justify-content-center">
                     <span style="font-size: 18px;" id="scoreUser2"></span>
@@ -122,7 +122,7 @@
                     <span style="font-size: 18px;" id="historyUser2"></span>
                 </div>
                 <div class="row justify-content-center">
-                    <span id="timerUser2" , style="color: red; font-size: 25px;">0:20</span>
+                    <span id="timerUser2" , style="color: red; font-size: 25px;">0:00</span>
                 </div>
                 <br>
                 <br>
@@ -242,6 +242,8 @@
                 $("#btnRestart").click(function () {
                     clearTimeout(t1);
                     clearTimeout(t2);
+                    clearTimeout(t3);
+                    clearTimeout(t4);
                     $("#timerUser1").text("0:20");
                     $("#timerUser2").text("0:20");
                     for (var k = 0; k < size; k++) {
@@ -409,8 +411,47 @@
 
                     }
 
-                    else if (json.msg_id === "") {
-
+                    else if (json.msg_id === "watch_match") {
+                        $("#btnStart").css("pointer-events", "none","important");
+                        $("#btnRestart").css("pointer-events", "none", "important");
+                        for (var k = 0; k < size; k++) {
+                                for (var l = 0; l < size; l++) {
+                                    if (dataMatrix[k][l] == -1) {
+                                        matrix[k][l].css("pointer-events", "none");
+                                    }
+                                }
+                        }
+                    }
+                    else if(json.msg_id === "game_state_watch"){
+                        
+                        if (json.user === "c1") {
+                            clearTimeout(t3);
+                            countdown4();
+                            seconds1 = 20;
+                        }
+                        else if (json.user === "c2") {
+                            clearTimeout(t4);
+                            countdown3();
+                            seconds2 = 20;
+                        }
+                        var ix = json.x;
+                        var jy = json.y;
+                        if (json.x != -1) {
+                            matrix[ix][jy].html(json.label == 0 ? maskOf_O : maskOf_X).css("pointer-events", "none", "important");
+                            dataMatrix[ix][jy] = json.label;
+                        }
+                    }
+                    else if (json.msg_id === "restart_game_watch"){
+                        clearTimeout(t3);
+                        clearTimeout(t4);
+                        $("#timerUser1").text("0:20");
+                        $("#timerUser2").text("0:20");
+                        for (var k = 0; k < size; k++) {
+                            for (var l = 0; l < size; l++) {
+                                dataMatrix[k][l] = -1;
+                                matrix[k][l].html("");
+                            }
+                        }
                     }
 
                 };

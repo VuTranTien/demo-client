@@ -339,15 +339,6 @@
                         <label for="recipient-name" class="col-form-label">Tên bàn</label>
                         <input type="text" class="form-control" id="nameBoard">
                       </div>
-                      <div class="form-group">
-                        <label for="#coundownTime" class="col-form-label">Thời gian mỗi bước đi</label>
-                        <select id="countdownTime" class="custom-select" name="coundownTime">
-                          <option selected value="15">15</option>
-                          <option value="20">20</option>
-                          <option value="25">25</option>
-                          <option value="30">30</option>
-                        </select>
-                      </div>
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -506,9 +497,8 @@
           $("#createBoard").click(function () {
             var js3 = '{\
              msg_id: "create_board",\
-             email: "'+email+ '",\
-             name:"'+ $("#nameBoard").val() + '",  \
-             time:'+ $("#countdownTime").val() + '  \
+             email: "'+ $("#email").val() + '",\
+             name:"'+ $("#nameBoard").val() + '" \
                }';
 
             socket.send(js3);
@@ -681,6 +671,17 @@
                 // btn.css("pointer-events", "none");
                 btn.html(lst_cb[jk].name);
                 $("#list_of_check_board").append(btn);
+                btn.click({ vi: lst_cb[jk].name, eml: email, v_socket : socket }, function (event) {
+                  var js4 = '{\
+                      msg_id: "watch_match",\
+                      email: "'+ $("#email").val() + '",\
+                      name:"'+ event.data.vi + '"\
+                      }';
+                  socket.send(js4);
+
+
+                  location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.vi + "&email=" + event.data.eml);
+                });
               }
               else if (lst_cb[jk].isFull == 1) {
                 var btn = $('<button>');
