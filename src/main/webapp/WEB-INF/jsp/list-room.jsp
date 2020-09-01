@@ -63,36 +63,9 @@
       color: #999;
     }
   </style>
+  <script src="${pageContext.request.contextPath}/js/check_token.js"></script>
   <script>
-    var token;
-
-    function parseJwt(token) {
-      var base64Url = token.split('.')[1];
-      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-
-      return String(jsonPayload);
-    }
-    function checkToken() {
-        
-      if (!(document.cookie === "")) {//check xem token con hieu luc khong
-      token = document.cookie.split(";")[0].split("=")[1];
-        var objToken = JSON.parse(parseJwt(token));
-        console.log(objToken);
-        var t = objToken.exp*1000 < new Date().getTime();
-        if(t){
-          alert(t);
-          location.replace("http://localhost:8880/demo-client/login.do");
-        }
-        // alert(document.cookie.split(";")[0].split("=")[1]);
-        
-      }
-      
-    }
-    checkToken();
-
+    checkToken('http://localhost:8880/demo-client/login.do',false);
   </script>
 </head>
 
@@ -133,7 +106,7 @@
         }
     });
   var urlPre = "http://localhost:8880";
-  var url = "http://192.168.100.138:8080";
+  var url = "http://192.168.100.139:8080";
   function loadRoom() {//load room tra ve tu api 
   
     $.post(url+"/center/user/room_list.do", function (data) {

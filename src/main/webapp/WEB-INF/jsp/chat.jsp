@@ -465,8 +465,7 @@
       var ip = $("#ip").val();
       var port = $("#port").val();
       var idx = 0;
-      // var url = "ws://192.168.100.138:";
-     
+
 
 
       function load() {//load room tra ve tu api 
@@ -675,7 +674,7 @@
                 btn.click({ vi: lst_cb[jk].name, eml: email, v_socket : socket }, function (event) {
 
                   location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.vi + "&email=" + event.data.eml);
-                
+
                 });
               }
               else if (lst_cb[jk].isFull == 1) {
@@ -686,7 +685,7 @@
                 btn.click({ vi: lst_cb[jk].name, eml: email, v_socket : socket }, function (event) {
                   var js4 = '{\
                       msg_id: "enter_board",\
-                      email: "'+ $("#email").val() + '",\
+                      email: "'+ event.data.eml + '",\
                       name:"'+ event.data.vi + '"\
                       }';
                   socket.send(js4);

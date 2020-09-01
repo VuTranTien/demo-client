@@ -9,33 +9,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/check_token.js"></script>
 
     <script>
-        var email = "error_email";
-        function parseJwt(token) {
-            var base64Url = token.split('.')[1];
-            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-
-            return String(jsonPayload);
-        }
-        function checkToken() {
-
-            if (!(document.cookie === "")) {//check xem token con hieu luc khong
-                token = document.cookie.split(";")[0].split("=")[1];
-                var objToken = JSON.parse(parseJwt(token));
-                console.log(objToken);
-                var t = objToken.exp * 1000 < new Date().getTime();
-                if (t) {
-                    location.replace("http://localhost:8880/demo-client/login.do");
-                }
-
-            }
-
-        }
-        checkToken();
+    checkToken('http://localhost:8880/demo-client/login.do',false);
     </script>
 
     <style>
@@ -70,8 +47,6 @@
             <input type="text" hidden id = "count2">
             <input type="text"hidden id = "state_countdown" value="">
             
-
-
 
         </div>
         <div class="row justify-content-end">
@@ -240,7 +215,7 @@
                     sendState(socket);
                 }
             };
-            
+
             socket.onopen = function (e) {
                 console.log("-------------Room Connection------------");
 
@@ -286,9 +261,9 @@
                     socket.send(js2);
                     });
 
-                
+
                 socket.onmessage = function (event) {
-                   
+
                     var json = JSON.parse(event.data);
                     console.log(json);
                     if (json.msg_id === "load_score") {
@@ -481,7 +456,7 @@
                 };
 
                 socket.onclose = function (event) {
-                   
+
                     if (event.wasClean) {
                         alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
                     } else {
