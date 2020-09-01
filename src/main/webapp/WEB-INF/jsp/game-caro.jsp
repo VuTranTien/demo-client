@@ -89,7 +89,7 @@
                         <div class="row">
                             <div class="col-8"><button style="width: 8em;" id="btnStart" type="button"
                                     class="btn btn-warning">Start Game</button></div>
-                            <div class="col-4"><button id="btnRestart" style="width: 8em;" id="btnStart" type="button"
+                            <div class="col-4"><button id="btnRestart" style="width: 8em;" type="button"
                                     class="btn btn-warning">Restart</button></div>
                         </div>
                     </div>
@@ -328,10 +328,11 @@
                         if (json.ret == 0) {
                             $('.isClick').css("pointer-events", "auto");
                             $("#btnStart").css("pointer-events", "none");
-
                         }
                         else {
+                            $("#btnStart").css("pointer-events", "auto");
                             alert("Vui lòng chờ...");
+
                         }
                     }
                     else if (json.msg_id === "game_state") {
