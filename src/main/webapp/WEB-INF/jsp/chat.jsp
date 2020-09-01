@@ -497,7 +497,7 @@
           $("#createBoard").click(function () {
             var js3 = '{\
              msg_id: "create_board",\
-             email: "'+ $("#email").val() + '",\
+             email: "'+ email+ '",\
              name:"'+ $("#nameBoard").val() + '" \
                }';
 
