@@ -106,7 +106,7 @@
         }
     });
   var urlPre = "http://localhost:8880";
-  var url = "http://192.168.100.138:8080";
+  var url = "http://192.168.100.139:8080";
   function loadRoom() {//load room tra ve tu api 
   
     $.post(url+"/center/user/room_list.do", function (data) {
@@ -121,28 +121,15 @@
         new_element.setAttribute("class","btn btn-success")
         new_element.innerHTML = element.name;
         new_element.onclick = function() { // Note this is a function
-          //goi ajax toi api check xem token co hop le khong
-          // alert(element.id);
-          // $.post(
-          //         urlPre+"/restApi/room_info.do",
-          //         {
-          //           id : parseInt(element.id)
-                    
-          //         },
-          //         function(result){
-          //           var j2 = JSON.parse(result);
-          //           var ip_ = j2.ip;
-          //           var port_ = j2.port;
-                    
-          //           $.redirectPost("http://localhost:8880/demo-client/chat.do", {ip: ip_, port: port_});
-
-
-          //         }
-
-          //       );
-          $.redirectPost("http://localhost:8880/demo-client/chat.do", {id: element.id, port: element.port, ip: element.ip});
           
 
+          // $.redirectPost("http://localhost:8880/demo-client/chat.do", {id: element.id, port: element.port, ip: element.ip});
+          location.replace("http://localhost:8880/demo-client/chat.do");
+          localStorage.room_id = element.id;
+          localStorage.port = element.port;
+          localStorage.ip = element.ip;
+
+        
         };
         console.log(String(new_element.value));
         $("#list-rooms").append(new_element);

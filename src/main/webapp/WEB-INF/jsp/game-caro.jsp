@@ -12,6 +12,9 @@
     <script src="${pageContext.request.contextPath}/js/check_token.js"></script>
 
     <script>
+    var email = localStorage.email;
+    var name_of_check_board = localStorage.name_of_check_board;
+
     checkToken('http://localhost:8880/demo-client/login.do',false);
     </script>
 
@@ -41,13 +44,6 @@
     <div class="container-fluid" style="margin-top: 20px;">
         <div class="row justify-content-center">
             <h1> GAME BOARD </h1>
-            <input id="name_of_check_board" type="text" hidden value="${name}">
-            <input type="text" value="${email}" hidden id="email">
-            <input type="text" hidden id="count1">
-            <input type="text" hidden id = "count2">
-            <input type="text"hidden id = "state_countdown" value="">
-            
-
         </div>
         <div class="row justify-content-end">
             <div class='col-3'>
@@ -149,7 +145,7 @@
         var turn = size ** 2;
         var matrix = [[]];
         var dataMatrix = [[]];
-        var url = "ws://192.168.100.138:";
+        var url = "ws://192.168.100.139:";
         var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center btn-outline-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                 <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
                 <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\
@@ -195,7 +191,7 @@
             function sendState(socket){
                 var state_count_down = '{\
                     msg_id: "game_state",\
-                    name: "'+$("#name_of_check_board").val()+'",\
+                    name: "'+localStorage.name_of_check_board+'",\
                     x: '+ -1 +',\
                     y: '+ -1 +'\
                     }';
@@ -224,7 +220,7 @@
                 $("#btnStart").click(function () {
                     var startgame = '{\
                 msg_id: "game_start",\
-                name:"'+ $("#name_of_check_board").val() + '"\
+                name:"'+ localStorage.name_of_check_board + '"\
                 }';
                     socket.send(startgame);
                     $("#btnStart").css("pointer-events", "none");
@@ -232,7 +228,7 @@
                 // TODO load score user
                 var getScoreOwner = '{\
                     msg_id:"load_score",\
-                    name: "'+ $("#name_of_check_board").val() + '"\
+                    name: "'+localStorage.name_of_check_board + '"\
                     }';
 
                 socket.send(getScoreOwner);
@@ -255,7 +251,7 @@
 
                     var js2 = '{\
                     msg_id: "restart_game",\
-                    name: "'+ $("#name_of_check_board").val() + '"\
+                    name: "'+ localStorage.name_of_check_board + '"\
                      }';
                     //TODO: reset matrix
                     socket.send(js2);
@@ -508,7 +504,7 @@
                         // clearTimeout(t1);
                         var state = '{\
                             msg_id: "game_state",\
-                            name: "'+ $("#name_of_check_board").val() + '",\
+                            name: "'+ localStorage.name_of_check_board + '",\
                             x: '+ event.data.vi + ',\
                             y: '+ event.data.vj + '\
                         }';
@@ -558,8 +554,8 @@
         function overide_channel_reload(socket) {
             var js1 = '{\
             msg_id: "overide_channel",\
-            email:"'+ $("#email").val() + '",\
-            name: "'+ $("#name_of_check_board").val() + '"\
+            email:"'+ localStorage.email + '",\
+            name: "'+ localStorage.name_of_check_board + '"\
             }';
             socket.send(js1);
 

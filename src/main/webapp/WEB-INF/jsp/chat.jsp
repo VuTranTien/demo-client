@@ -39,7 +39,11 @@
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 
   <script>
-    var email = $("#email").val();
+    if (localStorage.getItem("email") === null) {
+      location.replace('http://localhost:8880/demo-client/login.do');
+      localStorage.clear();
+    }
+    var email = localStorage.email;
     function parseJwt(token) {
       var base64Url = token.split('.')[1];
       var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -313,7 +317,7 @@
       <div id="main-menu" class="main-menu collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <li>
-            <a><i class="menu-icon fa fa-dashboard"></i>Phòng ${room_id}</a>
+            <a id= "room_name"></a>
           </li>
           <li>
             <button type="button" data-target="#form_create_check" data-toggle="modal"
@@ -416,10 +420,6 @@
             <div class="headind_srch">
               <div class="recent_heading">
                 <h4>Đang hoạt động</h4>
-                <input type="text" hidden value="${room_id}" id="room_name">
-                <input type="text" hidden value="${email}" id="email">
-                <input type="text" hidden value="${port}" id="port">
-                <input type="text" hidden value="${ip}" id="ip">
               </div>
               <div class="srch_bar">
 
@@ -458,17 +458,16 @@
 
       var listRooms;
 
-      var ip = $("#ip").val();
-      var port = $("#port").val();
+      var ip = localStorage.ip;
+      var port = localStorage.port;
       var idx = 0;
+      var room_name_html =' <i class="menu-icon fa fa-dashboard"></i>Phòng '+localStorage.room_id;
+ 
 
 
 
       function load() {//load room tra ve tu api 
-        console.log($("#room_name").val());
-        console.log($("#port").val());
-        console.log($("#ip").val());
-      
+        $("#room_name").html(room_name_html); 
         let socket = new WebSocket('ws://'+ip +':' + port);
 
         //Gui tin nhan di
@@ -496,7 +495,7 @@
              email: "'+ email+ '",\
              name:"'+ $("#nameBoard").val() + '" \
                }';
-
+            localStorage.name_of_check_board = $("#nameBoard").val();
             socket.send(js3);
             load_ch(socket);
             location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + $("#nameBoard").val() + "&email=" + email);
@@ -692,7 +691,7 @@
                   socket.send(js4);
                  
                   $(this).css("pointer-events", "none");
-
+                  localStorage.name_of_check_board = vi;
 
 
                   location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.vi + "&email=" + event.data.eml);
