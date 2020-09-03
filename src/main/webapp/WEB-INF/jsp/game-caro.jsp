@@ -169,9 +169,7 @@
         function load() {
 
 
-            $("#call_back").click(function () {
-                location.replace('http://localhost:8880/demo-client/list-room.do');
-            });
+           
             //Connection Server
             let socket = new WebSocket(url + "9000");
             function countdown1() {
@@ -215,6 +213,14 @@
             socket.onopen = function (e) {
                 console.log("-------------Room Connection------------");
 
+                $("#call_back").click(function () {
+                var back = '{\
+                msg_id: "call_back",\
+                name: "'+ $("#name_of_check_board").val() + '",\
+                }';
+                socket.send(back);
+                location.replace('http://localhost:8880/demo-client/list-room.do');
+            });
 
                 overide_channel_reload(socket);
                 $("#btnStart").click(function () {
@@ -447,6 +453,23 @@
                                 matrix[k][l].html("");
                             }
                         }
+                    }
+                    else if(json.msg_id === "reset_user2"){
+                        clearTimeout(t1);
+                        clearTimeout(t2);
+                        clearTimeout(t3);
+                        clearTimeout(t4);
+                        for (var k = 0; k < size; k++) {
+                            for (var l = 0; l < size; l++) {
+                                dataMatrix[k][l] = -1;
+                                matrix[k][l].html("");
+                            }
+                        }
+                        $("#nameUser2").text("USER2");
+                        $("#scoreUser2").empty();
+                        $("#historyUser2").empty();
+                        $("#timerUser1").text("0:00");
+                        $("#timerUser2").text("0:00");
                     }
 
                 };
