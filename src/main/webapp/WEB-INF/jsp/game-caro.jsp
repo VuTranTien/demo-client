@@ -216,7 +216,7 @@
                 $("#call_back").click(function () {
                 var back = '{\
                 msg_id: "call_back",\
-                name: "'+ $("#name_of_check_board").val() + '",\
+                name: "'+ localStorage.name_of_check_board + '",\
                 }';
                 socket.send(back);
                 location.replace('http://localhost:8880/demo-client/list-room.do');
