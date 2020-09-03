@@ -34,8 +34,8 @@ function checkToken(url, redirect) {
    * @param redirect : boolean
    */
   var cookie =  JSON.parse(getCookie('access_token'));
-  console.log(cookie.exp*1000);
-  console.log(new Date().getTime());
+  // console.log(cookie.exp*1000);
+  // console.log(new Date().getTime());
   if((new Date().getTime() < cookie.exp * 1000 && redirect==true) || (new Date().getTime() > cookie.exp * 1000 && redirect==false)){
     location.replace(url);
   }

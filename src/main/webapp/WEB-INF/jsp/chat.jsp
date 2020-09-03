@@ -13,8 +13,6 @@
   <meta charset="utf-8">
   <title>Demo</title>
   <meta name="description" content="GihOt Admin">
-  <script type="text/javascript" src="${pageContext.request.contextPath}/js/script.js"></script>
-
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -384,8 +382,6 @@
           <h3 class="menu-title">Danh sách bàn cờ</h3><!-- /.menu-title -->
 
           <li id="list_of_check_board" class="menu-item dropdown">
-            <a id="enter_board">
-              <i class="menu-icon fa fa-th"></i>Bàn 1 <i class=" ml-5 stat-icon fa fa-spinner"></i> 1/2</a>
           </li>
         </ul>
       </div><!-- /.navbar-collapse -->
@@ -659,7 +655,7 @@
                 </div>\
           ');
           }
-          else if (js1.msg_id === "load_list_check_board") {
+          else if (js1.msg_id === "load_list_chess_board") {
             var lst_cb = JSON.parse(js1.list);
             console.log(lst_cb);
             //FIXME: 
@@ -670,6 +666,7 @@
                 btn.addClass('btn btn-danger btn-lg btn-block');
                 // btn.css("pointer-events", "none");
                 btn.html(lst_cb[jk].name);
+                
                 $("#list_of_check_board").append(btn);
                 btn.click({ vi: lst_cb[jk].name, eml: email, v_socket : socket }, function (event) {
 
@@ -681,6 +678,10 @@
                 var btn = $('<button>');
                 btn.addClass('btn btn-success btn-lg btn-block');
                 btn.html(lst_cb[jk].name);
+                temp = email.split("@")[0];
+                if (lst_cb[jk].owner === temp){
+                  btn.css("pointer-events", "none");
+                }
                 $("#list_of_check_board").append(btn);
                 btn.click({ vi: lst_cb[jk].name, eml: email, v_socket : socket }, function (event) {
                   var js4 = '{\
@@ -712,6 +713,7 @@
           } else {
             // e.g. server process killed or network down
             // event.code is usually 1006 in this case
+            location.replace('http://localhost:8880/demo-client/login.do');
             alert('[close] Connection died');
           }
         };
@@ -729,7 +731,7 @@
       }
       function load_ch(socket) {
         var js5 = '{\
-               msg_id: "load_list_check_board" \
+               msg_id: "load_list_chess_board" \
               }';
         socket.send(js5);
       }
