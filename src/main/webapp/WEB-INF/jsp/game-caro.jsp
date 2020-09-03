@@ -286,11 +286,13 @@
                         $("#historyUser1").text('W:' + list_score[0].win + ' L:' + list_score[0].lose);
 
                         $("#scoreUser2").text('Score: ' + list_score[1].score);
-                        $("#historyUser2").text('W:' + list_score[1].score + ' L:' + list_score[1].lose);
+                        $("#historyUser2").text('W:' + list_score[1].win + ' L:' + list_score[1].lose);
                     }
                     else if (json.msg_id === "game_state_win") {
                         clearTimeout(t1);
                         clearTimeout(t2);
+                        clearTimeout(t3);
+                        clearTimeout(t4);
                         $("#timerUser1").text("0:20");
                         $("#timerUser2").text("0:20");
                         alert(json.winner);

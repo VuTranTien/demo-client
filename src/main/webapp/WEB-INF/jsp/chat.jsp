@@ -691,7 +691,7 @@
                   socket.send(js4);
                  
                   $(this).css("pointer-events", "none");
-                  localStorage.name_of_check_board = vi;
+                  localStorage.name_of_check_board = event.data.vi;
 
 
                   location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.vi + "&email=" + event.data.eml);
@@ -712,8 +712,8 @@
           } else {
             // e.g. server process killed or network down
             // event.code is usually 1006 in this case
-            location.replace('http://localhost:8880/demo-client/login.do');
-            alert('[close] Connection died');
+            // location.replace('http://localhost:8880/demo-client/login.do');
+            // alert('[close] Connection died');
           }
         };
 
