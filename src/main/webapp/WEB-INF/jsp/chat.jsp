@@ -231,6 +231,7 @@
     }
 
     .mesgs {
+      background-image: url("${pageContext.request.contextPath}/images/background.jpg");
       float: left;
       padding: 30px 15px 0 25px;
       width: 60%;
@@ -397,18 +398,13 @@
     <header id="header" class="header">
       <div class="header-menu">
         <div class="col-sm-7">
-          <a id="menuToggle" class="menutoggle pull-left"><i class="fa fa fa-tasks"></i></a>
-          <!-- <div class="header-left">
-                        <button class="search-trigger"><i class="fa fa-search"></i></button>
-                        <div class="form-inline">
-                            <form class="search-form">
-                                <input class="form-control mr-sm-2" type="text" placeholder="Search ..." aria-label="Search">
-                                <button class="search-close" type="submit"><i class="fa fa-close"></i></button>
-                            </form>
-                        </div>
-                        
+        
+        </div>
+        <div class ="col-sm-3">
 
-                    </div> -->
+        </div>
+        <div class = "col-sm-2">
+            <a href="http://localhost:8880/demo-client/list-room.do">HOME</a>
         </div>
       </div>
     </header>
@@ -429,7 +425,7 @@
             </div>
           </div>
           <div class="mesgs">
-            <div class="msg_history" id="msg_history">
+            <div class="msg_history" id="msg_history" >
 
 
             </div>
@@ -503,7 +499,7 @@
 
 
           $("#send").click(function () {
-
+            if($("#message").val().trim() != ""){
             var json2 = '{\
               msg_id: "normal",\
               msg_from:'+ email + ',\
@@ -517,6 +513,7 @@
                 </div>\
             ');
             $("#message").val("");
+          }
           });
 
         };
@@ -616,21 +613,23 @@
                       </div>\
                     </div>\
                   ');
+                  $("#all_form").append(formMsg);
                 btn.click({ reiEmail: list_user[i].email, fromEmail: email, ix: i }, function (event) {
-                  $("#all_form").html(formMsg);
+                  // $("#all_form").html(formMsg);
                   $("#form_message" + event.data.ix).modal("show");
 
                   $("#sendMsg" + event.data.ix).click({ rEmail: event.data.reiEmail, fEmail: event.data.fromEmail, index: event.data.ix}, function (rs) {
+                    if($("#"+rs.data.index).val().trim() != ""){
                     var sendMsg = '{\
                     msg_id: "user_to_user",\
                     msg: "'+ String($("#"+String(rs.data.index)).val()) + '",\
                     msg_from: "'+ rs.data.fEmail + '",\
                     msg_reic: "'+ rs.data.rEmail + '"\
                   }';
-                    console.log(String($("#"+String(rs.data.index)).val()));
                     socket.send(sendMsg);
                     $("#form_message" + event.data.ix);
-
+                    $("#"+String(rs.data.index)).val("");
+                  }
                   });
 
                 });

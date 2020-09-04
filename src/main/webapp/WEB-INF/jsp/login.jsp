@@ -20,6 +20,13 @@
   <script>
     checkToken('http://localhost:8880/demo-client/list-room.do',true);
   </script>
+  <style>
+    body{
+            background-repeat: no-repeat;
+            background-image: url("${pageContext.request.contextPath}/images/backgroundLogin.jpeg");
+            background-size: 100% 250%;
+        }
+  </style>
 </head>
 
 <body >

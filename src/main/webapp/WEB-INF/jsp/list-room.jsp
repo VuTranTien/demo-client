@@ -70,10 +70,18 @@
 </head>
 
 <body onload="loadRoom()">
+  <br>
   <div class="container" style="margin-top: 20px;">
     <div class="row justify-content-center ">
-      <h2>List Room</h2>
+      <h2>LIST ROOM</h2>
     </div>
+    <div class="row justify-content-end">
+      <div class="col-4">
+        <button type="button" class="btn btn-warning" id = "btnLogout">Log out </button>
+      </div>
+      
+    </div>
+    <br>
     <div class="row justify-content-center ">
       <div class="btn-group-vertical w-50 " id="list-rooms">
       </div>
@@ -106,9 +114,15 @@
         }
     });
   var urlPre = "http://localhost:8880";
-  var url = "http://192.168.100.139:8080";
+  var url = "http://192.168.100.138:8080";
   function loadRoom() {//load room tra ve tu api 
+  //TODO delete cookie
   
+    $("#btnLogout").click(function(){
+      window.localStorage.clear();
+      document.cookie = "access_token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+      location.replace("http://localhost:8880/demo-client/login.do");
+    });
     $.post(url+"/center/user/room_list.do", function (data) {
       var listRooms = JSON.parse(data);
       var i = 0;
@@ -116,6 +130,7 @@
         var new_element = document.createElement("button");
 
         new_element.name = element.name; 
+        new_element.style.margin = "5px";
         new_element.setAttribute("id","room_"+element.id);
         new_element.setAttribute("value",element.name);
         new_element.setAttribute("class","btn btn-success")
@@ -135,7 +150,7 @@
         $("#list-rooms").append(new_element);
       });
     });
-
+    
   }
 
 </script>

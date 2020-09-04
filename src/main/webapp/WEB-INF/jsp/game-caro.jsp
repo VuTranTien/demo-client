@@ -19,18 +19,13 @@
     </script>
 
     <style>
-        body {
-            /* background-image: linear-gradient(to right, #c4e0e5, #4ca1af ); */
-            /* background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%); */
-            background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%);
-
-        }
-
-
 
         button.cell:hover {
             border: 3px solid blue !important;
 
+        }
+        body{
+            background-image: url("${pageContext.request.contextPath}/images/backgroundGame.jpeg");
         }
 
         p {
@@ -41,7 +36,7 @@
 
 <body onload="load()">
 
-    <div class="container-fluid" style="margin-top: 20px;">
+    <div class="container-fluid" style="margin-top: 20px;" >
         <div class="row justify-content-center">
             <h1> GAME BOARD </h1>
         </div>
@@ -145,7 +140,7 @@
         var turn = size ** 2;
         var matrix = [[]];
         var dataMatrix = [[]];
-        var url = "ws://192.168.100.139:";
+        var url = "ws://192.168.100.138:";
         var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center btn-outline-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                 <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
                 <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\
@@ -219,7 +214,7 @@
                 name: "'+ localStorage.name_of_check_board + '",\
                 }';
                 socket.send(back);
-                location.replace('http://localhost:8880/demo-client/list-room.do');
+                location.replace('http://localhost:8880/demo-client/chat.do');
             });
 
                 overide_channel_reload(socket);
