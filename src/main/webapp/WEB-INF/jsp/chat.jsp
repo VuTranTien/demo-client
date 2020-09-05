@@ -404,7 +404,7 @@
 
         </div>
         <div class = "col-sm-2">
-            <a href="http://localhost:8880/demo-client/list-room.do">HOME</a>
+            <a href="http://localhost:8880/demo-client/list-room.do"><i>DANH SÁCH PHÒNG</i> </a>
         </div>
       </div>
     </header>

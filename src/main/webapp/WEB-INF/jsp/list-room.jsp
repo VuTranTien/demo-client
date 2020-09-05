@@ -22,10 +22,9 @@
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
   <style>
     body {
-      background-color: #74EBD5;
-      background-image: linear-gradient(90deg, #74EBD5 0%, #9FACE6 100%);
-      /* background-image: linear-gradient(to right, #c4e0e5, #4ca1af ); */
-      min-height: 100vh;
+      background-image: url("${pageContext.request.contextPath}/images/backgroundListroom.jpg");
+      background-size: 100% 200%;
+      background-repeat: no-repeat;
     }
 
     ::-webkit-scrollbar {
@@ -77,7 +76,7 @@
     </div>
     <div class="row justify-content-end">
       <div class="col-4">
-        <button type="button" class="btn btn-warning" id = "btnLogout">Log out </button>
+        <button type="button" class="btn btn-danger" id = "btnLogout">Log out</button>
       </div>
       
     </div>
