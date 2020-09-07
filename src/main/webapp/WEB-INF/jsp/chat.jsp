@@ -386,7 +386,7 @@
           </li>
           <h3 class="menu-title">Danh sách bàn cờ</h3><!-- /.menu-title -->
 
-          <li id="list_of_check_board" class="menu-item dropdown">
+          <li id="list_of_chess_board" class="menu-item dropdown">
           </li>
         </ul>
       </div><!-- /.navbar-collapse -->
@@ -491,7 +491,7 @@
              email: "'+ email+ '",\
              name:"'+ $("#nameBoard").val() + '" \
                }';
-            localStorage.name_of_check_board = $("#nameBoard").val();
+            localStorage.name_of_chess_board = $("#nameBoard").val();
             socket.send(js3);
             load_ch(socket);
             location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + $("#nameBoard").val() + "&email=" + email);
@@ -657,7 +657,7 @@
             var lst_cb = JSON.parse(js1.list);
             console.log(lst_cb);
             //FIXME: 
-            $("#list_of_check_board").empty();
+            $("#list_of_chess_board").empty();
             for (var jk = 0; jk < lst_cb.length; jk++) {
               if (lst_cb[jk].isFull == 2) {
                 var btn = $('<button>');
@@ -665,7 +665,7 @@
                 // btn.css("pointer-events", "none");
                 btn.html(lst_cb[jk].name);
                 
-                $("#list_of_check_board").append(btn);
+                $("#list_of_chess_board").append(btn);
                 btn.click({ vi: lst_cb[jk].name, eml: email, v_socket : socket }, function (event) {
 
                   location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.vi + "&email=" + event.data.eml);
@@ -680,7 +680,7 @@
                 if (lst_cb[jk].owner === temp){
                   btn.css("pointer-events", "none");
                 }
-                $("#list_of_check_board").append(btn);
+                $("#list_of_chess_board").append(btn);
                 btn.click({ vi: lst_cb[jk].name, eml: email, v_socket : socket }, function (event) {
                   var js4 = '{\
                       msg_id: "enter_board",\
@@ -690,7 +690,7 @@
                   socket.send(js4);
                  
                   $(this).css("pointer-events", "none");
-                  localStorage.name_of_check_board = event.data.vi;
+                  localStorage.name_of_chess_board = event.data.vi;
 
 
                   location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.vi + "&email=" + event.data.eml);

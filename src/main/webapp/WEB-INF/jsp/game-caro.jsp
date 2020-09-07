@@ -13,7 +13,7 @@
 
     <script>
     var email = localStorage.email;
-    var name_of_check_board = localStorage.name_of_check_board;
+    var name_of_chess_board = localStorage.name_of_chess_board;
 
     checkToken('http://localhost:8880/demo-client/login.do',false);
     </script>
@@ -123,6 +123,7 @@
                         <circle cx="8" cy="8" r="8" />
                     </svg>
                 </div>
+                
 
             </div>
         </div>
@@ -134,13 +135,13 @@
 
 
     <script>
-        var checkerBoard = [];
+        var chessBoard = [];
         var x, y;
         var size = 23;
         var turn = size ** 2;
         var matrix = [[]];
         var dataMatrix = [[]];
-        var url = "ws://192.168.100.138:";
+        var url = "ws://192.168.100.139:";
         var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center btn-outline-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                 <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
                 <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\
@@ -155,6 +156,7 @@
             $seconds1.textContent = '0:' + seconds1;
             if (seconds1-- > 0) t3 = setTimeout(countdown3, 1000)
             };
+            
         function countdown4() {
             $seconds2.textContent = '0:' + seconds2;
             if (seconds2-- > 0) t4 = setTimeout(countdown4, 1000)
@@ -184,7 +186,7 @@
             function sendState(socket){
                 var state_count_down = '{\
                     msg_id: "game_state",\
-                    name: "'+localStorage.name_of_check_board+'",\
+                    name: "'+localStorage.name_of_chess_board+'",\
                     x: '+ -1 +',\
                     y: '+ -1 +'\
                     }';
@@ -211,7 +213,7 @@
                 $("#call_back").click(function () {
                 var back = '{\
                 msg_id: "call_back",\
-                name: "'+ localStorage.name_of_check_board + '",\
+                name: "'+ localStorage.name_of_chess_board + '",\
                 }';
                 socket.send(back);
                 location.replace('http://localhost:8880/demo-client/chat.do');
@@ -221,7 +223,7 @@
                 $("#btnStart").click(function () {
                     var startgame = '{\
                 msg_id: "game_start",\
-                name:"'+ localStorage.name_of_check_board + '"\
+                name:"'+ localStorage.name_of_chess_board + '"\
                 }';
                     socket.send(startgame);
                     $("#btnStart").css("pointer-events", "none");
@@ -229,7 +231,7 @@
                 // TODO load score user
                 var getScoreOwner = '{\
                     msg_id:"load_score",\
-                    name: "'+localStorage.name_of_check_board + '"\
+                    name: "'+localStorage.name_of_chess_board + '"\
                     }';
 
                 socket.send(getScoreOwner);
@@ -252,7 +254,7 @@
 
                     var js2 = '{\
                     msg_id: "restart_game",\
-                    name: "'+ localStorage.name_of_check_board + '"\
+                    name: "'+ localStorage.name_of_chess_board + '"\
                      }';
                     //TODO: reset matrix
                     socket.send(js2);
@@ -486,14 +488,14 @@
                     alert(`[error] ${error.message}`);
                 };
 
-                create_checkBoard(socket);
+                create_chessBoard(socket);
 
 
             }
         }
         //-------------------------------------------------------------------------------
 
-        function create_checkBoard(s) {
+        function create_chessBoard(s) {
 
             for (var i = 0; i < size; i++) {
 
@@ -502,10 +504,10 @@
                 matrix[i] = [];
                 dataMatrix[i] = [];
                 if (i % 2 !== 0) {
-                    checkerBoard.push(trEven);
+                    chessBoard.push(trEven);
                 }
                 else {
-                    checkerBoard.push(trOdd);
+                    chessBoard.push(trOdd);
                 }
 
                 for (var j = 0; j < size; j++) {
@@ -524,7 +526,7 @@
                         // clearTimeout(t1);
                         var state = '{\
                             msg_id: "game_state",\
-                            name: "'+ localStorage.name_of_check_board + '",\
+                            name: "'+ localStorage.name_of_chess_board + '",\
                             x: '+ event.data.vi + ',\
                             y: '+ event.data.vj + '\
                         }';
@@ -543,12 +545,12 @@
 
                     });
                     tdEle.append(btn);
-                    checkerBoard[i].append(tdEle);
+                    chessBoard[i].append(tdEle);
                 }
             }
 
 
-            $('tbody').append(checkerBoard);
+            $('tbody').append(chessBoard);
             $(".odd td:odd").css("background-color", "white");
             $(".odd td:even").css("background-color", "white");
             $(".even td:odd").css("background-color", "white");
@@ -575,7 +577,7 @@
             var js1 = '{\
             msg_id: "overide_channel",\
             email:"'+ localStorage.email + '",\
-            name: "'+ localStorage.name_of_check_board + '"\
+            name: "'+ localStorage.name_of_chess_board + '"\
             }';
             socket.send(js1);
 
