@@ -1,30 +1,30 @@
 <!doctype html>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <title>Play</title>
     <meta name="description" content="GihOt Admin">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/check_token.js"></script>
 
     <script>
-    var email = localStorage.email;
-    var name_of_chess_board = localStorage.name_of_chess_board;
+        var email = localStorage.email;
+        var name_of_chess_board = localStorage.name_of_chess_board;
 
-    checkToken('http://localhost:8880/demo-client/login.do',false);
+        checkToken('http://localhost:8880/demo-client/login.do', false);
     </script>
 
     <style>
-
         button.cell:hover {
             border: 3px solid blue !important;
 
         }
-        body{
+
+        body {
             background-image: url("${pageContext.request.contextPath}/images/backgroundGame.jpeg");
         }
 
@@ -36,7 +36,7 @@
 
 <body onload="load()">
 
-    <div class="container-fluid" style="margin-top: 20px;" >
+    <div class="container-fluid" style="margin-top: 20px;">
         <div class="row justify-content-center">
             <h1> GAME BOARD </h1>
         </div>
@@ -123,7 +123,7 @@
                         <circle cx="8" cy="8" r="8" />
                     </svg>
                 </div>
-                
+
 
             </div>
         </div>
@@ -149,50 +149,50 @@
         var maskOf_O = '<svg width="1.8em" height="1.8em" viewBox="0.4 0.7 45 35" class="bi bi-circle-fill text-dark" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                         <circle cx="10" cy="10" r="10"/>\
                         </svg>';
-        var t1,t2,t3,t4;
+        var t1, t2, t3, t4;
         var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
         var seconds2 = 20, $seconds2 = document.querySelector('#timerUser2');
         function countdown3() {
             $seconds1.textContent = '0:' + seconds1;
             if (seconds1-- > 0) t3 = setTimeout(countdown3, 1000)
-            };
-            
+        };
+
         function countdown4() {
             $seconds2.textContent = '0:' + seconds2;
             if (seconds2-- > 0) t4 = setTimeout(countdown4, 1000)
-            };
+        };
 
         //-------------------------------------------------------------------------------
         function load() {
+            $("#btnRestart").css("pointer-events", "none", "important");
 
 
-           
             //Connection Server
             let socket = new WebSocket(url + "9000");
             function countdown1() {
-            $seconds1.textContent = '0:' + seconds1;
-            if (seconds1-- > 0) t1 = setTimeout(countdown1, 1000)
-            if (seconds1 == 0) {
-                for (var k = 0; k < size; k++) {
-                    for (var l = 0; l < size; l++) {
-                        if (dataMatrix[k][l] == -1) {
-                            matrix[k][l].css("pointer-events", "auto");
+                $seconds1.textContent = '0:' + seconds1;
+                if (seconds1-- > 0) t1 = setTimeout(countdown1, 1000)
+                if (seconds1 == 0) {
+                    for (var k = 0; k < size; k++) {
+                        for (var l = 0; l < size; l++) {
+                            if (dataMatrix[k][l] == -1) {
+                                matrix[k][l].css("pointer-events", "auto");
+                            }
                         }
                     }
+                    sendState(socket);
                 }
-                sendState(socket);
-            }
             };
-            function sendState(socket){
+            function sendState(socket) {
                 var state_count_down = '{\
                     msg_id: "game_state",\
-                    name: "'+localStorage.name_of_chess_board+'",\
-                    x: '+ -1 +',\
-                    y: '+ -1 +'\
+                    name: "'+ localStorage.name_of_chess_board + '",\
+                    x: '+ -1 + ',\
+                    y: '+ -1 + '\
                     }';
                 socket.send(state_count_down);
             }
-            function countdown2() { 
+            function countdown2() {
                 $seconds2.textContent = '0:' + seconds2;
                 if (seconds2-- > 0) t2 = setTimeout(countdown2, 1000)
                 if (seconds2 == 0) {
@@ -200,9 +200,9 @@
                         for (var l = 0; l < size; l++) {
                             if (dataMatrix[k][l] == -1) {
                                 matrix[k][l].css("pointer-events", "auto");
+                            }
                         }
                     }
-                }
                     sendState(socket);
                 }
             };
@@ -211,27 +211,27 @@
                 console.log("-------------Room Connection------------");
 
                 $("#call_back").click(function () {
-                var back = '{\
+                    var back = '{\
                 msg_id: "call_back",\
                 name: "'+ localStorage.name_of_chess_board + '",\
                 }';
-                socket.send(back);
-                location.replace('http://localhost:8880/demo-client/chat.do');
-            });
+                    socket.send(back);
+                    location.replace('http://localhost:8880/demo-client/chat.do');
+                });
 
                 overide_channel_reload(socket);
                 $("#btnStart").click(function () {
                     var startgame = '{\
                 msg_id: "game_start",\
-                name:"'+ localStorage.name_of_chess_board + '"\
+                name:"'+ localStorage.name_of_chess_board + '",\
+                email:"'+ email + '"\
                 }';
                     socket.send(startgame);
-                    $("#btnStart").css("pointer-events", "none");
                 });
                 // TODO load score user
                 var getScoreOwner = '{\
                     msg_id:"load_score",\
-                    name: "'+localStorage.name_of_chess_board + '"\
+                    name: "'+ localStorage.name_of_chess_board + '"\
                     }';
 
                 socket.send(getScoreOwner);
@@ -256,9 +256,10 @@
                     msg_id: "restart_game",\
                     name: "'+ localStorage.name_of_chess_board + '"\
                      }';
+
                     //TODO: reset matrix
                     socket.send(js2);
-                    });
+                });
 
 
                 socket.onmessage = function (event) {
@@ -293,6 +294,7 @@
                         $("#timerUser1").text("0:20");
                         $("#timerUser2").text("0:20");
                         alert(json.winner);
+                        $("#btnRestart").css("pointer-events", "auto", "important");
                         //TODO: restart game
                         for (var k = 0; k < size; k++) {
                             for (var l = 0; l < size; l++) {
@@ -305,12 +307,16 @@
                         if (json.ret == 0) {
                             $('.isClick').css("pointer-events", "auto");
                             $("#btnStart").css("pointer-events", "none");
+
                         }
                         else {
                             $("#btnStart").css("pointer-events", "auto");
                             alert("Waiting another player...");
 
                         }
+                    }
+                    else if(json.msg_id === "not_ready"){
+                        alert("Wait a minute!\nYour friend is not ready");
                     }
                     else if (json.msg_id === "game_state") {
                         if (json.user === "c1") {
@@ -356,7 +362,7 @@
                             matrix[ix][jy].html(json.label == 0 ? maskOf_O : maskOf_X).css("pointer-events", "none", "important");
                             dataMatrix[ix][jy] = json.label;
                         }
-                        else{
+                        else {
                             for (var k = 0; k < size; k++) {
                                 for (var l = 0; l < size; l++) {
                                     if (dataMatrix[k][l] == -1) {
@@ -378,6 +384,7 @@
                         clearTimeout(t2);
                         $("#timerUser1").text("0:20");
                         $("#timerUser2").text("0:20");
+                        $("#btnRestart").css("pointer-events", "none", "important");
                         //TODO: reset turn ve 0
                     }
                     else if (json.msg_id === "reload_data_matrix") {
@@ -412,18 +419,18 @@
                     }
 
                     else if (json.msg_id === "watch_match") {
-                        $("#btnStart").css("pointer-events", "none","important");
+                        $("#btnStart").css("pointer-events", "none", "important");
                         $("#btnRestart").css("pointer-events", "none", "important");
                         for (var k = 0; k < size; k++) {
-                                for (var l = 0; l < size; l++) {
-                                    if (dataMatrix[k][l] == -1) {
-                                        matrix[k][l].css("pointer-events", "none");
-                                    }
+                            for (var l = 0; l < size; l++) {
+                                if (dataMatrix[k][l] == -1) {
+                                    matrix[k][l].css("pointer-events", "none");
                                 }
+                            }
                         }
                     }
-                    else if(json.msg_id === "game_state_watch"){
-                        
+                    else if (json.msg_id === "game_state_watch") {
+
                         if (json.user === "c1") {
                             clearTimeout(t3);
                             countdown4();
@@ -441,7 +448,7 @@
                             dataMatrix[ix][jy] = json.label;
                         }
                     }
-                    else if (json.msg_id === "restart_game_watch"){
+                    else if (json.msg_id === "restart_game_watch") {
                         clearTimeout(t3);
                         clearTimeout(t4);
                         $("#timerUser1").text("0:20");
@@ -453,7 +460,7 @@
                             }
                         }
                     }
-                    else if(json.msg_id === "reset_user2"){
+                    else if (json.msg_id === "reset_user2") {
                         clearTimeout(t1);
                         clearTimeout(t2);
                         clearTimeout(t3);
@@ -470,6 +477,47 @@
                         $("#timerUser1").text("0:00");
                         $("#timerUser2").text("0:00");
                     }
+                    else if (json.msg_id === "is_ready") {
+                        var rd_content = $('#frame0');
+                        var ready_btn = $('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ready_modal">');
+                        var ready_modal = $('<div class="modal fade" id="ready_modal">');
+
+                        var md_dialog = $('<div class="modal-dialog modal-sm">');
+                        
+                        var md_content = $('<div class="modal-content">').html('<div class="modal-header">\
+                                                <h4 class="modal-title">'+json.msg_from+' want start game!</h4>\
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>\
+                                                </div>\
+                                                <div class="modal-body">\
+                                                Combat now!\
+                                                </div>');
+                        var rd_footer = $('<div class="modal-footer">');
+                            var btn_accept = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">')
+                                            .html('Yes')
+                                            .click({s:socket},function(event){
+                                                event.data.s.send('{\
+                                                    msg_id:"ready_response",\
+                                                    ret: 0,\
+                                                    name:"'+name_of_chess_board+'"\
+                                                }');
+                                            });
+                            var btn_not_accept = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">')
+                                            .html('No')
+                                            .click({s:socket},function(event){
+                                                event.data.s.send('{\
+                                                    msg_id:"ready_response",\
+                                                    ret: -1,\
+                                                    name:"'+name_of_chess_board+'"\
+                                                }');
+                                            });
+                        rd_footer.append(btn_accept).append(btn_not_accept);
+                        md_content.append(rd_footer);
+                        md_dialog.html(md_content);
+                        ready_modal.html(md_dialog);
+                        rd_content.append(ready_modal);
+                        $(ready_modal).modal('show');
+                        // rd_content.children("#")
+                    }
 
                 };
 
@@ -482,10 +530,12 @@
                         // event.code is usually 1006 in this case
                         alert('[close] Connection died');
                     }
+                    socket.close();
                 };
 
                 socket.onerror = function (error) {
                     alert(`[error] ${error.message}`);
+                    socket.close();
                 };
 
                 create_chessBoard(socket);
@@ -572,7 +622,6 @@
 
         };
 
-
         function overide_channel_reload(socket) {
             var js1 = '{\
             msg_id: "overide_channel",\
@@ -583,6 +632,7 @@
 
         }
 
+        
     </script>
 
 

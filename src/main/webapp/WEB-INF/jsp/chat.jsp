@@ -706,7 +706,6 @@
 
         socket.onclose = function (event) {
           if (event.wasClean) {
-            socket.close();
             alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
           } else {
             // e.g. server process killed or network down
@@ -714,10 +713,12 @@
             // location.replace('http://localhost:8880/demo-client/login.do');
             // alert('[close] Connection died');
           }
+          socket.close();
         };
 
         socket.onerror = function (error) {
           alert(`[error] ${error.message}`);
+          socket.close();
         };
 
       }
