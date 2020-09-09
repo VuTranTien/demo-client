@@ -26,6 +26,7 @@
 
         body {
             background-image: url("${pageContext.request.contextPath}/images/backgroundGame.jpeg");
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"
         }
 
         p {
@@ -57,6 +58,7 @@
                                     class="btn btn-warning">Start Game</button></div>
                             <div class="col-4"><button id="btnRestart" style="width: 8em;" type="button"
                                     class="btn btn-warning">Restart</button></div>
+                            
                         </div>
                     </div>
                 </div>
@@ -485,7 +487,7 @@
                         var md_dialog = $('<div class="modal-dialog modal-sm">');
                         
                         var md_content = $('<div class="modal-content">').html('<div class="modal-header">\
-                                                <h4 class="modal-title">'+json.msg_from+' want start game!</h4>\
+                                                <h4 class="modal-title"><i style="color: crimson;">'+json.msg_from+'</i> want to start game!</h4>\
                                                 <button type="button" class="close" data-dismiss="modal">&times;</button>\
                                                 </div>\
                                                 <div class="modal-body">\

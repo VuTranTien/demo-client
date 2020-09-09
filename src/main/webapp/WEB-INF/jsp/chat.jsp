@@ -235,6 +235,7 @@
       float: left;
       padding: 30px 15px 0 25px;
       width: 60%;
+      fill-opacity: 20%;
     }
 
     .sent_msg p {
@@ -321,10 +322,12 @@
             <a id= "room_name"></a>
           </li>
           <li>
-            <button type="button" data-target="#form_create_check" data-toggle="modal"
+            <button style="width: 8em;" type="button" data-target="#form_create_check" data-toggle="modal"
               class="btn btn-secondary btn-sm ml-5"><i class="fa fa-lightbulb-o"></i>&nbsp; Tạo bàn</button>
-            <button style="margin: 10px;" type="button" data-target="#form_ranked" data-toggle="modal"
+            <button style="width: 8em; margin: 10px;" type="button" data-target="#form_ranked" data-toggle="modal"
               class="btn btn-secondary btn-sm ml-5"><i class="fa fa-user"></i>&nbsp; Xếp hạng</button>
+              <button id="game_history" style="width: 8em; " type="button" data-target="#form_history" data-toggle="modal"
+              class="btn btn-secondary btn-sm ml-5"><i class="fa fa-info-circle"></i>&nbsp; Lịch sử đấu</button>
 
             <div class="modal fade" id="form_create_check" tabindex="-1" role="dialog"
               aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -369,6 +372,37 @@
                             <th>Hạng</th>
                             <th>Tên</th>
                             <th>Điểm</th>
+                          </tr>
+
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="form_history" tabindex="-1" role="dialog"
+              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Lịch sử đấu</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div>
+                      <div class="form-group">
+                        <table id="list_combats" class="table">
+                          <tr>
+                            <th>Người chơi 1</th>
+                            <th>Người chơi 2</th>
+                            <th>Thời gian</th>
+                            <th>Kết quả</th>
                           </tr>
 
                         </table>
@@ -514,6 +548,12 @@
             ');
             $("#message").val("");
           }
+          });
+          $("#game_history").click(function(){
+            socket.send('{\
+              msg_id:"game_history",\
+              email:"'+email+'"\
+            }');
           });
 
         };
@@ -697,6 +737,23 @@
                 });
               }
             }
+          }
+          else if(js1.msg_id==="game_history"){
+            
+            var table_content="";
+            var history_list = JSON.parse(js1.history_list);
+            for(var x = 0; x<history_list.length;x++){
+                var history_item = history_list[x];
+                $("#game_history").append('\
+                <tr>\
+                  <td>'+history_item.email_pl1+'</td>\
+                  <td>'+history_item.email_pl2+'</td>\
+                  <td>'+history_item.time+'</td>\
+                  <td>'+history_item.result+'</td>\
+                </tr>\
+                ');
+            }
+            
           }
           else {
             console.log("Error in message recieved");
