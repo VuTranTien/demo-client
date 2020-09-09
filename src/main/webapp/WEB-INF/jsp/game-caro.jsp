@@ -45,8 +45,45 @@
         </div>
 
         <div class="row justify-content-end">
-            <div class='col-3'>
-                <button type="button" class="btn btn-secondary btn-lg active" id="call_back">BACK</button>
+            <div class="col-3">
+                <div class="row justify-content-center">
+        
+                    <button id="btnInvite" style="margin: 10px;" type="button" data-target="#form_invite" data-toggle="modal"
+                        class="btn btn-primary btn-lg active">Invite</button>
+        
+                    <div class="modal fade" id="form_invite" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalCenterTitle">List User Online</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+                                        <div class="form-group">
+                                            <table id="listOnline" class="table">
+        
+        
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                </div>
+              </div>
+                        </div>
+
+                </div>
+            </div>
+            <div class='col-3' >
+                <div class="row justify-content-center">
+                    <button style="margin: 10px;" type="button" class="btn btn-secondary btn-lg active" id="call_back">BACK</button>                    
+                </div>
             </div>
 
         </div>
@@ -108,39 +145,7 @@
             <div class="col-3 background-right">
 
                 <br>
-                <div class="row justify-content-center">
-
-                        <button id="btnInvite" style="margin: 10px;" type="button" data-target="#form_ranked" data-toggle="modal"
-                        class="btn btn-success">Invite</button>
-
-                        <div class="modal fade" id="form_ranked" tabindex="-1" role="dialog"
-                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalCenterTitle">List User Online</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <div>
-                                <div class="form-group">
-                                    <table id="listOnline" class="table">
-
-
-                                    </table>
-                                </div>
-                                </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  </div>
-                </div>
-              </div>
-                        </div>
-
-                </div>
+                
                 <div class="row justify-content-center">
                     <h3 id="nameUser2">User2</h3>
                 </div>
@@ -180,7 +185,7 @@
         var turn = size ** 2;
         var matrix = [[]];
         var dataMatrix = [[]];
-        var url = "ws://192.168.100.139:";
+        var url = "ws://192.168.100.138:";
         var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center btn-outline-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                 <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
                 <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\
@@ -328,6 +333,7 @@
                             $("#nameUser2").text(json.email);
                             $("#scoreUser2").text('Score: ' + json.score);
                             $("#historyUser2").text('W:' + json.win + ' L:' + json.lose);
+                            $("#btnInvite").css("pointer-events", "none");
                         }
                     }
                     else if (json.msg_id === "update_score") {
@@ -359,7 +365,6 @@
                         if (json.ret == 0) {
                             $('.isClick').css("pointer-events", "auto");
                             $("#btnStart").css("pointer-events", "none");
-
                         }
                         else {
                             $("#btnStart").css("pointer-events", "auto");
@@ -523,6 +528,7 @@
                                 matrix[k][l].html("");
                             }
                         }
+                        $("#btnInvite").css("pointer-events", "auto");
                         $("#nameUser2").text("USER2");
                         $("#scoreUser2").empty();
                         $("#historyUser2").empty();
@@ -572,6 +578,12 @@
                     }
 
                     else if (json.msg_id === "online"){
+                        $("#listOnline").empty();
+                        $("#listOnline").append('<tr>\
+                                        <th>Number</th>\
+                                        <th>Name</th>\
+                                        <th>Invite</th>\
+                                    </tr>');
                        var list_user = json.list_user;
                        for (var i = 0; i < list_user.length; i++) {
                         var temp = list_user[i].email.split("@")[0];
@@ -581,16 +593,6 @@
                         num.html(i+1);
                         name.html(temp);
                         var invite = $('<td>');
-                    //    $("#listOnline").append('\
-                    //    <tr>\
-                    //    <td>'+(i+1)+'</td>\
-                    //    <td>'+temp+'</td>\
-                    //    <td><button class="btn btn-success btn-sm rounded-0" type="button"\
-                    //         id="buttonEdit" data-toggle="tooltip" data-placement="top" title=""\
-                    //         data-original-title="Edit"><i class="fa fa-edit"></i>Invite</button>\
-                    //     </td>\
-                    //     </tr>\
-                    //    ');
                         var buttonInvite = $('<button>');
                         buttonInvite.addClass("btn btn-success btn-sm rounded-0");
                         buttonInvite.html("Invite");
@@ -599,7 +601,7 @@
                                 msg_id: "invite_game",\
                                 ip_port: "'+event.data.ip_port+'",\
                                 email: "'+event.data.email+'",\
-                                name: "'+localStorage.name_of_check_board+'"\
+                                name: "'+localStorage.name_of_chess_board+'"\
                             }';
                             socket.send(inviteUser);
                         })

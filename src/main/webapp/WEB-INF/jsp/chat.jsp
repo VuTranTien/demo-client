@@ -392,9 +392,13 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                    <div>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Từ chối</button>
-                    <button id="acceptEnter" type="button" class="btn btn-primary">Đồng ý</button>
+                    <div class = "container">
+                      <div class="row justify-content-center">
+                        <button style="margin-left: 20px;" type="button" class="btn btn-secondary" data-dismiss="modal">Từ chối</button>
+                      </div>
+                      <div>
+                        <button style="margin-right: 20px;" id="acceptEnter" type="button" class="btn btn-primary">Đồng ý</button>
+                      </div>
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -689,7 +693,7 @@
                 
                 $("#list_of_chess_board").append(btn);
                 btn.click({ vi: lst_cb[jk].name, eml: email, v_socket : socket }, function (event) {
-
+                  localStorage.name_of_chess_board = event.data.vi;
                   location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.vi + "&email=" + event.data.eml);
 
                 });
@@ -729,7 +733,7 @@
                       name:"'+ event.data.name + '"\
                       }';
               socket.send(js4);
-            localStorage.name_of_check_board = event.data.name;
+            localStorage.name_of_chess_board = event.data.name;
             location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.name + "&email=" + email);
           })
           }
