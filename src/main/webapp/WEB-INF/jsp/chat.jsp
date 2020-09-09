@@ -381,6 +381,28 @@
                 </div>
               </div>
             </div>
+            <div class="modal fade" id="form_accept" tabindex="-1" role="dialog"
+              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Mời vào bàn cờ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Từ chối</button>
+                    <button id="acceptEnter" type="button" class="btn btn-primary">Đồng ý</button>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
             <div id="all_form"></div>
 
           </li>
@@ -698,6 +720,20 @@
               }
             }
           }
+          else if (js1.msg_id === "invite_game"){
+            $("#form_accept").modal("show");
+            $("#acceptEnter").click({name: js1.name, eml: email},function(event){
+              var js4 = '{\
+                      msg_id: "enter_board",\
+                      email: "'+ event.data.eml + '",\
+                      name:"'+ event.data.name + '"\
+                      }';
+              socket.send(js4);
+            localStorage.name_of_check_board = event.data.name;
+            location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.name + "&email=" + email);
+          })
+          }
+         
           else {
             console.log("Error in message recieved");
           }

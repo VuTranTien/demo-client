@@ -10,21 +10,24 @@
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/check_token.js"></script>
-
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+    
     <script>
-    var email = localStorage.email;
-    var name_of_check_board = localStorage.name_of_check_board;
+        var email = localStorage.email;
+        var name_of_check_board = localStorage.name_of_check_board;
 
-    checkToken('http://localhost:8880/demo-client/login.do',false);
+        checkToken('http://localhost:8880/demo-client/login.do', false);
     </script>
 
     <style>
-
         button.cell:hover {
             border: 3px solid blue !important;
 
         }
-        body{
+
+        body {
             background-image: url("${pageContext.request.contextPath}/images/backgroundGame.jpeg");
         }
 
@@ -36,10 +39,12 @@
 
 <body onload="load()">
 
-    <div class="container-fluid" style="margin-top: 20px;" >
+    <div class="container-fluid" style="margin-top: 20px;">
+        
         <div class="row justify-content-center">
             <h1> GAME BOARD </h1>
         </div>
+        
         <div class="row justify-content-end">
             <div class='col-3'>
                 <button type="button" class="btn btn-secondary btn-lg active" id="call_back">BACK</button>
@@ -102,10 +107,45 @@
             </div>
             <!----------------------------------------------------------------------right----------------------------------------------------------------->
             <div class="col-3 background-right">
+               
                 <br>
+                <div class="row justify-content-center">
+                    
+                        <button id="btnInvite" style="margin: 10px;" type="button" data-target="#form_ranked" data-toggle="modal"
+                        class="btn btn-success">Invite</button>
+                   
+                        <div class="modal fade" id="form_ranked" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">List User Online</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                <div class="form-group">
+                                    <table id="listOnline" class="table">
+                                    
+
+                                    </table>
+                                </div>
+                                </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+                        </div>
+    
+                </div>
                 <div class="row justify-content-center">
                     <h3 id="nameUser2">User2</h3>
                 </div>
+               
                 <div class="row justify-content-center">
                     <span style="font-size: 18px;" id="scoreUser2"></span>
                 </div>
@@ -148,49 +188,47 @@
         var maskOf_O = '<svg width="1.8em" height="1.8em" viewBox="0.4 0.7 45 35" class="bi bi-circle-fill text-dark" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                         <circle cx="10" cy="10" r="10"/>\
                         </svg>';
-        var t1,t2,t3,t4;
+        var t1, t2, t3, t4;
         var seconds1 = 20, $seconds1 = document.querySelector('#timerUser1');
         var seconds2 = 20, $seconds2 = document.querySelector('#timerUser2');
         function countdown3() {
             $seconds1.textContent = '0:' + seconds1;
             if (seconds1-- > 0) t3 = setTimeout(countdown3, 1000)
-            };
+        };
         function countdown4() {
             $seconds2.textContent = '0:' + seconds2;
             if (seconds2-- > 0) t4 = setTimeout(countdown4, 1000)
-            };
+        };
 
         //-------------------------------------------------------------------------------
         function load() {
 
-
-           
             //Connection Server
             let socket = new WebSocket(url + "9000");
             function countdown1() {
-            $seconds1.textContent = '0:' + seconds1;
-            if (seconds1-- > 0) t1 = setTimeout(countdown1, 1000)
-            if (seconds1 == 0) {
-                for (var k = 0; k < size; k++) {
-                    for (var l = 0; l < size; l++) {
-                        if (dataMatrix[k][l] == -1) {
-                            matrix[k][l].css("pointer-events", "auto");
+                $seconds1.textContent = '0:' + seconds1;
+                if (seconds1-- > 0) t1 = setTimeout(countdown1, 1000)
+                if (seconds1 == 0) {
+                    for (var k = 0; k < size; k++) {
+                        for (var l = 0; l < size; l++) {
+                            if (dataMatrix[k][l] == -1) {
+                                matrix[k][l].css("pointer-events", "auto");
+                            }
                         }
                     }
+                    sendState(socket);
                 }
-                sendState(socket);
-            }
             };
-            function sendState(socket){
+            function sendState(socket) {
                 var state_count_down = '{\
                     msg_id: "game_state",\
-                    name: "'+localStorage.name_of_check_board+'",\
-                    x: '+ -1 +',\
-                    y: '+ -1 +'\
+                    name: "'+ localStorage.name_of_check_board + '",\
+                    x: '+ -1 + ',\
+                    y: '+ -1 + '\
                     }';
                 socket.send(state_count_down);
             }
-            function countdown2() { 
+            function countdown2() {
                 $seconds2.textContent = '0:' + seconds2;
                 if (seconds2-- > 0) t2 = setTimeout(countdown2, 1000)
                 if (seconds2 == 0) {
@@ -198,9 +236,9 @@
                         for (var l = 0; l < size; l++) {
                             if (dataMatrix[k][l] == -1) {
                                 matrix[k][l].css("pointer-events", "auto");
+                            }
                         }
                     }
-                }
                     sendState(socket);
                 }
             };
@@ -209,14 +247,27 @@
                 console.log("-------------Room Connection------------");
 
                 $("#call_back").click(function () {
-                var back = '{\
+                    var back = '{\
                 msg_id: "call_back",\
                 name: "'+ localStorage.name_of_check_board + '",\
                 }';
-                socket.send(back);
-                location.replace('http://localhost:8880/demo-client/chat.do');
-            });
+                    socket.send(back);
+                    location.replace('http://localhost:8880/demo-client/chat.do');
+                });
 
+                $("#btnInvite").click(function () {
+                    $("#listOnline").empty();
+                    $("#listOnline").append('<tr>\
+                                        <th>Number</th>\
+                                        <th>Name</th>\
+                                        <th>Invite</th>\
+                                    </tr>');
+                    var getUser = '{\
+                msg_id: "user_online"\
+                }';
+                    socket.send(getUser);
+                    
+                });
                 overide_channel_reload(socket);
                 $("#btnStart").click(function () {
                     var startgame = '{\
@@ -229,7 +280,7 @@
                 // TODO load score user
                 var getScoreOwner = '{\
                     msg_id:"load_score",\
-                    name: "'+localStorage.name_of_check_board + '"\
+                    name: "'+ localStorage.name_of_check_board + '"\
                     }';
 
                 socket.send(getScoreOwner);
@@ -256,7 +307,7 @@
                      }';
                     //TODO: reset matrix
                     socket.send(js2);
-                    });
+                });
 
 
                 socket.onmessage = function (event) {
@@ -269,7 +320,7 @@
                             $("#scoreUser1").text('Score: ' + json.score);
                             $("#historyUser1").text('W:' + json.win + ' L:' + json.lose);
                         }
-                        else if (json.msg_type === "c2") {
+                        else if (json.msg_type === "c2") {  
                             $("#nameUser2").text(json.email);
                             $("#scoreUser2").text('Score: ' + json.score);
                             $("#historyUser2").text('W:' + json.win + ' L:' + json.lose);
@@ -354,7 +405,7 @@
                             matrix[ix][jy].html(json.label == 0 ? maskOf_O : maskOf_X).css("pointer-events", "none", "important");
                             dataMatrix[ix][jy] = json.label;
                         }
-                        else{
+                        else {
                             for (var k = 0; k < size; k++) {
                                 for (var l = 0; l < size; l++) {
                                     if (dataMatrix[k][l] == -1) {
@@ -410,18 +461,18 @@
                     }
 
                     else if (json.msg_id === "watch_match") {
-                        $("#btnStart").css("pointer-events", "none","important");
+                        $("#btnStart").css("pointer-events", "none", "important");
                         $("#btnRestart").css("pointer-events", "none", "important");
                         for (var k = 0; k < size; k++) {
-                                for (var l = 0; l < size; l++) {
-                                    if (dataMatrix[k][l] == -1) {
-                                        matrix[k][l].css("pointer-events", "none");
-                                    }
+                            for (var l = 0; l < size; l++) {
+                                if (dataMatrix[k][l] == -1) {
+                                    matrix[k][l].css("pointer-events", "none");
                                 }
+                            }
                         }
                     }
-                    else if(json.msg_id === "game_state_watch"){
-                        
+                    else if (json.msg_id === "game_state_watch") {
+
                         if (json.user === "c1") {
                             clearTimeout(t3);
                             countdown4();
@@ -439,7 +490,7 @@
                             dataMatrix[ix][jy] = json.label;
                         }
                     }
-                    else if (json.msg_id === "restart_game_watch"){
+                    else if (json.msg_id === "restart_game_watch") {
                         clearTimeout(t3);
                         clearTimeout(t4);
                         $("#timerUser1").text("0:20");
@@ -451,7 +502,7 @@
                             }
                         }
                     }
-                    else if(json.msg_id === "reset_user2"){
+                    else if (json.msg_id === "reset_user2") {
                         clearTimeout(t1);
                         clearTimeout(t2);
                         clearTimeout(t3);
@@ -468,7 +519,45 @@
                         $("#timerUser1").text("0:00");
                         $("#timerUser2").text("0:00");
                     }
-
+                    else if (json.msg_id === "online"){
+                       var list_user = json.list_user;
+                       for (var i = 0; i < list_user.length; i++) {
+                        var temp = list_user[i].email.split("@")[0];
+                        var row = $('<tr>');
+                        var num = $('<td>');
+                        var name = $('<td>');
+                        num.html(i+1);
+                        name.html(temp);
+                        var invite = $('<td>');
+                    //    $("#listOnline").append('\
+                    //    <tr>\
+                    //    <td>'+(i+1)+'</td>\
+                    //    <td>'+temp+'</td>\
+                    //    <td><button class="btn btn-success btn-sm rounded-0" type="button"\
+                    //         id="buttonEdit" data-toggle="tooltip" data-placement="top" title=""\
+                    //         data-original-title="Edit"><i class="fa fa-edit"></i>Invite</button>\
+                    //     </td>\
+                    //     </tr>\
+                    //    ');
+                        var buttonInvite = $('<button>');
+                        buttonInvite.addClass("btn btn-success btn-sm rounded-0");
+                        buttonInvite.html("Invite");
+                        buttonInvite.click({ip_port: list_user[i].ip_port, email: list_user[i].email},function(event){
+                            var inviteUser = '{\
+                                msg_id: "invite_game",\
+                                ip_port: "'+event.data.ip_port+'",\
+                                email: "'+event.data.email+'",\
+                                name: "'+localStorage.name_of_check_board+'"\
+                            }';
+                            socket.send(inviteUser);
+                        })
+                        invite.html(buttonInvite);
+                        row.append(num);
+                        row.append(name);
+                        row.append(invite);
+                        $("#listOnline").append(row);
+                       }
+                    }
                 };
 
                 socket.onclose = function (event) {
@@ -580,7 +669,16 @@
             socket.send(js1);
 
         }
-
+        function inviteUser(channel, socket){
+            var inviteUser = '{\
+                msg_id: "invite_user",\
+                channel: '+channel+',\
+            }';
+            socket.send(inviteUser);
+        }
+        function test(ip){
+            alert(ip);
+        }
     </script>
 
 
