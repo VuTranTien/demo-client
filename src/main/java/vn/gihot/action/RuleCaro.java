@@ -1,6 +1,5 @@
 package vn.gihot.action;
 
-import javax.swing.*;
 
 public class RuleCaro {
     final  int size = 6;
@@ -102,24 +101,4 @@ public class RuleCaro {
         return false;
     }
 
-    public static void main(String[] args) {
-        RuleCaro ruleCaro = new RuleCaro();
-        for (int i = 0; i< ruleCaro.matrix.length; i++){
-            for (int j = 0; j< ruleCaro.matrix.length;j++){
-                ruleCaro.matrix[i][j] = 0;
-            }
-        }
-//        for (int i = 0; i< ruleCaro.matrix.length; i++){
-//            ruleCaro.matrix[i][i] = 1;
-//        }
-
-        for (int i = 0; i< ruleCaro.matrix.length; i++){
-            System.out.print("\n");
-            for (int j = 0; j< ruleCaro.matrix.length;j++){
-                System.out.print(" " + ruleCaro.matrix[i][j] + " ");
-            }
-        }
-
-
-    }
 }

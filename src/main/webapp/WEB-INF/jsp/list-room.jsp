@@ -113,7 +113,7 @@
         }
     });
   var urlPre = "http://localhost:8880";
-  var url = "http://192.168.100.138:8080";
+  var url = "http://192.168.100.139:8080";
   function loadRoom() {//load room tra ve tu api 
   //TODO delete cookie
   

@@ -1,22 +1,22 @@
 <!doctype html>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <title>Play</title>
     <meta name="description" content="GihOt Admin">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/check_token.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
     integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
     crossorigin="anonymous"></script>
-    
+
     <script>
         var email = localStorage.email;
-        var name_of_check_board = localStorage.name_of_check_board;
+        var name_of_chess_board = localStorage.name_of_chess_board;
 
         checkToken('http://localhost:8880/demo-client/login.do', false);
     </script>
@@ -40,11 +40,10 @@
 <body onload="load()">
 
     <div class="container-fluid" style="margin-top: 20px;">
-        
         <div class="row justify-content-center">
             <h1> GAME BOARD </h1>
         </div>
-        
+
         <div class="row justify-content-end">
             <div class='col-3'>
                 <button type="button" class="btn btn-secondary btn-lg active" id="call_back">BACK</button>
@@ -107,13 +106,13 @@
             </div>
             <!----------------------------------------------------------------------right----------------------------------------------------------------->
             <div class="col-3 background-right">
-               
+
                 <br>
                 <div class="row justify-content-center">
-                    
+
                         <button id="btnInvite" style="margin: 10px;" type="button" data-target="#form_ranked" data-toggle="modal"
                         class="btn btn-success">Invite</button>
-                   
+
                         <div class="modal fade" id="form_ranked" tabindex="-1" role="dialog"
                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -128,7 +127,7 @@
                                 <div>
                                 <div class="form-group">
                                     <table id="listOnline" class="table">
-                                    
+
 
                                     </table>
                                 </div>
@@ -140,12 +139,12 @@
                 </div>
               </div>
                         </div>
-    
+
                 </div>
                 <div class="row justify-content-center">
                     <h3 id="nameUser2">User2</h3>
                 </div>
-               
+
                 <div class="row justify-content-center">
                     <span style="font-size: 18px;" id="scoreUser2"></span>
                 </div>
@@ -164,6 +163,7 @@
                     </svg>
                 </div>
 
+
             </div>
         </div>
         <div class="row">
@@ -174,13 +174,13 @@
 
 
     <script>
-        var checkerBoard = [];
+        var chessBoard = [];
         var x, y;
         var size = 23;
         var turn = size ** 2;
         var matrix = [[]];
         var dataMatrix = [[]];
-        var url = "ws://192.168.100.138:";
+        var url = "ws://192.168.100.139:";
         var maskOf_X = '<svg width="2em" height="2em" viewBox="6 6 16 16" class="bi bi-x align-center btn-outline-danger" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
                 <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>\
                 <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>\
@@ -195,6 +195,7 @@
             $seconds1.textContent = '0:' + seconds1;
             if (seconds1-- > 0) t3 = setTimeout(countdown3, 1000)
         };
+
         function countdown4() {
             $seconds2.textContent = '0:' + seconds2;
             if (seconds2-- > 0) t4 = setTimeout(countdown4, 1000)
@@ -202,6 +203,8 @@
 
         //-------------------------------------------------------------------------------
         function load() {
+            $("#btnRestart").css("pointer-events", "none", "important");
+
 
             //Connection Server
             let socket = new WebSocket(url + "9000");
@@ -222,7 +225,7 @@
             function sendState(socket) {
                 var state_count_down = '{\
                     msg_id: "game_state",\
-                    name: "'+ localStorage.name_of_check_board + '",\
+                    name: "'+ localStorage.name_of_chess_board + '",\
                     x: '+ -1 + ',\
                     y: '+ -1 + '\
                     }';
@@ -249,7 +252,7 @@
                 $("#call_back").click(function () {
                     var back = '{\
                 msg_id: "call_back",\
-                name: "'+ localStorage.name_of_check_board + '",\
+                name: "'+ localStorage.name_of_chess_board + '",\
                 }';
                     socket.send(back);
                     location.replace('http://localhost:8880/demo-client/chat.do');
@@ -266,21 +269,21 @@
                 msg_id: "user_online"\
                 }';
                     socket.send(getUser);
-                    
+
                 });
                 overide_channel_reload(socket);
                 $("#btnStart").click(function () {
                     var startgame = '{\
                 msg_id: "game_start",\
-                name:"'+ localStorage.name_of_check_board + '"\
+                name:"'+ localStorage.name_of_chess_board + '",\
+                email:"'+ email + '"\
                 }';
                     socket.send(startgame);
-                    $("#btnStart").css("pointer-events", "none");
                 });
                 // TODO load score user
                 var getScoreOwner = '{\
                     msg_id:"load_score",\
-                    name: "'+ localStorage.name_of_check_board + '"\
+                    name: "'+ localStorage.name_of_chess_board + '"\
                     }';
 
                 socket.send(getScoreOwner);
@@ -303,8 +306,9 @@
 
                     var js2 = '{\
                     msg_id: "restart_game",\
-                    name: "'+ localStorage.name_of_check_board + '"\
+                    name: "'+ localStorage.name_of_chess_board + '"\
                      }';
+
                     //TODO: reset matrix
                     socket.send(js2);
                 });
@@ -320,7 +324,7 @@
                             $("#scoreUser1").text('Score: ' + json.score);
                             $("#historyUser1").text('W:' + json.win + ' L:' + json.lose);
                         }
-                        else if (json.msg_type === "c2") {  
+                        else if (json.msg_type === "c2") {
                             $("#nameUser2").text(json.email);
                             $("#scoreUser2").text('Score: ' + json.score);
                             $("#historyUser2").text('W:' + json.win + ' L:' + json.lose);
@@ -342,6 +346,7 @@
                         $("#timerUser1").text("0:20");
                         $("#timerUser2").text("0:20");
                         alert(json.winner);
+                        $("#btnRestart").css("pointer-events", "auto", "important");
                         //TODO: restart game
                         for (var k = 0; k < size; k++) {
                             for (var l = 0; l < size; l++) {
@@ -354,12 +359,16 @@
                         if (json.ret == 0) {
                             $('.isClick').css("pointer-events", "auto");
                             $("#btnStart").css("pointer-events", "none");
+
                         }
                         else {
                             $("#btnStart").css("pointer-events", "auto");
                             alert("Waiting another player...");
 
                         }
+                    }
+                    else if(json.msg_id === "not_ready"){
+                        alert("Wait a minute!\nYour friend is not ready");
                     }
                     else if (json.msg_id === "game_state") {
                         if (json.user === "c1") {
@@ -427,6 +436,7 @@
                         clearTimeout(t2);
                         $("#timerUser1").text("0:20");
                         $("#timerUser2").text("0:20");
+                        $("#btnRestart").css("pointer-events", "none", "important");
                         //TODO: reset turn ve 0
                     }
                     else if (json.msg_id === "reload_data_matrix") {
@@ -519,6 +529,48 @@
                         $("#timerUser1").text("0:00");
                         $("#timerUser2").text("0:00");
                     }
+                    else if (json.msg_id === "is_ready") {
+                        var rd_content = $('#frame0');
+                        var ready_btn = $('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ready_modal">');
+                        var ready_modal = $('<div class="modal fade" id="ready_modal">');
+
+                        var md_dialog = $('<div class="modal-dialog modal-sm">');
+
+                        var md_content = $('<div class="modal-content">').html('<div class="modal-header">\
+                                                <h4 class="modal-title">'+json.msg_from+' want start game!</h4>\
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>\
+                                                </div>\
+                                                <div class="modal-body">\
+                                                Combat now!\
+                                                </div>');
+                        var rd_footer = $('<div class="modal-footer">');
+                            var btn_accept = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">')
+                                            .html('Yes')
+                                            .click({s:socket},function(event){
+                                                event.data.s.send('{\
+                                                    msg_id:"ready_response",\
+                                                    ret: 0,\
+                                                    name:"'+name_of_chess_board+'"\
+                                                }');
+                                            });
+                            var btn_not_accept = $('<button type="button" class="btn btn-secondary" data-dismiss="modal">')
+                                            .html('No')
+                                            .click({s:socket},function(event){
+                                                event.data.s.send('{\
+                                                    msg_id:"ready_response",\
+                                                    ret: -1,\
+                                                    name:"'+name_of_chess_board+'"\
+                                                }');
+                                            });
+                        rd_footer.append(btn_accept).append(btn_not_accept);
+                        md_content.append(rd_footer);
+                        md_dialog.html(md_content);
+                        ready_modal.html(md_dialog);
+                        rd_content.append(ready_modal);
+                        $(ready_modal).modal('show');
+                        // rd_content.children("#")
+                    }
+
                     else if (json.msg_id === "online"){
                        var list_user = json.list_user;
                        for (var i = 0; i < list_user.length; i++) {
@@ -569,20 +621,22 @@
                         // event.code is usually 1006 in this case
                         alert('[close] Connection died');
                     }
+                    socket.close();
                 };
 
                 socket.onerror = function (error) {
                     alert(`[error] ${error.message}`);
+                    socket.close();
                 };
 
-                create_checkBoard(socket);
+                create_chessBoard(socket);
 
 
             }
         }
         //-------------------------------------------------------------------------------
 
-        function create_checkBoard(s) {
+        function create_chessBoard(s) {
 
             for (var i = 0; i < size; i++) {
 
@@ -591,10 +645,10 @@
                 matrix[i] = [];
                 dataMatrix[i] = [];
                 if (i % 2 !== 0) {
-                    checkerBoard.push(trEven);
+                    chessBoard.push(trEven);
                 }
                 else {
-                    checkerBoard.push(trOdd);
+                    chessBoard.push(trOdd);
                 }
 
                 for (var j = 0; j < size; j++) {
@@ -613,7 +667,7 @@
                         // clearTimeout(t1);
                         var state = '{\
                             msg_id: "game_state",\
-                            name: "'+ localStorage.name_of_check_board + '",\
+                            name: "'+ localStorage.name_of_chess_board + '",\
                             x: '+ event.data.vi + ',\
                             y: '+ event.data.vj + '\
                         }';
@@ -632,12 +686,12 @@
 
                     });
                     tdEle.append(btn);
-                    checkerBoard[i].append(tdEle);
+                    chessBoard[i].append(tdEle);
                 }
             }
 
 
-            $('tbody').append(checkerBoard);
+            $('tbody').append(chessBoard);
             $(".odd td:odd").css("background-color", "white");
             $(".odd td:even").css("background-color", "white");
             $(".even td:odd").css("background-color", "white");
@@ -659,12 +713,11 @@
 
         };
 
-
         function overide_channel_reload(socket) {
             var js1 = '{\
             msg_id: "overide_channel",\
             email:"'+ localStorage.email + '",\
-            name: "'+ localStorage.name_of_check_board + '"\
+            name: "'+ localStorage.name_of_chess_board + '"\
             }';
             socket.send(js1);
 
