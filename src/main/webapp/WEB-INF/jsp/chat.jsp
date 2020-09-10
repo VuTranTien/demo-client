@@ -375,6 +375,15 @@
                           </tr>
 
                         </table>
+                        <h5>Hạng Của Tôi</h5>
+                        <br>
+                        <table id="myRanked" class="table">
+                          <tr>
+                            <th>Hạng</th>
+                            <th>Tên</th>
+                            <th>Điểm</th>
+                          </tr>
+                        </table>
                       </div>
                     </div>
                   </div>
@@ -384,9 +393,9 @@
                 </div>
               </div>
             </div>
-            <div class="modal fade" id="form_history" tabindex="-1" role="dialog"
+            <div class="modal fade bd-example-modal-lg" id="form_history" tabindex="-1" role="dialog"
               aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalCenterTitle">Lịch sử đấu</h5>
@@ -398,19 +407,39 @@
                     <div>
                       <div class="form-group">
                         <table id="list_combats" class="table">
-                          <tr>
-                            <th>Người chơi 1</th>
-                            <th>Người chơi 2</th>
-                            <th>Thời gian</th>
-                            <th>Kết quả</th>
-                          </tr>
-
+                          
                         </table>
                       </div>
                     </div>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="form_accept" tabindex="-1" role="dialog"
+              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Mời vào bàn cờ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class = "container">
+                      <div class="row justify-content-center">
+                        <button style="margin-left: 20px;" type="button" class="btn btn-secondary" data-dismiss="modal">Từ chối</button>
+                      </div>
+                      <div>
+                        <button style="margin-right: 20px;" id="acceptEnter" type="button" class="btn btn-primary">Đồng ý</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    
                   </div>
                 </div>
               </div>
@@ -504,8 +533,14 @@
         socket.onopen = function (e) {
           console.log("[open] Connection established");
           console.log("Sending to server");
+          var checkLogin = '{\
+          msg_id: "check_login",\
+          msg_from: "'+email+'"\
+          }';
+          socket.send(checkLogin);
           var load_ranked = '{\
-            msg_id: load_ranked\
+            msg_id: load_ranked,\
+            email: '+email+'\
           }';
           load_ch(socket);
           socket.send(load_ranked);
@@ -590,16 +625,31 @@
             if (js1.list.length > 0) {
               var list_ranked = JSON.parse(js1.list);
             }
+            var temp = "...";
             for (var i = 0; i < list_ranked.length; i++) {
               var ranked = list_ranked[i];
-              console.log(ranked);
+              
+              if (ranked.email === email.split("@")[0]){
+                temp = i+1;
+              }
               $("#listRanked").append('\
               <tr>\
               <td>'+ (i + 1) + '</td>\
               <td>'+ ranked.email + '</td>\
               <td>'+ ranked.score + '</td>\
-              </tr>');
+              <br>\
+              </tr>\
+              ');
             }
+            
+            var my_score = JSON.parse(js1.my_score);
+            $("#myRanked").append('\
+            <tr>\
+            <td>'+temp+'</td>\
+            <td>'+my_score[0].email+'</td>\
+            <td>'+my_score[0].score+'</td>\
+            </tr>\
+            ');
           }
           else if (js1.msg_id === "online") {
             $("#list_online").empty();
@@ -739,19 +789,39 @@
             }
           }
           else if(js1.msg_id==="game_history"){
-
+            $("#list_combats").empty();
+            $("#list_combats").append('<tr>\
+                            <th>Người chơi 1</th>\
+                            <th>Người chơi 2</th>\
+                            <th>Thời gian</th>\
+                            <th>Kết quả</th>\
+                          </tr>');
             var table_content="";
             var history_list = JSON.parse(js1.history_list);
             for(var x = 0; x<history_list.length;x++){
                 var history_item = history_list[x];
-                $("#game_history").append('\
+               
+                if(history_item.email_pl1 === email.split("@")[0]){
+                  $("#list_combats").append('\
                 <tr>\
-                  <td>'+history_item.email_pl1+'</td>\
-                  <td>'+history_item.email_pl2+'</td>\
+                  <td class = "btn-outline-success"><b>'+history_item.email_pl1+'</b></td>\
+                  <td class = "btn-outline-danger"><b>'+history_item.email_pl2+'</b></td>\
                   <td>'+history_item.time+'</td>\
                   <td>'+history_item.result+'</td>\
                 </tr>\
                 ');
+                }
+                else if (history_item.email_pl2 === email.split("@")[0]){
+                  $("#list_combats").append('\
+                <tr>\
+                  <td class = "btn-outline-danger"><b>'+history_item.email_pl1+'</b></td>\
+                  <td class = "btn-outline-success"><b>'+history_item.email_pl2+'</b></td>\
+                  <td>'+history_item.time+'</td>\
+                  <td>'+history_item.result+'</td>\
+                </tr>\
+                ');
+                }
+                
             }
 
           }
@@ -768,7 +838,11 @@
             location.replace("http://localhost:8880/demo-client/game-caro.do?name=" + event.data.name + "&email=" + email);
           })
           }
-
+          else if (js1.msg_id ==="disconnect"){
+            window.localStorage.clear();
+            document.cookie = "access_token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+            location.replace("http://localhost:8880/demo-client/login.do");
+          }
           else {
             console.log("Error in message recieved");
           }
