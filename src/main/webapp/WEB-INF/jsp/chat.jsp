@@ -538,6 +538,11 @@
           msg_from: "'+email+'"\
           }';
           socket.send(checkLogin);
+          var enterRoom = '{\
+            msg_id: "enter_room",\
+            email: "'+email+'"\
+          }';
+          socket.send(enterRoom);
           var load_ranked = '{\
             msg_id: load_ranked,\
             email: '+email+'\
